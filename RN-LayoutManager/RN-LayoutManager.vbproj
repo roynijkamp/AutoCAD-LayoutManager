@@ -172,10 +172,10 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LayoutManager.Designer.vb">
-      <DependentUpon>LayoutManager.vb</DependentUpon>
+    <Compile Include="ucLayoutManager.Designer.vb">
+      <DependentUpon>ucLayoutManager.vb</DependentUpon>
     </Compile>
-    <Compile Include="LayoutManager.vb">
+    <Compile Include="ucLayoutManager.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="myCommands.Designer.vb">
@@ -202,8 +202,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LayoutManager.resx">
-      <DependentUpon>LayoutManager.vb</DependentUpon>
+    <EmbeddedResource Include="ucLayoutManager.resx">
+      <DependentUpon>ucLayoutManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

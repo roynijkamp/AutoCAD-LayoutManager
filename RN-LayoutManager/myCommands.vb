@@ -23,7 +23,7 @@ Namespace RN_LayoutManager
                 'palette nog niet geopend
                 m_palette = New Autodesk.AutoCAD.Windows.PaletteSet("RN-LayoutManager", New Guid("{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"))
                 m_palette.Style = PaletteSetStyles.ShowPropertiesMenu + PaletteSetStyles.ShowAutoHideButton + PaletteSetStyles.ShowCloseButton
-                Dim palette_overlayman As LayoutManager = New LayoutManager()
+                Dim palette_overlayman As ucLayoutManager = New ucLayoutManager()
                 m_palette.Add("RN-LayoutManager", palette_overlayman)
 
             End If
