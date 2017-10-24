@@ -3,6 +3,7 @@ Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.EditorInput
+Imports Autodesk.AutoCAD.Windows
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Application.DocumentManager.MdiActiveDocument
@@ -63,10 +64,11 @@ Public Class ucLayoutManager
             If bUpdate Then
                 Try
                     Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-                    acLayoutMgr.RenameLayout(myCntrl.LayoutName, myCntrl.LayoutNameOld)
+                    'MsgBox("Rename " & myCntrl.LayoutNameOld & " to " & myCntrl.LayoutName)
+                    acLayoutMgr.RenameLayout(myCntrl.LayoutNameOld, myCntrl.LayoutName)
                     acDoc.Editor.Regen()
                 Catch ex As Exception
-                    MsgBox("Er ging iets fout bij het wijzigen van de layoutnaam!" & vbCrLf & ex.Message & vbCrLf & ex.Source)
+                    MsgBox("Er ging iets fout bij het wijzigen van de layoutnaam!" & vbCrLf & ex.Message & vbCrLf & ex.Source & vbCrLf & ex.StackTrace)
                     myCntrl.LayoutName = myCntrl.LayoutNameOld
                     myCntrl.updateItem()
                     Return False
