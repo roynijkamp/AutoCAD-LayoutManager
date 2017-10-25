@@ -252,6 +252,24 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_sort_ascending.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_sort_descending.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_refresh.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
