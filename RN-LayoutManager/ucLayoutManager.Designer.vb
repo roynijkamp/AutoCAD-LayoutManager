@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ucLayoutManager
     Inherits System.Windows.Forms.UserControl
 
     'UserControl overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,18 +20,21 @@ Partial Class ucLayoutManager
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.cmdRefreshList = New System.Windows.Forms.Button()
+        Me.lblCheckCount = New System.Windows.Forms.Label()
+        Me.cmdSaveOrder = New System.Windows.Forms.Button()
         Me.cmdPlot = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
-        Me.lblCheckCount = New System.Windows.Forms.Label()
+        Me.cmdRefreshList = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -53,7 +56,7 @@ Partial Class ucLayoutManager
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(420, 956)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(420, 582)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'lblTitel
@@ -79,12 +82,13 @@ Partial Class ucLayoutManager
         Me.flowLayouts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.flowLayouts.Location = New System.Drawing.Point(3, 73)
         Me.flowLayouts.Name = "flowLayouts"
-        Me.flowLayouts.Size = New System.Drawing.Size(414, 830)
+        Me.flowLayouts.Size = New System.Drawing.Size(414, 456)
         Me.flowLayouts.TabIndex = 0
         Me.flowLayouts.WrapContents = False
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdSaveOrder)
         Me.GroupBox1.Controls.Add(Me.cmdPlot)
         Me.GroupBox1.Controls.Add(Me.cmdSortDESC)
         Me.GroupBox1.Controls.Add(Me.cmdSortASC)
@@ -102,53 +106,13 @@ Partial Class ucLayoutManager
         Me.GroupBox2.Controls.Add(Me.lblCheckCount)
         Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
         Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 906)
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
         Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        '
-        'cmdRefreshList
-        '
-        Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
-        Me.cmdRefreshList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdRefreshList.Location = New System.Drawing.Point(4, 11)
-        Me.cmdRefreshList.Name = "cmdRefreshList"
-        Me.cmdRefreshList.Size = New System.Drawing.Size(34, 34)
-        Me.cmdRefreshList.TabIndex = 3
-        Me.cmdRefreshList.UseVisualStyleBackColor = True
-        '
-        'cmdPlot
-        '
-        Me.cmdPlot.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_print
-        Me.cmdPlot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdPlot.Location = New System.Drawing.Point(84, 11)
-        Me.cmdPlot.Name = "cmdPlot"
-        Me.cmdPlot.Size = New System.Drawing.Size(34, 34)
-        Me.cmdPlot.TabIndex = 6
-        Me.cmdPlot.UseVisualStyleBackColor = True
-        '
-        'cmdSortDESC
-        '
-        Me.cmdSortDESC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_descending
-        Me.cmdSortDESC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSortDESC.Location = New System.Drawing.Point(44, 11)
-        Me.cmdSortDESC.Name = "cmdSortDESC"
-        Me.cmdSortDESC.Size = New System.Drawing.Size(34, 34)
-        Me.cmdSortDESC.TabIndex = 5
-        Me.cmdSortDESC.UseVisualStyleBackColor = True
-        '
-        'cmdSortASC
-        '
-        Me.cmdSortASC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_ascending
-        Me.cmdSortASC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSortASC.Location = New System.Drawing.Point(6, 11)
-        Me.cmdSortASC.Name = "cmdSortASC"
-        Me.cmdSortASC.Size = New System.Drawing.Size(34, 34)
-        Me.cmdSortASC.TabIndex = 4
-        Me.cmdSortASC.UseVisualStyleBackColor = True
         '
         'lblCheckCount
         '
@@ -163,13 +127,69 @@ Partial Class ucLayoutManager
         Me.lblCheckCount.Text = "lblCheckCount"
         Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'cmdSaveOrder
+        '
+        Me.cmdSaveOrder.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_save
+        Me.cmdSaveOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdSaveOrder.Location = New System.Drawing.Point(82, 11)
+        Me.cmdSaveOrder.Name = "cmdSaveOrder"
+        Me.cmdSaveOrder.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSaveOrder.TabIndex = 7
+        Me.ToolTip1.SetToolTip(Me.cmdSaveOrder, "Layout volgorde opslaan in DWG")
+        Me.cmdSaveOrder.UseVisualStyleBackColor = True
+        '
+        'cmdPlot
+        '
+        Me.cmdPlot.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdPlot.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_print
+        Me.cmdPlot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdPlot.Location = New System.Drawing.Point(381, 13)
+        Me.cmdPlot.Name = "cmdPlot"
+        Me.cmdPlot.Size = New System.Drawing.Size(34, 34)
+        Me.cmdPlot.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.cmdPlot, "Geslecteerde layouts afdrukken")
+        Me.cmdPlot.UseVisualStyleBackColor = True
+        '
+        'cmdSortDESC
+        '
+        Me.cmdSortDESC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_descending
+        Me.cmdSortDESC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdSortDESC.Location = New System.Drawing.Point(44, 11)
+        Me.cmdSortDESC.Name = "cmdSortDESC"
+        Me.cmdSortDESC.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSortDESC.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.cmdSortDESC, "Sorteren van Z-A")
+        Me.cmdSortDESC.UseVisualStyleBackColor = True
+        '
+        'cmdSortASC
+        '
+        Me.cmdSortASC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_ascending
+        Me.cmdSortASC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdSortASC.Location = New System.Drawing.Point(6, 11)
+        Me.cmdSortASC.Name = "cmdSortASC"
+        Me.cmdSortASC.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSortASC.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
+        Me.cmdSortASC.UseVisualStyleBackColor = True
+        '
+        'cmdRefreshList
+        '
+        Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
+        Me.cmdRefreshList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdRefreshList.Location = New System.Drawing.Point(4, 11)
+        Me.cmdRefreshList.Name = "cmdRefreshList"
+        Me.cmdRefreshList.Size = New System.Drawing.Size(34, 34)
+        Me.cmdRefreshList.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
+        Me.cmdRefreshList.UseVisualStyleBackColor = True
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "ucLayoutManager"
-        Me.Size = New System.Drawing.Size(420, 956)
+        Me.Size = New System.Drawing.Size(420, 582)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -189,4 +209,6 @@ Partial Class ucLayoutManager
     Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
     Friend WithEvents cmdRefreshList As Windows.Forms.Button
     Friend WithEvents lblCheckCount As Windows.Forms.Label
+    Friend WithEvents cmdSaveOrder As Windows.Forms.Button
+    Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
 End Class

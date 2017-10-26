@@ -113,28 +113,8 @@
       <Private>False</Private>
     </Reference>
     <!--Map 3D References-->
-    <Reference Include="Autodesk.Map.Platform">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="OSGeo.MapGuide.Foundation">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="OSGeo.MapGuide.Geometry">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="OSGeo.MapGuide.PlatformBase">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
     <!--Civil 3D Refernces-->
     <Reference Include="AecBaseMgd">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AeccDbMgd">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
@@ -172,6 +152,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="plotting.vb" />
     <Compile Include="ucLayoutManager.Designer.vb">
       <DependentUpon>ucLayoutManager.vb</DependentUpon>
     </Compile>
@@ -269,6 +250,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon_refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
