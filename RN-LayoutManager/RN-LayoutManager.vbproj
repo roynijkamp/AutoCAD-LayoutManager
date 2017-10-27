@@ -254,6 +254,12 @@
   <ItemGroup>
     <None Include="icons\icon_save.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_PDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_PDF_multi.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

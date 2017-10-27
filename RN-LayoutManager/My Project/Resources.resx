@@ -121,6 +121,12 @@
   <data name="icon_import" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icons\icon_import.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon_PDF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_PDF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_PDF_multi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_PDF_multi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon_print" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icons\icon_print.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

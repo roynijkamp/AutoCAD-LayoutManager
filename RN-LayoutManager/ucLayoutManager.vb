@@ -7,12 +7,14 @@ Imports Autodesk.AutoCAD.Windows
 Imports System.Windows
 Imports System.Linq
 Imports System.IO
+Imports System.Windows.Forms
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
     Dim acCurDb As Database = acDoc.Database
     Dim acEd As Editor = acDoc.Editor
     Dim iCheckCount As Integer = 0 'counter for checks
+    Dim drag_drop_scroll_amount As Integer = 0
     Private Sub LayoutManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         loadLayouts()
     End Sub
@@ -33,6 +35,8 @@ Public Class ucLayoutManager
         'first add model item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
+        myCntrl.IsModel = True
+        drag_drop_scroll_amount = myCntrl.Height
         'hide button print and checkbox
         myCntrl.hideButtons()
         myCntrl.updateItem()
@@ -150,6 +154,11 @@ Public Class ucLayoutManager
             Dim acLayoutMgr As LayoutManager = LayoutManager.Current
             acLayoutMgr.CurrentLayout = myCntrl.LayoutName
             acDoc.Editor.Regen()
+            'zoom extends when not model view
+            If myCntrl.IsModel = False Then
+                Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
+                acadApp.ZoomExtents()
+            End If
         End Using
     End Sub
 
@@ -161,7 +170,7 @@ Public Class ucLayoutManager
     Public Sub item_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
         If e.Button = Forms.MouseButtons.Left Then
             Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
-            myCntrl.DoDragDrop(myCntrl, DragDropEffects.Move)
+            myCntrl.DoDragDrop(myCntrl, Windows.DragDropEffects.Move)
             'reset dragstate of control
             myCntrl.GetDragged = False
             myCntrl.isDragged()
@@ -175,20 +184,32 @@ Public Class ucLayoutManager
     ''' <param name="e"></param>
     Public Sub item_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         If e.Data.GetDataPresent(GetType(RN_LayoutItems.RN_UCLayoutItem)) Then
-            e.Effect = DragDropEffects.All
+            e.Effect = Windows.DragDropEffects.All
             Dim myCntrlOver As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
             Dim myCntrlSrc As RN_LayoutItems.RN_UCLayoutItem = CType(e.Data.GetData(GetType(RN_LayoutItems.RN_UCLayoutItem)), RN_LayoutItems.RN_UCLayoutItem)
 
             Dim iIndexOver As Integer = flowLayouts.Controls.IndexOf(myCntrlOver)
             flowLayouts.Controls.SetChildIndex(myCntrlSrc, iIndexOver)
+            'auto scroll list on drag
+            flowLayouts.ScrollControlIntoView(myCntrlSrc)
             'reset dragstate of control
             myCntrlSrc.GetDragged = True
             myCntrlSrc.isDragged()
         End If
     End Sub
 
+
+
+    ''' <summary>
+    ''' 'Apply layout order to drawing
+    ''' </summary>
+    ''' <param name="sOrder"></param>
+    ''' <returns></returns>
     Public Function setLayoutOrder(Optional ByVal sOrder As String = "list")
         Dim aSortedLayouts() As String
+        pgbVoortgang.Visible = True
+        pgbVoortgang.Value = 0
+        pgbVoortgang.Maximum = flowLayouts.Controls.Count + 2
         If sOrder = "list" Then
             Try
                 Using acLockDoc As DocumentLock = acDoc.LockDocument
@@ -201,6 +222,8 @@ Public Class ucLayoutManager
                             Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
                             lay.TabOrder = iTab
                             iTab += 1
+                            pgbVoortgang.Value = iTab
+                            pgbVoortgang.Update()
                         Next
                         acTrans.Commit()
                         acDoc.Editor.Regen()
@@ -229,6 +252,8 @@ Public Class ucLayoutManager
                             Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
                             lay.TabOrder = iTab
                             iTab += 1
+                            pgbVoortgang.Value = iTab
+                            pgbVoortgang.Update()
                         Next
                         acTrans.Commit()
                         acDoc.Editor.Regen()
@@ -239,6 +264,8 @@ Public Class ucLayoutManager
                 Return False
             End Try
         End If
+        pgbVoortgang.Value = 0
+        pgbVoortgang.Visible = False
         Return True
     End Function
 
@@ -295,32 +322,50 @@ Public Class ucLayoutManager
                 End Using
             End Using
         Catch ex As Exception
-            MsgBox("Fout bij het wijzigen van de volgorde!" & ex.Message & vbCrLf & ex.Source)
+            MsgBox("Fout bij het laden van de layout lijst" & ex.Message & vbCrLf & ex.Source)
+            Return layouts
         End Try
     End Function
 
-    Public Function plotLayouts()
-        Dim db As Database = HostApplicationServices.WorkingDatabase
-        Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
-        Try
-            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
+    ''' <summary>
+    ''' 'Plot checked layouts to singlesheet PDF
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function plotLayoutsSingle()
+        Return True
+    End Function
 
-            Dim layouts As New List(Of Layout)()
-            layouts = checkedLayouts()
+    ''' <summary>
+    ''' 'Plot checked layouts to multisheet PDF
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function plotLayoutsMulti()
+        If iCheckCount > 0 Then
+            Dim db As Database = HostApplicationServices.WorkingDatabase
+            Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
+            Try
+                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
 
-            Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
+                Dim layouts As New List(Of Layout)()
+                layouts = checkedLayouts()
 
-            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts)
+                Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
+
+                Dim plotter As New plotting.MultiSheetsPdf(filename, layouts)
                 plotter.Publish()
 
 
-        Catch e As System.Exception
-            Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
-            ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
-        Finally
-            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
-        End Try
-        Return True
+            Catch e As System.Exception
+                Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+                ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
+            Finally
+                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
+            End Try
+            Return True
+        Else
+            MsgBox("Er zijn geen layouts geselecteerd!")
+            Return False
+        End If
     End Function
 
     'Public Sub PlotPdfPSEUDO()
@@ -353,7 +398,29 @@ Public Class ucLayoutManager
     '    End Try
     'End Sub
 
-    Private Sub cmdPlot_Click(sender As Object, e As EventArgs) Handles cmdPlot.Click
-        plotLayouts()
+    Private Sub cmdPlot_Click(sender As Object, e As EventArgs) Handles cmdPlotMulitSheet.Click
+        plotLayoutsMulti()
+    End Sub
+
+    Private Sub flowLayouts_DragLeave(sender As Object, e As EventArgs) Handles flowLayouts.DragLeave
+        Dim iBegY As Integer = Me.flowLayouts.FindForm().PointToClient(Me.flowLayouts.Parent.PointToScreen(Me.flowLayouts.Location)).Y
+        Dim iFlowBoundY As Integer = Me.flowLayouts.Height + iBegY
+        Dim iMouseY As Integer = Me.flowLayouts.FindForm().PointToClient(MousePosition).Y
+
+        While iMouseY >= iFlowBoundY
+            flowLayouts.VerticalScroll.Value = flowLayouts.VerticalScroll.Value + drag_drop_scroll_amount
+            iMouseY = flowLayouts.FindForm().PointToClient(MousePosition).Y
+            flowLayouts.Refresh()
+        End While
+
+        While iMouseY <= iBegY
+            flowLayouts.VerticalScroll.Value = flowLayouts.VerticalScroll.Value - drag_drop_scroll_amount
+            iMouseY = flowLayouts.FindForm().PointToClient(MousePosition).Y
+            flowLayouts.Refresh()
+        End While
+    End Sub
+
+    Private Sub cmdPlotSingleSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotSingleSheet.Click
+        plotLayoutsSingle()
     End Sub
 End Class
