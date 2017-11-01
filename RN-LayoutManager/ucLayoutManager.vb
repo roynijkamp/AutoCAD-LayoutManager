@@ -8,6 +8,7 @@ Imports System.Windows
 Imports System.Linq
 Imports System.IO
 Imports System.Windows.Forms
+Imports Autodesk.AutoCAD.PlottingServices
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -139,7 +140,9 @@ Public Class ucLayoutManager
 
     Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
-        'TODO:   implement plotting
+
+        plotSingleLayout(myCntrl.LayoutName)
+
         Return True
     End Function
 
@@ -174,6 +177,8 @@ Public Class ucLayoutManager
             'reset dragstate of control
             myCntrl.GetDragged = False
             myCntrl.isDragged()
+            'save new order
+            setLayoutOrder()
         End If
     End Sub
 
@@ -327,19 +332,13 @@ Public Class ucLayoutManager
         End Try
     End Function
 
-    ''' <summary>
-    ''' 'Plot checked layouts to singlesheet PDF
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function plotLayoutsSingle()
-        Return True
-    End Function
 
     ''' <summary>
-    ''' 'Plot checked layouts to multisheet PDF
+    ''' 'Plot multiple layouts to one multisheet PDF
     ''' </summary>
+    ''' <param name="pdfSheetType"></param>
     ''' <returns></returns>
-    Public Function plotLayoutsMulti()
+    Public Function plotLayouts(ByVal pdfSheetType As SheetType)
         If iCheckCount > 0 Then
             Dim db As Database = HostApplicationServices.WorkingDatabase
             Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
@@ -351,8 +350,10 @@ Public Class ucLayoutManager
 
                 Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
 
-                Dim plotter As New plotting.MultiSheetsPdf(filename, layouts)
-                plotter.Publish()
+                Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType)
+                    plotter.Publish()
+
+
 
 
             Catch e As System.Exception
@@ -368,39 +369,27 @@ Public Class ucLayoutManager
         End If
     End Function
 
-    'Public Sub PlotPdfPSEUDO()
-    '    Dim db As Database = HostApplicationServices.WorkingDatabase
-    '    Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
-    '    Try
-    '        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
-    '        Using tr As Transaction = db.TransactionManager.StartTransaction()
-    '            Dim layouts As New List(Of Layout)()
-    '            Dim layoutDict As DBDictionary = DirectCast(db.LayoutDictionaryId.GetObject(OpenMode.ForRead), DBDictionary)
-    '            For Each entry As DBDictionaryEntry In layoutDict
-    '                If entry.Key <> "Model" Then
-    '                    layouts.Add(DirectCast(tr.GetObject(entry.Value, OpenMode.ForRead), Layout))
-    '                End If
-    '            Next
-    '            layouts.Sort(Function(l1, l2) l1.TabOrder.CompareTo(l2.TabOrder))
 
-    '            Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
+    Public Function plotSingleLayout(ByVal sLayoutName As String)
+        If iCheckCount > 0 Then
+            Dim db As Database = HostApplicationServices.WorkingDatabase
+            Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
+            Try
+                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
 
-    '            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts)
-    '            plotter.Publish()
-
-    '            tr.Commit()
-    '        End Using
-    '    Catch e As System.Exception
-    '        Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
-    '        ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
-    '    Finally
-    '        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
-    '    End Try
-    'End Sub
-
-    Private Sub cmdPlot_Click(sender As Object, e As EventArgs) Handles cmdPlotMulitSheet.Click
-        plotLayoutsMulti()
-    End Sub
+            Catch e As System.Exception
+                Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+                ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
+            Finally
+                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
+            End Try
+            Return True
+        Else
+            MsgBox("Er zijn geen layouts geselecteerd!")
+            Return False
+        End If
+        Return True
+    End Function
 
     Private Sub flowLayouts_DragLeave(sender As Object, e As EventArgs) Handles flowLayouts.DragLeave
         Dim iBegY As Integer = Me.flowLayouts.FindForm().PointToClient(Me.flowLayouts.Parent.PointToScreen(Me.flowLayouts.Location)).Y
@@ -420,7 +409,11 @@ Public Class ucLayoutManager
         End While
     End Sub
 
+    Private Sub cmdPlotMulitSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotMulitSheet.Click
+        plotLayouts(SheetType.MultiPdf)
+    End Sub
+
     Private Sub cmdPlotSingleSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotSingleSheet.Click
-        plotLayoutsSingle()
+        plotLayouts(SheetType.SinglePdf)
     End Sub
 End Class

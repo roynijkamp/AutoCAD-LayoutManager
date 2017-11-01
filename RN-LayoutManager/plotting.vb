@@ -8,29 +8,50 @@ Public Class plotting
         Private dwgFile As String, pdfFile As String, dsdFile As String, outputDir As String
         Private sheetNum As Integer
         Private layouts As IEnumerable(Of Layout)
+        Private pdfSheetType As SheetType = SheetType.MultiPdf
 
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout))
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType)
             Dim db As Database = HostApplicationServices.WorkingDatabase
             Me.dwgFile = db.Filename
             Me.pdfFile = pdfFile
             Me.outputDir = Path.GetDirectoryName(Me.pdfFile)
             Me.dsdFile = Path.ChangeExtension(Me.pdfFile, "dsd")
             Me.layouts = layouts
+            Me.pdfSheetType = pdfSheetType
         End Sub
 
         Public Sub Publish()
             If TryCreateDSD() Then
-                'Autodesk.AutoCAD.ApplicationServices.Application
+                'If Me.pdfSheetType = SheetType.MultiPdf Then
                 Dim publisher As Publisher = Autodesk.AutoCAD.ApplicationServices.Application.Publisher
-                Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
-                publisher.PublishDsd(Me.dsdFile, plotDlg)
-                plotDlg.Destroy()
-                File.Delete(Me.dsdFile)
-                MsgBox("PDF aanmaken is voltooid!")
+                    Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
+                    publisher.PublishDsd(Me.dsdFile, plotDlg)
+                    plotDlg.Destroy()
+                    File.Delete(Me.dsdFile)
+                    MsgBox("PDF aanmaken is voltooid!")
+                    'Else
+                    '    Dim publisher As Publisher = Autodesk.AutoCAD.ApplicationServices.Application.Publisher
+
+                    '    Try
+                    '        'AutoCAD PDF (General Documentation)
+                    '        Dim plotConf As PlotConfig = PlotConfigManager.SetCurrentConfig("AutoCAD PDF (General Documentation).pc3")
+                    '        Dim dsdData As DsdData = New DsdData
+                    '        dsdData.ReadDsd(Me.dsdFile)
+                    '        publisher.PublishExecute(dsdData, plotConf)
+
+                    '        File.Delete(Me.dsdFile)
+                    '        MsgBox("PDF aanmaken is voltooid!")
+                    '    Catch ex As Autodesk.AutoCAD.Runtime.Exception
+                    '        MsgBox(ex.Message)
+                    '    End Try
+                    'End If
+                Else
+                MsgBox("Fout bij het maken van de DSD file")
             End If
         End Sub
+
 
         Private Function TryCreateDSD() As Boolean
             Using dsd As New DsdData()
@@ -49,10 +70,12 @@ Public Class plotting
 
                     dsd.SetUnrecognizedData("PwdProtectPublishedDWF", "FALSE")
                     dsd.SetUnrecognizedData("PromptForPwd", "FALSE")
-                    'dsd.SheetType = SheetType.MultiDwf
-                    dsd.SheetType = SheetType.MultiPdf
+                    dsd.SheetType = Me.pdfSheetType
+
                     dsd.NoOfCopies = 1
+                    'If Me.pdfSheetType = SheetType.MultiPdf Then
                     dsd.DestinationName = Me.pdfFile
+                    'End If
                     dsd.IsHomogeneous = False
                     dsd.LogFilePath = Path.Combine(Me.outputDir, LOG)
 
@@ -70,8 +93,14 @@ Public Class plotting
                 Dim dsdEntry As New DsdEntry()
                 dsdEntry.DwgName = Me.dwgFile
                 dsdEntry.Layout = layout.LayoutName
-                dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + "-" + layout.LayoutName
-                dsdEntry.Nps = layout.TabOrder.ToString()
+                dsdEntry.NpsSourceDwg = dsdEntry.DwgName
+                If Me.pdfSheetType = SheetType.MultiPdf Then
+                    dsdEntry.Title = layout.LayoutName
+                    dsdEntry.Nps = layout.TabOrder.ToString()
+                Else
+                    dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + "-" + layout.LayoutName
+                    dsdEntry.Nps = "Setup1"
+                End If
                 entries.Add(dsdEntry)
             Next
             Return entries
@@ -92,17 +121,24 @@ Public Class plotting
                         ElseIf str.Contains("OriginalSheetPath") Then
                             newStr = Convert.ToString("OriginalSheetPath=") & Me.dwgFile
                         ElseIf str.Contains("Type") Then
-                            newStr = "Type=6"
+                            If Me.pdfSheetType = SheetType.MultiPdf Then
+                                'Multi Sheet PDF
+                                newStr = "Type=6"
+                            Else
+                                'Single Sheet PDF
+                                newStr = "Type=5"
+                            End If
+
                         ElseIf str.Contains("OUT") Then
-                            newStr = Convert.ToString("OUT=") & Me.outputDir
-                        ElseIf str.Contains("IncludeLayer") Then
-                            newStr = "IncludeLayer=TRUE"
-                        ElseIf str.Contains("PromptForDwfName") Then
-                            newStr = "PromptForDwfName=FALSE"
-                        ElseIf str.Contains("LogFilePath") Then
-                            newStr = "LogFilePath=" + Path.Combine(Me.outputDir, LOG)
-                        Else
-                            newStr = str
+                                newStr = Convert.ToString("OUT=") & Me.outputDir
+                            ElseIf str.Contains("IncludeLayer") Then
+                                newStr = "IncludeLayer=TRUE"
+                            ElseIf str.Contains("PromptForDwfName") Then
+                                newStr = "PromptForDwfName=FALSE"
+                            ElseIf str.Contains("LogFilePath") Then
+                                newStr = "LogFilePath=" + Path.Combine(Me.outputDir, LOG)
+                            Else
+                                newStr = str
                         End If
                         writer.WriteLine(newStr)
                     End While
