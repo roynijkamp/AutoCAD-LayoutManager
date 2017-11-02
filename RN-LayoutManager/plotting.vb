@@ -26,28 +26,12 @@ Public Class plotting
             If TryCreateDSD() Then
                 'If Me.pdfSheetType = SheetType.MultiPdf Then
                 Dim publisher As Publisher = Autodesk.AutoCAD.ApplicationServices.Application.Publisher
-                    Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
-                    publisher.PublishDsd(Me.dsdFile, plotDlg)
-                    plotDlg.Destroy()
-                    File.Delete(Me.dsdFile)
-                    MsgBox("PDF aanmaken is voltooid!")
-                    'Else
-                    '    Dim publisher As Publisher = Autodesk.AutoCAD.ApplicationServices.Application.Publisher
-
-                    '    Try
-                    '        'AutoCAD PDF (General Documentation)
-                    '        Dim plotConf As PlotConfig = PlotConfigManager.SetCurrentConfig("AutoCAD PDF (General Documentation).pc3")
-                    '        Dim dsdData As DsdData = New DsdData
-                    '        dsdData.ReadDsd(Me.dsdFile)
-                    '        publisher.PublishExecute(dsdData, plotConf)
-
-                    '        File.Delete(Me.dsdFile)
-                    '        MsgBox("PDF aanmaken is voltooid!")
-                    '    Catch ex As Autodesk.AutoCAD.Runtime.Exception
-                    '        MsgBox(ex.Message)
-                    '    End Try
-                    'End If
-                Else
+                Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
+                publisher.PublishDsd(Me.dsdFile, plotDlg)
+                plotDlg.Destroy()
+                File.Delete(Me.dsdFile)
+                MsgBox("PDF aanmaken is voltooid!")
+            Else
                 MsgBox("Fout bij het maken van de DSD file")
             End If
         End Sub
@@ -73,9 +57,8 @@ Public Class plotting
                     dsd.SheetType = Me.pdfSheetType
 
                     dsd.NoOfCopies = 1
-                    'If Me.pdfSheetType = SheetType.MultiPdf Then
                     dsd.DestinationName = Me.pdfFile
-                    'End If
+
                     dsd.IsHomogeneous = False
                     dsd.LogFilePath = Path.Combine(Me.outputDir, LOG)
 

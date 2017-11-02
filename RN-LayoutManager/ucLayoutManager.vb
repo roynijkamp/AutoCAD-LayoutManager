@@ -16,6 +16,43 @@ Public Class ucLayoutManager
     Dim acEd As Editor = acDoc.Editor
     Dim iCheckCount As Integer = 0 'counter for checks
     Dim drag_drop_scroll_amount As Integer = 0
+
+    'Active Drawing Tracking
+    Private Shared m_DocData As clsMyDocData = New clsMyDocData
+    Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
+
+
+
+    '### Active Drawing Tracking
+    Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
+        'display the current active document
+
+        'If Not m_DocData Is Nothing Then
+        'm_Container2.txtADwg.Text = m_DocData.Current.Stuff
+        Try
+            loadLayouts()
+            'Todo: implement load saved selection
+        Catch
+            'MsgBox("Probleem bij DocumentActivated")
+        End Try
+    End Sub
+    Private Sub DocumentManager_DocumentToBeDeactivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
+        'store the current contents
+        'If Not m_DocData Is Nothing Then
+        'm_DocData.Current.Stuff = m_Container2.txtADwg.Text
+        Try
+            'Todo: implement save selection
+            resetList()
+        Catch
+            'MsgBox("Probleem bij DocumentToBeDactivated")
+        End Try
+    End Sub
+
+
+    '### /Active Drawing Tracking
+
+
+
     Private Sub LayoutManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         loadLayouts()
     End Sub
@@ -23,21 +60,27 @@ Public Class ucLayoutManager
     Private Sub cmdRefreshList_Click(sender As Object, e As EventArgs)
         loadLayouts()
     End Sub
-    ''' <summary>
-    ''' 'Load layouts into list
-    ''' </summary>
-    Public Sub loadLayouts()
+
+    Public Sub resetList()
         'reset check count
         iCheckCount = 0
         updateCheckLabel()
         'clear flow
         flowLayouts.Controls.Clear()
+    End Sub
+
+    ''' <summary>
+    ''' 'Load layouts into list
+    ''' </summary>
+    Public Sub loadLayouts()
+        'reset and clear list
+        resetList()
         flowLayouts.AllowDrop = True
         'first add model item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
         myCntrl.IsModel = True
-        drag_drop_scroll_amount = myCntrl.Height
+        drag_drop_scroll_amount = myCntrl.Height + 40
         'hide button print and checkbox
         myCntrl.hideButtons()
         myCntrl.updateItem()
@@ -140,8 +183,24 @@ Public Class ucLayoutManager
 
     Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        Dim layouts As New List(Of Layout)()
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim acLayoutMgr As LayoutManager = LayoutManager.Current
 
-        plotSingleLayout(myCntrl.LayoutName)
+                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
+                    Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                    layouts.Add(lay)
+
+                    acTrans.Commit()
+                    plotLayouts(SheetType.SinglePdf, layouts)
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij het laden van de layout lijst" & ex.Message & vbCrLf & ex.Source)
+            Return False
+        End Try
 
         Return True
     End Function
@@ -310,26 +369,31 @@ Public Class ucLayoutManager
 
     Public Function checkedLayouts()
         Dim layouts As New List(Of Layout)()
-        Try
-            Using acLockDoc As DocumentLock = acDoc.LockDocument
-                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                    Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+        If iCheckCount > 0 Then
+            Try
+                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                    Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim acLayoutMgr As LayoutManager = LayoutManager.Current
 
-                    For Each cntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-                        If cntrl.CheckState Then 'layout is checked, add to plot
-                            Dim oId As ObjectId = acLayoutMgr.GetLayoutId(cntrl.LayoutName)
-                            Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
-                            layouts.Add(lay)
-                        End If
-                    Next
-                    acTrans.Commit()
-                    Return layouts
+                        For Each cntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+                            If cntrl.CheckState Then 'layout is checked, add to plot
+                                Dim oId As ObjectId = acLayoutMgr.GetLayoutId(cntrl.LayoutName)
+                                Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                                layouts.Add(lay)
+                            End If
+                        Next
+                        acTrans.Commit()
+                        Return layouts
+                    End Using
                 End Using
-            End Using
-        Catch ex As Exception
-            MsgBox("Fout bij het laden van de layout lijst" & ex.Message & vbCrLf & ex.Source)
+            Catch ex As Exception
+                MsgBox("Fout bij het laden van de layout lijst" & ex.Message & vbCrLf & ex.Source)
+                Return layouts
+            End Try
+        Else
+            MsgBox("Er zijn geen layouts geselecteerd!")
             Return layouts
-        End Try
+        End If
     End Function
 
 
@@ -338,23 +402,20 @@ Public Class ucLayoutManager
     ''' </summary>
     ''' <param name="pdfSheetType"></param>
     ''' <returns></returns>
-    Public Function plotLayouts(ByVal pdfSheetType As SheetType)
-        If iCheckCount > 0 Then
-            Dim db As Database = HostApplicationServices.WorkingDatabase
+    Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout))
+
+        Dim db As Database = HostApplicationServices.WorkingDatabase
             Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
             Try
                 Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
 
-                Dim layouts As New List(Of Layout)()
-                layouts = checkedLayouts()
+                'Dim layouts As New List(Of Layout)()
+                'layouts = checkedLayouts()
 
                 Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
 
                 Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType)
-                    plotter.Publish()
-
-
-
+                plotter.Publish()
 
             Catch e As System.Exception
                 Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
@@ -363,33 +424,9 @@ Public Class ucLayoutManager
                 Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
             End Try
             Return True
-        Else
-            MsgBox("Er zijn geen layouts geselecteerd!")
-            Return False
-        End If
+
     End Function
 
-
-    Public Function plotSingleLayout(ByVal sLayoutName As String)
-        If iCheckCount > 0 Then
-            Dim db As Database = HostApplicationServices.WorkingDatabase
-            Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
-            Try
-                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
-
-            Catch e As System.Exception
-                Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
-                ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
-            Finally
-                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
-            End Try
-            Return True
-        Else
-            MsgBox("Er zijn geen layouts geselecteerd!")
-            Return False
-        End If
-        Return True
-    End Function
 
     Private Sub flowLayouts_DragLeave(sender As Object, e As EventArgs) Handles flowLayouts.DragLeave
         Dim iBegY As Integer = Me.flowLayouts.FindForm().PointToClient(Me.flowLayouts.Parent.PointToScreen(Me.flowLayouts.Location)).Y
@@ -410,10 +447,18 @@ Public Class ucLayoutManager
     End Sub
 
     Private Sub cmdPlotMulitSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotMulitSheet.Click
-        plotLayouts(SheetType.MultiPdf)
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            plotLayouts(SheetType.MultiPdf, checkedLayouts())
+        End If
     End Sub
 
     Private Sub cmdPlotSingleSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotSingleSheet.Click
-        plotLayouts(SheetType.SinglePdf)
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            plotLayouts(SheetType.SinglePdf, checkedLayouts())
+        End If
     End Sub
 End Class

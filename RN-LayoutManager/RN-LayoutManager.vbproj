@@ -152,6 +152,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsMyDocData.vb" />
     <Compile Include="plotting.vb" />
     <Compile Include="ucLayoutManager.Designer.vb">
       <DependentUpon>ucLayoutManager.vb</DependentUpon>
