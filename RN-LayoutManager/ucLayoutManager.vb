@@ -30,6 +30,10 @@ Public Class ucLayoutManager
         'If Not m_DocData Is Nothing Then
         'm_Container2.txtADwg.Text = m_DocData.Current.Stuff
         Try
+            'remap vars to current document
+            acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+            acCurDb = acDoc.Database
+            acEd = acDoc.Editor
             loadLayouts()
             'Todo: implement load saved selection
         Catch
@@ -42,6 +46,10 @@ Public Class ucLayoutManager
         'm_DocData.Current.Stuff = m_Container2.txtADwg.Text
         Try
             'Todo: implement save selection
+            'remap vars to current document
+            acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+            acCurDb = acDoc.Database
+            acEd = acDoc.Editor
             resetList()
         Catch
             'MsgBox("Probleem bij DocumentToBeDactivated")
@@ -54,12 +62,14 @@ Public Class ucLayoutManager
 
 
     Private Sub LayoutManager_Load(sender As Object, e As EventArgs) Handles Me.Load
+        '### Active Drawing Tracking
+        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
+        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
+
+        '### /Active Drawing Tracking
         loadLayouts()
     End Sub
 
-    Private Sub cmdRefreshList_Click(sender As Object, e As EventArgs)
-        loadLayouts()
-    End Sub
 
     Public Sub resetList()
         'reset check count
@@ -74,7 +84,11 @@ Public Class ucLayoutManager
     ''' </summary>
     Public Sub loadLayouts()
         'reset and clear list
-        resetList()
+        'reset check count
+        iCheckCount = 0
+        updateCheckLabel()
+        'clear flow
+        flowLayouts.Controls.Clear()
         flowLayouts.AllowDrop = True
         'first add model item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
@@ -213,14 +227,24 @@ Public Class ucLayoutManager
     Public Sub ItemViewClick(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         Using acLockDoc As DocumentLock = acDoc.LockDocument
-            Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-            acLayoutMgr.CurrentLayout = myCntrl.LayoutName
-            acDoc.Editor.Regen()
-            'zoom extends when not model view
-            If myCntrl.IsModel = False Then
-                Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
-                acadApp.ZoomExtents()
-            End If
+            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+                acLayoutMgr.CurrentLayout = myCntrl.LayoutName
+                'acDoc.Editor.Regen()
+                'zoom extends when not model view
+                If myCntrl.IsModel = False Then
+                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
+                    Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                    For Each vpId As ObjectId In lay.GetViewports()
+                        Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
+                        vp.Locked = True
+                    Next
+                    acTrans.Commit()
+                    Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
+                    acadApp.ZoomExtents()
+                    acDoc.Editor.Regen()
+                End If
+            End Using
         End Using
     End Sub
 
@@ -460,5 +484,9 @@ Public Class ucLayoutManager
         If layouts.Count > 1 Then
             plotLayouts(SheetType.SinglePdf, checkedLayouts())
         End If
+    End Sub
+
+    Private Sub cmdRefreshList_Click(sender As Object, e As EventArgs) Handles cmdRefreshList.Click
+        loadLayouts()
     End Sub
 End Class

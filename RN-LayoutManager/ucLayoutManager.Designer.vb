@@ -27,16 +27,16 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
-        Me.lblCheckCount = New System.Windows.Forms.Label()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.cmdPlotSingleSheet = New System.Windows.Forms.Button()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
+        Me.lblCheckCount = New System.Windows.Forms.Label()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
-        Me.cmdPlotSingleSheet = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -104,46 +104,17 @@ Partial Class ucLayoutManager
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
-        'GroupBox2
+        'cmdPlotSingleSheet
         '
-        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
-        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
-        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
-        Me.GroupBox2.TabIndex = 4
-        Me.GroupBox2.TabStop = False
-        '
-        'pgbVoortgang
-        '
-        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.pgbVoortgang.Location = New System.Drawing.Point(329, 11)
-        Me.pgbVoortgang.Name = "pgbVoortgang"
-        Me.pgbVoortgang.Size = New System.Drawing.Size(88, 13)
-        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.pgbVoortgang.TabIndex = 5
-        Me.pgbVoortgang.Visible = False
-        '
-        'lblCheckCount
-        '
-        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCheckCount.AutoSize = True
-        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.lblCheckCount.Location = New System.Drawing.Point(326, 32)
-        Me.lblCheckCount.Name = "lblCheckCount"
-        Me.lblCheckCount.Size = New System.Drawing.Size(89, 13)
-        Me.lblCheckCount.TabIndex = 4
-        Me.lblCheckCount.Text = "lblCheckCount"
-        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.IsBalloon = True
+        Me.cmdPlotSingleSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdPlotSingleSheet.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_PDF
+        Me.cmdPlotSingleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 13)
+        Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
+        Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(34, 34)
+        Me.cmdPlotSingleSheet.TabIndex = 8
+        Me.ToolTip1.SetToolTip(Me.cmdPlotSingleSheet, "Geslecteerde layouts afdrukken naar Singlesheet PDF")
+        Me.cmdPlotSingleSheet.UseVisualStyleBackColor = True
         '
         'cmdSaveOrder
         '
@@ -190,6 +161,43 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
+        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
+        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
+        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
+        Me.GroupBox2.TabIndex = 4
+        Me.GroupBox2.TabStop = False
+        '
+        'pgbVoortgang
+        '
+        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.pgbVoortgang.Location = New System.Drawing.Point(329, 11)
+        Me.pgbVoortgang.Name = "pgbVoortgang"
+        Me.pgbVoortgang.Size = New System.Drawing.Size(88, 13)
+        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+        Me.pgbVoortgang.TabIndex = 5
+        Me.pgbVoortgang.Visible = False
+        '
+        'lblCheckCount
+        '
+        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblCheckCount.AutoSize = True
+        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblCheckCount.Location = New System.Drawing.Point(326, 32)
+        Me.lblCheckCount.Name = "lblCheckCount"
+        Me.lblCheckCount.Size = New System.Drawing.Size(89, 13)
+        Me.lblCheckCount.TabIndex = 4
+        Me.lblCheckCount.Text = "lblCheckCount"
+        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'cmdRefreshList
         '
         Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
@@ -201,17 +209,9 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
         Me.cmdRefreshList.UseVisualStyleBackColor = True
         '
-        'cmdPlotSingleSheet
+        'ToolTip1
         '
-        Me.cmdPlotSingleSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdPlotSingleSheet.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_PDF
-        Me.cmdPlotSingleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 13)
-        Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
-        Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(34, 34)
-        Me.cmdPlotSingleSheet.TabIndex = 8
-        Me.ToolTip1.SetToolTip(Me.cmdPlotSingleSheet, "Geslecteerde layouts afdrukken naar Singlesheet PDF")
-        Me.cmdPlotSingleSheet.UseVisualStyleBackColor = True
+        Me.ToolTip1.IsBalloon = True
         '
         'ucLayoutManager
         '
