@@ -261,6 +261,30 @@
   <ItemGroup>
     <None Include="icons\icon_PDF_multi.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_filter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_light_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_light_off-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_light_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_light_on-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_selection_all.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_selection_invert.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

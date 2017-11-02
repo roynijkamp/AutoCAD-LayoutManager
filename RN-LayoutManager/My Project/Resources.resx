@@ -145,4 +145,28 @@
   <data name="icon_view" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icons\icon_view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_light_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_light_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_light_off_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_light_off-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_light_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_light_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_light_on_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_light_on-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_selection_all" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_selection_all.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_selection_invert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_selection_invert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\icon_settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

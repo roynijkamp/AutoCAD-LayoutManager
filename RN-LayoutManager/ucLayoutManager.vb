@@ -227,12 +227,13 @@ Public Class ucLayoutManager
     Public Sub ItemViewClick(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         Using acLockDoc As DocumentLock = acDoc.LockDocument
-            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+
+            Dim acLayoutMgr As LayoutManager = LayoutManager.Current
                 acLayoutMgr.CurrentLayout = myCntrl.LayoutName
-                'acDoc.Editor.Regen()
-                'zoom extends when not model view
-                If myCntrl.IsModel = False Then
+                acDoc.Editor.Regen()
+            'zoom extends when not model view
+            If myCntrl.IsModel = False Then
+                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
                     Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
                     Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
                     For Each vpId As ObjectId In lay.GetViewports()
@@ -243,8 +244,9 @@ Public Class ucLayoutManager
                     Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
                     acadApp.ZoomExtents()
                     acDoc.Editor.Regen()
-                End If
-            End Using
+                End Using
+            End If
+
         End Using
     End Sub
 
@@ -488,5 +490,39 @@ Public Class ucLayoutManager
 
     Private Sub cmdRefreshList_Click(sender As Object, e As EventArgs) Handles cmdRefreshList.Click
         loadLayouts()
+    End Sub
+
+    Public Function itterateList(ByVal sAction As String)
+        For Each cntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+            If cntrl.CheckState Then 'layout is checked
+                If sAction = "hide" Then
+                    cntrl.Visible = False
+                End If
+                If sAction = "invert" Then
+                    cntrl.SetCheckState(Not cntrl.CheckState)
+                End If
+            Else 'layout is unchecked
+                If sAction = "select" Or sAction = "invert" Then
+                    cntrl.SetCheckState(Not cntrl.CheckState)
+                End If
+            End If
+        Next
+    End Function
+
+
+    Private Sub cmdHideItems_Click(sender As Object, e As EventArgs) Handles cmdHideItems.Click
+        itterateList("hide")
+    End Sub
+
+    Private Sub cmdShowItems_Click(sender As Object, e As EventArgs) Handles cmdShowItems.Click
+        loadLayouts()
+    End Sub
+
+    Private Sub cmdSelectAll_Click(sender As Object, e As EventArgs) Handles cmdSelectAll.Click
+        itterateList("select")
+    End Sub
+
+    Private Sub cmdInvertSelection_Click(sender As Object, e As EventArgs) Handles cmdInvertSelection.Click
+        itterateList("invert")
     End Sub
 End Class
