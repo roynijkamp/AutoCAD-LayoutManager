@@ -1,5 +1,6 @@
 ﻿Imports Autodesk.AutoCAD.ApplicationServices
-Imports AcApp = Autodesk.AutoCAD.ApplicationServices.Application
+Imports AcApp = Autodesk.AutoCAD.ApplicationServices.Application
+
 
 MustInherit Class clsDocData
     Private Shared m_docDataMap As System.Collections.Hashtable

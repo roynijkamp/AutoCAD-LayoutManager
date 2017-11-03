@@ -27,10 +27,8 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
-        Me.lblCheckCount = New System.Windows.Forms.Label()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.cmdTrash = New System.Windows.Forms.Button()
+        Me.cmdInvertSelection = New System.Windows.Forms.Button()
         Me.cmdSelectAll = New System.Windows.Forms.Button()
         Me.cmdHideItems = New System.Windows.Forms.Button()
         Me.cmdShowItems = New System.Windows.Forms.Button()
@@ -38,11 +36,14 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.cmdSettings = New System.Windows.Forms.Button()
         Me.cmdFilter = New System.Windows.Forms.Button()
+        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
+        Me.lblCheckCount = New System.Windows.Forms.Label()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
-        Me.cmdInvertSelection = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -96,6 +97,7 @@ Partial Class ucLayoutManager
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdTrash)
         Me.GroupBox1.Controls.Add(Me.cmdInvertSelection)
         Me.GroupBox1.Controls.Add(Me.cmdSelectAll)
         Me.GroupBox1.Controls.Add(Me.cmdHideItems)
@@ -113,49 +115,27 @@ Partial Class ucLayoutManager
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
-        'GroupBox2
+        'cmdTrash
         '
-        Me.GroupBox2.Controls.Add(Me.cmdSettings)
-        Me.GroupBox2.Controls.Add(Me.cmdFilter)
-        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
-        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
-        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
-        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
-        Me.GroupBox2.TabIndex = 4
-        Me.GroupBox2.TabStop = False
+        Me.cmdTrash.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
+        Me.cmdTrash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdTrash.Location = New System.Drawing.Point(271, 11)
+        Me.cmdTrash.Name = "cmdTrash"
+        Me.cmdTrash.Size = New System.Drawing.Size(34, 34)
+        Me.cmdTrash.TabIndex = 13
+        Me.ToolTip1.SetToolTip(Me.cmdTrash, "Verwijder geselecteerde layouts")
+        Me.cmdTrash.UseVisualStyleBackColor = True
         '
-        'pgbVoortgang
+        'cmdInvertSelection
         '
-        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.pgbVoortgang.Location = New System.Drawing.Point(329, 11)
-        Me.pgbVoortgang.Name = "pgbVoortgang"
-        Me.pgbVoortgang.Size = New System.Drawing.Size(88, 13)
-        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.pgbVoortgang.TabIndex = 5
-        Me.pgbVoortgang.Visible = False
-        '
-        'lblCheckCount
-        '
-        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCheckCount.AutoSize = True
-        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.lblCheckCount.Location = New System.Drawing.Point(326, 32)
-        Me.lblCheckCount.Name = "lblCheckCount"
-        Me.lblCheckCount.Size = New System.Drawing.Size(89, 13)
-        Me.lblCheckCount.TabIndex = 4
-        Me.lblCheckCount.Text = "lblCheckCount"
-        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.IsBalloon = True
+        Me.cmdInvertSelection.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_invert
+        Me.cmdInvertSelection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdInvertSelection.Location = New System.Drawing.Point(124, 11)
+        Me.cmdInvertSelection.Name = "cmdInvertSelection"
+        Me.cmdInvertSelection.Size = New System.Drawing.Size(34, 34)
+        Me.cmdInvertSelection.TabIndex = 12
+        Me.ToolTip1.SetToolTip(Me.cmdInvertSelection, "Selectie omkeren")
+        Me.cmdInvertSelection.UseVisualStyleBackColor = True
         '
         'cmdSelectAll
         '
@@ -236,6 +216,23 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.cmdSettings)
+        Me.GroupBox2.Controls.Add(Me.cmdFilter)
+        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
+        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
+        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
+        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
+        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
+        Me.GroupBox2.TabIndex = 4
+        Me.GroupBox2.TabStop = False
+        '
         'cmdSettings
         '
         Me.cmdSettings.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_settings
@@ -258,16 +255,41 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdFilter, "Weergave filter instellen")
         Me.cmdFilter.UseVisualStyleBackColor = True
         '
+        'pgbVoortgang
+        '
+        Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.pgbVoortgang.Location = New System.Drawing.Point(381, 11)
+        Me.pgbVoortgang.Name = "pgbVoortgang"
+        Me.pgbVoortgang.Size = New System.Drawing.Size(36, 18)
+        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+        Me.pgbVoortgang.TabIndex = 5
+        Me.pgbVoortgang.Visible = False
+        '
         'cmdSaveOrder
         '
+        Me.cmdSaveOrder.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdSaveOrder.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_save
         Me.cmdSaveOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSaveOrder.Location = New System.Drawing.Point(286, 13)
+        Me.cmdSaveOrder.Location = New System.Drawing.Point(341, 11)
         Me.cmdSaveOrder.Name = "cmdSaveOrder"
         Me.cmdSaveOrder.Size = New System.Drawing.Size(34, 34)
         Me.cmdSaveOrder.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.cmdSaveOrder, "Layout volgorde opslaan in DWG")
         Me.cmdSaveOrder.UseVisualStyleBackColor = True
+        '
+        'lblCheckCount
+        '
+        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblCheckCount.AutoSize = True
+        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblCheckCount.Location = New System.Drawing.Point(389, 32)
+        Me.lblCheckCount.Name = "lblCheckCount"
+        Me.lblCheckCount.Size = New System.Drawing.Size(26, 13)
+        Me.lblCheckCount.TabIndex = 4
+        Me.lblCheckCount.Text = "# 0"
+        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'cmdRefreshList
         '
@@ -280,16 +302,9 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
         Me.cmdRefreshList.UseVisualStyleBackColor = True
         '
-        'cmdInvertSelection
+        'ToolTip1
         '
-        Me.cmdInvertSelection.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_invert
-        Me.cmdInvertSelection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdInvertSelection.Location = New System.Drawing.Point(124, 11)
-        Me.cmdInvertSelection.Name = "cmdInvertSelection"
-        Me.cmdInvertSelection.Size = New System.Drawing.Size(34, 34)
-        Me.cmdInvertSelection.TabIndex = 12
-        Me.ToolTip1.SetToolTip(Me.cmdInvertSelection, "Selectie omkeren")
-        Me.cmdInvertSelection.UseVisualStyleBackColor = True
+        Me.ToolTip1.IsBalloon = True
         '
         'ucLayoutManager
         '
@@ -327,4 +342,5 @@ Partial Class ucLayoutManager
     Friend WithEvents cmdHideItems As Windows.Forms.Button
     Friend WithEvents cmdSelectAll As Windows.Forms.Button
     Friend WithEvents cmdInvertSelection As Windows.Forms.Button
+    Friend WithEvents cmdTrash As Windows.Forms.Button
 End Class

@@ -182,6 +182,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ucSettings.Designer.vb">
+      <DependentUpon>ucSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ucSettings.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ucLayoutManager.resx">
@@ -192,6 +198,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucSettings.resx">
+      <DependentUpon>ucSettings.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon_selection_invert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_trash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -24,12 +24,15 @@ Namespace RN_LayoutManager
                 m_palette = New Autodesk.AutoCAD.Windows.PaletteSet("RN-LayoutManager", New Guid("{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"))
                 m_palette.Style = PaletteSetStyles.ShowPropertiesMenu + PaletteSetStyles.ShowAutoHideButton + PaletteSetStyles.ShowCloseButton
                 Dim palette_overlayman As ucLayoutManager = New ucLayoutManager()
-                m_palette.Add("RN-LayoutManager", palette_overlayman)
+                m_palette.Add("LayoutManager", palette_overlayman)
+                Dim palette_settings As ucSettings = New ucSettings()
+                m_palette.Add("Instellingen", palette_settings)
 
             End If
             'm_palette.Icon = GetEmbeddedIcon("aitoolsicon.ico")
             'palette aanzetten
             m_palette.Visible = True
+            m_palette.Activate(0)
         End Sub
 
 

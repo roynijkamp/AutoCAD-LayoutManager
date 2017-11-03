@@ -192,7 +192,7 @@ Public Class ucLayoutManager
     End Function
 
     Public Sub updateCheckLabel()
-        lblCheckCount.Text = "# " & iCheckCount.ToString & " selected"
+        lblCheckCount.Text = "# " & iCheckCount.ToString ' & " selected"
     End Sub
 
     Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs)
@@ -393,7 +393,7 @@ Public Class ucLayoutManager
         setLayoutOrder()
     End Sub
 
-    Public Function checkedLayouts()
+    Public Function checkedLayouts(Optional ByVal bTrash As Boolean = False)
         Dim layouts As New List(Of Layout)()
         If iCheckCount > 0 Then
             Try
@@ -405,6 +405,10 @@ Public Class ucLayoutManager
                             If cntrl.CheckState Then 'layout is checked, add to plot
                                 Dim oId As ObjectId = acLayoutMgr.GetLayoutId(cntrl.LayoutName)
                                 Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                                If bTrash Then
+                                    'trash layout
+                                    acLayoutMgr.DeleteLayout(cntrl.LayoutName)
+                                End If
                                 layouts.Add(lay)
                             End If
                         Next
@@ -493,20 +497,24 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function itterateList(ByVal sAction As String)
-        For Each cntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-            If cntrl.CheckState Then 'layout is checked
-                If sAction = "hide" Then
-                    cntrl.Visible = False
-                End If
-                If sAction = "invert" Then
-                    cntrl.SetCheckState(Not cntrl.CheckState)
-                End If
-            Else 'layout is unchecked
-                If sAction = "select" Or sAction = "invert" Then
-                    cntrl.SetCheckState(Not cntrl.CheckState)
+        For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+            If myCntrl.IsModel = False Then 'model can not be selected
+                If myCntrl.CheckState Then 'layout is checked
+                    If sAction = "hide" Then
+                        myCntrl.Visible = False
+                    End If
+                    If sAction = "invert" Then
+                        myCntrl.SetCheckState(Not myCntrl.CheckState)
+                    End If
+                Else 'layout is unchecked
+
+                    If sAction = "select" Or sAction = "invert" Then
+                        myCntrl.SetCheckState(Not myCntrl.CheckState)
+                    End If
                 End If
             End If
         Next
+        Return True
     End Function
 
 
@@ -524,5 +532,12 @@ Public Class ucLayoutManager
 
     Private Sub cmdInvertSelection_Click(sender As Object, e As EventArgs) Handles cmdInvertSelection.Click
         itterateList("invert")
+    End Sub
+
+    Private Sub cmdTrash_Click(sender As Object, e As EventArgs) Handles cmdTrash.Click
+        If MsgBox("Weet u zeker dat u deze layouts wilt verwijderen?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, "Geselecteerde layouts verwijderen?") = MsgBoxResult.Yes Then
+            checkedLayouts(True)
+            loadLayouts()
+        End If
     End Sub
 End Class
