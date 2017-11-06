@@ -33,6 +33,13 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.None.DayOfYearStamp.DeltaDayStamp</AssemblyVersionSettings>
+    <AssemblyInfoFilePath>bin\Debug\RN-LayoutManager.dll</AssemblyInfoFilePath>
+    <AssemblyFileVersionSettings>None.None.DayOfYearStamp.DeltaDayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.None.DayOfYearStamp.DeltaDayStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -152,6 +159,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsINI.vb" />
     <Compile Include="clsMyDocData.vb" />
     <Compile Include="plotting.vb" />
     <Compile Include="ucLayoutManager.Designer.vb">
