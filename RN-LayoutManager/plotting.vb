@@ -9,14 +9,19 @@ Public Class plotting
         Private sheetNum As Integer
         Private layouts As IEnumerable(Of Layout)
         Private pdfSheetType As SheetType = SheetType.MultiPdf
+        Private pdfOutputDIR As String
 
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType)
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, pdfOutputDIR As String)
             Dim db As Database = HostApplicationServices.WorkingDatabase
             Me.dwgFile = db.Filename
             Me.pdfFile = pdfFile
-            Me.outputDir = Path.GetDirectoryName(Me.pdfFile)
+            If pdfOutputDIR.Length > 1 Then
+                Me.outputDir = pdfOutputDIR
+            Else
+                Me.outputDir = Path.GetDirectoryName(Me.pdfFile)
+            End If
             Me.dsdFile = Path.ChangeExtension(Me.pdfFile, "dsd")
             Me.layouts = layouts
             Me.pdfSheetType = pdfSheetType
@@ -57,7 +62,8 @@ Public Class plotting
                     dsd.SheetType = Me.pdfSheetType
 
                     dsd.NoOfCopies = 1
-                    dsd.DestinationName = Me.pdfFile
+                    'dsd.DestinationName = Me.pdfFile
+                    dsd.DestinationName = Me.outputDir & Me.pdfFile
 
                     dsd.IsHomogeneous = False
                     dsd.LogFilePath = Path.Combine(Me.outputDir, LOG)

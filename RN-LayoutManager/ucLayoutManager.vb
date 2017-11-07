@@ -9,6 +9,7 @@ Imports System.Linq
 Imports System.IO
 Imports System.Windows.Forms
 Imports Autodesk.AutoCAD.PlottingServices
+Imports System.Reflection
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -16,7 +17,12 @@ Public Class ucLayoutManager
     Dim acEd As Editor = acDoc.Editor
     Dim iCheckCount As Integer = 0 'counter for checks
     Dim drag_drop_scroll_amount As Integer = 0
-
+    Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
+    Dim sIniFile As String = "\layoutmanager.ini"
+    Dim iniFile As clsINI
+    Dim sPDFuserFolder As String
+    Dim sDefaultOutputLocation As String = "drawingfolder"
+    Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -65,7 +71,6 @@ Public Class ucLayoutManager
         '### Active Drawing Tracking
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
-
         '### /Active Drawing Tracking
         loadLayouts()
     End Sub
@@ -196,6 +201,7 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs)
+        Dim sOutputLocation As String = PDFoutputLocation()
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         Dim layouts As New List(Of Layout)()
         Try
@@ -229,8 +235,8 @@ Public Class ucLayoutManager
         Using acLockDoc As DocumentLock = acDoc.LockDocument
 
             Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-                acLayoutMgr.CurrentLayout = myCntrl.LayoutName
-                acDoc.Editor.Regen()
+            acLayoutMgr.CurrentLayout = myCntrl.LayoutName
+            acDoc.Editor.Regen()
             'zoom extends when not model view
             If myCntrl.IsModel = False Then
                 Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
@@ -433,27 +439,28 @@ Public Class ucLayoutManager
     ''' <param name="pdfSheetType"></param>
     ''' <returns></returns>
     Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout))
-
+        Dim sOutputLocation As String = PDFoutputLocation()
         Dim db As Database = HostApplicationServices.WorkingDatabase
-            Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
-            Try
-                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
+        Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
+        Try
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
 
-                'Dim layouts As New List(Of Layout)()
-                'layouts = checkedLayouts()
+            'Dim layouts As New List(Of Layout)()
+            'layouts = checkedLayouts()
 
-                Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
+            'Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
+            Dim filename As String = Path.GetFileName(Path.ChangeExtension(db.Filename, "pdf"))
 
-                Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType)
-                plotter.Publish()
+            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, sPDFuserFolder)
+            plotter.Publish()
 
-            Catch e As System.Exception
-                Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
-                ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
-            Finally
-                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
-            End Try
-            Return True
+        Catch e As System.Exception
+            Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+            ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
+        Finally
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
+        End Try
+        Return True
 
     End Function
 
@@ -540,4 +547,40 @@ Public Class ucLayoutManager
             loadLayouts()
         End If
     End Sub
+
+    Public Sub loadSettings()
+        'check of ini bestand bestaat, zo ja: instellingen laden
+        If File.Exists(sIniDir & sIniFile) Then
+            'bestand bestaat, instelingen laden
+            iniFile = New clsINI(sIniDir & sIniFile)
+            sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
+            sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
+
+        Else
+            'eerst check of map wel bestaat
+            If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
+                My.Computer.FileSystem.CreateDirectory(sIniDir)
+                iniFile = New clsINI(sIniDir & sIniFile)
+                iniFile.WriteString("appsettings", "version", sCurrVersion)
+            End If
+        End If
+    End Sub
+
+    Public Function PDFoutputLocation()
+        loadSettings()
+        Select Case sDefaultOutputLocation
+            Case "drawingfolder"
+                Return ""
+            Case "userlocation"
+                Return sPDFuserFolder
+            Case "askonplot"
+                Dim myFolderBrowser As FolderBrowserDialog = New FolderBrowserDialog()
+                If myFolderBrowser.ShowDialog() = DialogResult.OK Then
+                    Return myFolderBrowser.SelectedPath
+                Else
+                    Return "cancel"
+                End If
+        End Select
+        Return "cancel"
+    End Function
 End Class
