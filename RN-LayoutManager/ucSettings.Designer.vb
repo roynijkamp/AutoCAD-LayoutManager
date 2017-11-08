@@ -24,11 +24,11 @@ Partial Class ucSettings
     Private Sub InitializeComponent()
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.radioPDFdrawingFolder = New System.Windows.Forms.RadioButton()
-        Me.radioPDFuserFolder = New System.Windows.Forms.RadioButton()
-        Me.txtUserSaveFolder = New System.Windows.Forms.TextBox()
-        Me.cmdSelectUserSaveFolder = New System.Windows.Forms.Button()
         Me.radioPDFfolderAsk = New System.Windows.Forms.RadioButton()
+        Me.cmdSelectUserSaveFolder = New System.Windows.Forms.Button()
+        Me.txtUserSaveFolder = New System.Windows.Forms.TextBox()
+        Me.radioPDFuserFolder = New System.Windows.Forms.RadioButton()
+        Me.radioPDFdrawingFolder = New System.Windows.Forms.RadioButton()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -61,38 +61,15 @@ Partial Class ucSettings
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Opslag locatie PDF bestanden"
         '
-        'radioPDFdrawingFolder
+        'radioPDFfolderAsk
         '
-        Me.radioPDFdrawingFolder.AutoSize = True
-        Me.radioPDFdrawingFolder.Checked = True
-        Me.radioPDFdrawingFolder.Location = New System.Drawing.Point(6, 19)
-        Me.radioPDFdrawingFolder.Name = "radioPDFdrawingFolder"
-        Me.radioPDFdrawingFolder.Size = New System.Drawing.Size(286, 17)
-        Me.radioPDFdrawingFolder.TabIndex = 0
-        Me.radioPDFdrawingFolder.TabStop = True
-        Me.radioPDFdrawingFolder.Text = "PDF opslaan op de locatie van de tekening (standaard)"
-        Me.radioPDFdrawingFolder.UseVisualStyleBackColor = True
-        '
-        'radioPDFuserFolder
-        '
-        Me.radioPDFuserFolder.AutoSize = True
-        Me.radioPDFuserFolder.Location = New System.Drawing.Point(6, 42)
-        Me.radioPDFuserFolder.Name = "radioPDFuserFolder"
-        Me.radioPDFuserFolder.Size = New System.Drawing.Size(227, 17)
-        Me.radioPDFuserFolder.TabIndex = 1
-        Me.radioPDFuserFolder.TabStop = True
-        Me.radioPDFuserFolder.Text = "PDF altijd opslaan op onderstaande locatie"
-        Me.radioPDFuserFolder.UseVisualStyleBackColor = True
-        '
-        'txtUserSaveFolder
-        '
-        Me.txtUserSaveFolder.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtUserSaveFolder.Enabled = False
-        Me.txtUserSaveFolder.Location = New System.Drawing.Point(23, 65)
-        Me.txtUserSaveFolder.Name = "txtUserSaveFolder"
-        Me.txtUserSaveFolder.Size = New System.Drawing.Size(348, 20)
-        Me.txtUserSaveFolder.TabIndex = 2
+        Me.radioPDFfolderAsk.AutoSize = True
+        Me.radioPDFfolderAsk.Location = New System.Drawing.Point(6, 91)
+        Me.radioPDFfolderAsk.Name = "radioPDFfolderAsk"
+        Me.radioPDFfolderAsk.Size = New System.Drawing.Size(260, 17)
+        Me.radioPDFfolderAsk.TabIndex = 4
+        Me.radioPDFfolderAsk.Text = "Vraag mij om een opslag locatie tijdens het plotten"
+        Me.radioPDFfolderAsk.UseVisualStyleBackColor = True
         '
         'cmdSelectUserSaveFolder
         '
@@ -105,16 +82,35 @@ Partial Class ucSettings
         Me.cmdSelectUserSaveFolder.Text = "..."
         Me.cmdSelectUserSaveFolder.UseVisualStyleBackColor = True
         '
-        'radioPDFfolderAsk
+        'txtUserSaveFolder
         '
-        Me.radioPDFfolderAsk.AutoSize = True
-        Me.radioPDFfolderAsk.Location = New System.Drawing.Point(6, 91)
-        Me.radioPDFfolderAsk.Name = "radioPDFfolderAsk"
-        Me.radioPDFfolderAsk.Size = New System.Drawing.Size(260, 17)
-        Me.radioPDFfolderAsk.TabIndex = 4
-        Me.radioPDFfolderAsk.TabStop = True
-        Me.radioPDFfolderAsk.Text = "Vraag mij om een opslag locatie tijdens het plotten"
-        Me.radioPDFfolderAsk.UseVisualStyleBackColor = True
+        Me.txtUserSaveFolder.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtUserSaveFolder.Enabled = False
+        Me.txtUserSaveFolder.Location = New System.Drawing.Point(23, 65)
+        Me.txtUserSaveFolder.Name = "txtUserSaveFolder"
+        Me.txtUserSaveFolder.Size = New System.Drawing.Size(348, 20)
+        Me.txtUserSaveFolder.TabIndex = 2
+        '
+        'radioPDFuserFolder
+        '
+        Me.radioPDFuserFolder.AutoSize = True
+        Me.radioPDFuserFolder.Location = New System.Drawing.Point(6, 42)
+        Me.radioPDFuserFolder.Name = "radioPDFuserFolder"
+        Me.radioPDFuserFolder.Size = New System.Drawing.Size(227, 17)
+        Me.radioPDFuserFolder.TabIndex = 1
+        Me.radioPDFuserFolder.Text = "PDF altijd opslaan op onderstaande locatie"
+        Me.radioPDFuserFolder.UseVisualStyleBackColor = True
+        '
+        'radioPDFdrawingFolder
+        '
+        Me.radioPDFdrawingFolder.AutoSize = True
+        Me.radioPDFdrawingFolder.Location = New System.Drawing.Point(6, 19)
+        Me.radioPDFdrawingFolder.Name = "radioPDFdrawingFolder"
+        Me.radioPDFdrawingFolder.Size = New System.Drawing.Size(286, 17)
+        Me.radioPDFdrawingFolder.TabIndex = 0
+        Me.radioPDFdrawingFolder.Text = "PDF opslaan op de locatie van de tekening (standaard)"
+        Me.radioPDFdrawingFolder.UseVisualStyleBackColor = True
         '
         'ucSettings
         '

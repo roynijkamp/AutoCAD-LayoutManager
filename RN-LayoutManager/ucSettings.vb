@@ -7,7 +7,7 @@ Public Class ucSettings
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-    Dim sDefaultOutputLocation As String = "drawingfolder"
+    Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
@@ -57,6 +57,8 @@ Public Class ucSettings
                     radioPDFuserFolder.Checked = True
                 Case "askonplot"
                     radioPDFfolderAsk.Checked = True
+                Case Else
+                    radioPDFdrawingFolder.Checked = True
             End Select
         Else
             'eerst check of map wel bestaat

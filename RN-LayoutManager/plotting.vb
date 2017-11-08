@@ -13,15 +13,13 @@ Public Class plotting
 
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, pdfOutputDIR As String)
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType)
             Dim db As Database = HostApplicationServices.WorkingDatabase
             Me.dwgFile = db.Filename
             Me.pdfFile = pdfFile
-            If pdfOutputDIR.Length > 1 Then
-                Me.outputDir = pdfOutputDIR
-            Else
-                Me.outputDir = Path.GetDirectoryName(Me.pdfFile)
-            End If
+
+            Me.outputDir = Path.GetDirectoryName(Me.pdfFile)
+
             Me.dsdFile = Path.ChangeExtension(Me.pdfFile, "dsd")
             Me.layouts = layouts
             Me.pdfSheetType = pdfSheetType
@@ -29,7 +27,6 @@ Public Class plotting
 
         Public Sub Publish()
             If TryCreateDSD() Then
-                'If Me.pdfSheetType = SheetType.MultiPdf Then
                 Dim publisher As Publisher = Autodesk.AutoCAD.ApplicationServices.Application.Publisher
                 Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
                 publisher.PublishDsd(Me.dsdFile, plotDlg)
@@ -62,8 +59,8 @@ Public Class plotting
                     dsd.SheetType = Me.pdfSheetType
 
                     dsd.NoOfCopies = 1
-                    'dsd.DestinationName = Me.pdfFile
-                    dsd.DestinationName = Me.outputDir & Me.pdfFile
+                    dsd.DestinationName = Me.pdfFile
+                    'dsd.DestinationName = Me.outputDir & Me.pdfFile
 
                     dsd.IsHomogeneous = False
                     dsd.LogFilePath = Path.Combine(Me.outputDir, LOG)

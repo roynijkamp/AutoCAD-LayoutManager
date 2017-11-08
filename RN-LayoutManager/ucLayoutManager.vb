@@ -21,7 +21,7 @@ Public Class ucLayoutManager
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String
-    Dim sDefaultOutputLocation As String = "drawingfolder"
+    Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
@@ -62,6 +62,9 @@ Public Class ucLayoutManager
         End Try
     End Sub
 
+    Private Sub DocumentManger_DocumentLayoutSwitched()
+        'sub layout switched
+    End Sub
 
     '### /Active Drawing Tracking
 
@@ -71,9 +74,11 @@ Public Class ucLayoutManager
         '### Active Drawing Tracking
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
+        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
         '### /Active Drawing Tracking
         loadLayouts()
     End Sub
+
 
 
     Public Sub resetList()
@@ -440,18 +445,23 @@ Public Class ucLayoutManager
     ''' <returns></returns>
     Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout))
         Dim sOutputLocation As String = PDFoutputLocation()
+
         Dim db As Database = HostApplicationServices.WorkingDatabase
         Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
         Try
             Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
 
-            'Dim layouts As New List(Of Layout)()
-            'layouts = checkedLayouts()
+            Dim filename As String
+            If sOutputLocation = "" Then
+                'drawing location
+                filename = Path.ChangeExtension(db.Filename, "pdf")
+            Else
+                'user chosen location
+                filename = sOutputLocation & "\" & Path.GetFileName(Path.ChangeExtension(db.Filename, "pdf"))
+            End If
 
-            'Dim filename As String = Path.ChangeExtension(db.Filename, "pdf")
-            Dim filename As String = Path.GetFileName(Path.ChangeExtension(db.Filename, "pdf"))
 
-            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, sPDFuserFolder)
+            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType)
             plotter.Publish()
 
         Catch e As System.Exception
@@ -505,7 +515,7 @@ Public Class ucLayoutManager
 
     Public Function itterateList(ByVal sAction As String)
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-            If myCntrl.IsModel = False Then 'model can not be selected
+            If myCntrl.IsModel = False And myCntrl.Visible = True Then 'model can not be selected and item must be visible
                 If myCntrl.CheckState Then 'layout is checked
                     If sAction = "hide" Then
                         myCntrl.Visible = False
@@ -514,10 +524,13 @@ Public Class ucLayoutManager
                         myCntrl.SetCheckState(Not myCntrl.CheckState)
                     End If
                 Else 'layout is unchecked
-
                     If sAction = "select" Or sAction = "invert" Then
                         myCntrl.SetCheckState(Not myCntrl.CheckState)
                     End If
+                End If
+
+                If sAction = "markactive" Then
+                    'active layout makeren
                 End If
             End If
         Next
@@ -555,14 +568,6 @@ Public Class ucLayoutManager
             iniFile = New clsINI(sIniDir & sIniFile)
             sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
             sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
-
-        Else
-            'eerst check of map wel bestaat
-            If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
-                My.Computer.FileSystem.CreateDirectory(sIniDir)
-                iniFile = New clsINI(sIniDir & sIniFile)
-                iniFile.WriteString("appsettings", "version", sCurrVersion)
-            End If
         End If
     End Sub
 
@@ -580,7 +585,9 @@ Public Class ucLayoutManager
                 Else
                     Return "cancel"
                 End If
+            Case Else
+                Return ""
         End Select
-        Return "cancel"
+        Return ""
     End Function
 End Class
