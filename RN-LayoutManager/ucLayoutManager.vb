@@ -165,6 +165,7 @@ Public Class ucLayoutManager
                     AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
                     AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
                     AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
+                    myCntrl.ContextMenuStrip = SubMenu
                     flowLayouts.Controls.Add(myCntrl)
                 End If
             Next
@@ -632,4 +633,65 @@ Public Class ucLayoutManager
         End Select
         Return ""
     End Function
+
+    Private Sub LayoutKopierenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LayoutKopierenToolStripMenuItem.Click
+        Dim sNewLayoutName As String = InputBox("Layout naam", "Layout naam", "")
+        If sNewLayoutName <> "" Then
+            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+            ModifyLayout("kopieren", myCntrl, sNewLayoutName)
+            loadLayouts()
+        End If
+    End Sub
+
+    Private Sub LayoutVerwijderenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LayoutVerwijderenToolStripMenuItem.Click
+        If MsgBox("Weet u zeker dat u deze layouts wilt verwijderen?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, "Geselecteerde layouts verwijderen?") = MsgBoxResult.Yes Then
+            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+            ModifyLayout("verwijderen", myCntrl)
+            loadLayouts()
+        End If
+    End Sub
+
+    Public Function ModifyLayout(ByVal sAction As String, ByVal myCntrl As RN_LayoutItems.RN_UCLayoutItem, Optional ByVal sNewName As String = "")
+        Try
+
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+
+
+                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
+                    Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+
+                    If sAction = "verwijderen" Then
+                        'trash layout
+                        acLayoutMgr.DeleteLayout(myCntrl.LayoutName)
+                    ElseIf sAction = "kopieren" Then
+                        'layout kopieren
+                        If LayoutExists(myCntrl.LayoutName) = False Then
+                            acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
+                        End If
+                    End If
+
+                    acTrans.Commit()
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij het " & sAction & " van de layout " & ex.Message & vbCrLf & ex.Source)
+            Return False
+        End Try
+        Return True
+    End Function
+
+    Public Function LayoutExists(ByVal sLayName As String)
+        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+            Dim lays As DBDictionary = acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForRead)
+            If lays.Contains(sLayName) Then
+                MsgBox("Er bestaat al een layout met deze naam!")
+                Return True
+            End If
+            acTrans.Commit()
+        End Using
+        Return False
+    End Function
+
 End Class

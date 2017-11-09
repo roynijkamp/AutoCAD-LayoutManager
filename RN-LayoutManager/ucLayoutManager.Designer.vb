@@ -44,9 +44,14 @@ Partial Class ucLayoutManager
         Me.lblCheckCount = New System.Windows.Forms.Label()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.SubMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -306,6 +311,29 @@ Partial Class ucLayoutManager
         '
         Me.ToolTip1.IsBalloon = True
         '
+        'SubMenu
+        '
+        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem})
+        Me.SubMenu.Name = "SubMenu"
+        Me.SubMenu.Size = New System.Drawing.Size(175, 76)
+        '
+        'LayoutKopierenToolStripMenuItem
+        '
+        Me.LayoutKopierenToolStripMenuItem.Name = "LayoutKopierenToolStripMenuItem"
+        Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutKopierenToolStripMenuItem.Text = "Layout kopieren"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(171, 6)
+        '
+        'LayoutVerwijderenToolStripMenuItem
+        '
+        Me.LayoutVerwijderenToolStripMenuItem.Name = "LayoutVerwijderenToolStripMenuItem"
+        Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -318,6 +346,7 @@ Partial Class ucLayoutManager
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.SubMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -343,4 +372,8 @@ Partial Class ucLayoutManager
     Friend WithEvents cmdSelectAll As Windows.Forms.Button
     Friend WithEvents cmdInvertSelection As Windows.Forms.Button
     Friend WithEvents cmdTrash As Windows.Forms.Button
+    Friend WithEvents SubMenu As Windows.Forms.ContextMenuStrip
+    Friend WithEvents LayoutKopierenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents LayoutVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
 End Class

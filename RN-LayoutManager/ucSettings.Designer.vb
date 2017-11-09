@@ -29,6 +29,7 @@ Partial Class ucSettings
         Me.txtUserSaveFolder = New System.Windows.Forms.TextBox()
         Me.radioPDFuserFolder = New System.Windows.Forms.RadioButton()
         Me.radioPDFdrawingFolder = New System.Windows.Forms.RadioButton()
+        Me.lblVersion = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -112,10 +113,21 @@ Partial Class ucSettings
         Me.radioPDFdrawingFolder.Text = "PDF opslaan op de locatie van de tekening (standaard)"
         Me.radioPDFdrawingFolder.UseVisualStyleBackColor = True
         '
+        'lblVersion
+        '
+        Me.lblVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblVersion.AutoSize = True
+        Me.lblVersion.Location = New System.Drawing.Point(6, 795)
+        Me.lblVersion.Name = "lblVersion"
+        Me.lblVersion.Size = New System.Drawing.Size(36, 13)
+        Me.lblVersion.TabIndex = 4
+        Me.lblVersion.Text = "Versie"
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.lblTitel)
         Me.Name = "ucSettings"
@@ -123,6 +135,7 @@ Partial Class ucSettings
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -133,4 +146,5 @@ Partial Class ucSettings
     Friend WithEvents txtUserSaveFolder As Windows.Forms.TextBox
     Friend WithEvents radioPDFuserFolder As Windows.Forms.RadioButton
     Friend WithEvents radioPDFdrawingFolder As Windows.Forms.RadioButton
+    Friend WithEvents lblVersion As Windows.Forms.Label
 End Class

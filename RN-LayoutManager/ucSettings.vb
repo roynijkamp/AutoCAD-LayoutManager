@@ -68,6 +68,7 @@ Public Class ucSettings
                 iniFile.WriteString("appsettings", "version", sCurrVersion)
             End If
         End If
+        lblVersion.Text = sCurrVersion
     End Sub
 
     Private Sub radioPDFfolderAsk_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFfolderAsk.CheckedChanged
