@@ -159,6 +159,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsFunctions.vb" />
     <Compile Include="clsINI.vb" />
     <Compile Include="clsMyDocData.vb" />
     <Compile Include="plotting.vb" />

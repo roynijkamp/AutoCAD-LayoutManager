@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage 
+   SchemaVersion="1.0"
+   Name="RN Layout Manager"
+   AppVersion="1.0.0.0"
+   ProductCode="{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"
+   Author="R. Nijkamp"
+   Icon="./Contents/logo.ico"
+   HelpFile="./Docs/Handleiding.pdf"
+   Description="Handige tool voor het eenvoudig beheren van de Layouts"
+   UpgradeCode="{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"> <!-- Remain UpgradeCode -->
+  <CompanyDetails
+    Name="Roy Nijkamp"
+    Phone="+31611101043"
+    Url="http://www.roynijkmap.nl"
+    Email="roynijkamp@roynijkamp.nl" />
+
+  <Components> <!-- Alle AutoCAD producten -->
+    <RuntimeRequirements
+      Platform="AutoCAD|AutoCAD*"
+      OS="Win32|Win64"
+      SeriesMin="R19.1"
+      SeriesMax="R23.0" />
+
+    <ComponentEntry
+      AppName="layoutman"
+      ModuleName="./Contents/RN-LayoutManager.dll"
+      AppDescription="layoutman"
+      LoadOnAppearance="True">
+      <Commands GroupName="layoutman">
+        <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
+      </Commands>
+    </ComponentEntry>
+	</Components>
+</ApplicationPackage>

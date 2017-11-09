@@ -23,6 +23,7 @@ Public Class ucLayoutManager
     Dim sPDFuserFolder As String
     Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
+    Dim sCurrentLayout As String
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -64,11 +65,38 @@ Public Class ucLayoutManager
 
     Private Sub DocumentManger_DocumentLayoutSwitched()
         'sub layout switched
+        Dim acLayout As Layout = Nothing
+        Using acLockDoc As DocumentLock = acDoc.LockDocument
+            Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+            sCurrentLayout = acLayoutMgr.CurrentLayout
+        End Using
+        itterateList("iscurrent")
     End Sub
 
     '### /Active Drawing Tracking
 
+    Public Sub getTrustedPaths(AITools_path As String)
+        Dim str_TR As String = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("TRUSTEDPATHS")
 
+        Dim C_Paths As String = LCase(str_TR)
+        Dim splitAry() As String = C_Paths.Split(";")
+
+        Dim Old_Path_Ary As List(Of String) = New List(Of String)
+        Old_Path_Ary = splitAry.ToList()
+
+        Dim New_paths As List(Of String) = New List(Of String)
+
+        New_paths.Add(AITools_path)
+
+        For Each Str As String In New_paths
+            If Not Old_Path_Ary.Contains(LCase(Str)) Then
+                Old_Path_Ary.Add(Str)
+            End If
+        Next
+
+        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("TRUSTEDPATHS", String.Join(";", Old_Path_Ary.ToArray()))
+
+    End Sub
 
     Private Sub LayoutManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         '### Active Drawing Tracking
@@ -77,6 +105,10 @@ Public Class ucLayoutManager
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
         '### /Active Drawing Tracking
         loadLayouts()
+        'set active layout
+        DocumentManger_DocumentLayoutSwitched()
+        'tool toevoegen aan trusted path
+        getTrustedPaths(clsFunctions.getCoreDir())
     End Sub
 
 
@@ -100,6 +132,8 @@ Public Class ucLayoutManager
         'clear flow
         flowLayouts.Controls.Clear()
         flowLayouts.AllowDrop = True
+        flowLayouts.AutoScroll = True
+        flowLayouts.SetAutoScrollMargin(5, 5)
         'first add model item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
@@ -367,6 +401,8 @@ Public Class ucLayoutManager
         End If
         pgbVoortgang.Value = 0
         pgbVoortgang.Visible = False
+        'reset current layout marking
+        DocumentManger_DocumentLayoutSwitched()
         Return True
     End Function
 
@@ -515,7 +551,7 @@ Public Class ucLayoutManager
 
     Public Function itterateList(ByVal sAction As String)
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-            If myCntrl.IsModel = False And myCntrl.Visible = True Then 'model can not be selected and item must be visible
+            If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
                 If myCntrl.CheckState Then 'layout is checked
                     If sAction = "hide" Then
                         myCntrl.Visible = False
@@ -529,8 +565,14 @@ Public Class ucLayoutManager
                     End If
                 End If
 
-                If sAction = "markactive" Then
+                If sAction = "iscurrent" Then
                     'active layout makeren
+                    If myCntrl.LayoutName = sCurrentLayout Then
+                        myCntrl.IsCurrent = True
+                    Else
+                        myCntrl.IsCurrent = False
+                    End If
+                    myCntrl.isCurrentLayout()
                 End If
             End If
         Next
