@@ -10,6 +10,7 @@ Imports System.IO
 Imports System.Windows.Forms
 Imports Autodesk.AutoCAD.PlottingServices
 Imports System.Reflection
+Imports System.ComponentModel
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -71,6 +72,11 @@ Public Class ucLayoutManager
             sCurrentLayout = acLayoutMgr.CurrentLayout
         End Using
         itterateList("iscurrent")
+    End Sub
+
+    Private Sub DocumentManager_DocumentLayoutsModified()
+        loadLayouts()
+        DocumentManger_DocumentLayoutSwitched()
     End Sub
 
     '### /Active Drawing Tracking
@@ -637,7 +643,8 @@ Public Class ucLayoutManager
     Private Sub LayoutKopierenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LayoutKopierenToolStripMenuItem.Click
         Dim sNewLayoutName As String = InputBox("Layout naam", "Layout naam", "")
         If sNewLayoutName <> "" Then
-            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+            Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
+            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
             ModifyLayout("kopieren", myCntrl, sNewLayoutName)
             loadLayouts()
         End If
@@ -645,7 +652,8 @@ Public Class ucLayoutManager
 
     Private Sub LayoutVerwijderenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LayoutVerwijderenToolStripMenuItem.Click
         If MsgBox("Weet u zeker dat u deze layouts wilt verwijderen?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, "Geselecteerde layouts verwijderen?") = MsgBoxResult.Yes Then
-            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+            Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
+            Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
             ModifyLayout("verwijderen", myCntrl)
             loadLayouts()
         End If
@@ -667,7 +675,7 @@ Public Class ucLayoutManager
                         acLayoutMgr.DeleteLayout(myCntrl.LayoutName)
                     ElseIf sAction = "kopieren" Then
                         'layout kopieren
-                        If LayoutExists(myCntrl.LayoutName) = False Then
+                        If LayoutExists(sNewName) = False Then
                             acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
                         End If
                     End If
@@ -694,4 +702,7 @@ Public Class ucLayoutManager
         Return False
     End Function
 
+    Private Sub SubMenu_Opening(sender As Object, e As CancelEventArgs) Handles SubMenu.Opening
+        Me.SubMenu.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+    End Sub
 End Class

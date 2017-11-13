@@ -30,7 +30,11 @@ Partial Class ucSettings
         Me.radioPDFuserFolder = New System.Windows.Forms.RadioButton()
         Me.radioPDFdrawingFolder = New System.Windows.Forms.RadioButton()
         Me.lblVersion = New System.Windows.Forms.Label()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cmbPlottingDevice = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitel
@@ -123,10 +127,43 @@ Partial Class ucSettings
         Me.lblVersion.TabIndex = 4
         Me.lblVersion.Text = "Versie"
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.Label1)
+        Me.GroupBox2.Controls.Add(Me.cmbPlottingDevice)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 150)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(415, 125)
+        Me.GroupBox2.TabIndex = 5
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Standaard Plotter"
+        '
+        'cmbPlottingDevice
+        '
+        Me.cmbPlottingDevice.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbPlottingDevice.FormattingEnabled = True
+        Me.cmbPlottingDevice.Location = New System.Drawing.Point(93, 14)
+        Me.cmbPlottingDevice.Name = "cmbPlottingDevice"
+        Me.cmbPlottingDevice.Size = New System.Drawing.Size(304, 21)
+        Me.cmbPlottingDevice.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(6, 17)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(91, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Standaard plotter:"
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.lblTitel)
@@ -134,6 +171,8 @@ Partial Class ucSettings
         Me.Size = New System.Drawing.Size(421, 818)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -147,4 +186,7 @@ Partial Class ucSettings
     Friend WithEvents radioPDFuserFolder As Windows.Forms.RadioButton
     Friend WithEvents radioPDFdrawingFolder As Windows.Forms.RadioButton
     Friend WithEvents lblVersion As Windows.Forms.Label
+    Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
+    Friend WithEvents Label1 As Windows.Forms.Label
+    Friend WithEvents cmbPlottingDevice As Windows.Forms.ComboBox
 End Class

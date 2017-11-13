@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Windows.Forms
+Imports Autodesk.AutoCAD.ApplicationServices
+Imports Autodesk.AutoCAD.DatabaseServices
 
 Public Class ucSettings
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
@@ -84,4 +86,15 @@ Public Class ucSettings
         iniFile = New clsINI(sIniDir & sIniFile)
         iniFile.WriteString("publishsettings", "defaultoutput", sDefaultOutputLocation)
     End Sub
+
+    Public Sub loadPlotConfigs()
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+
+
+        For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
+            ' Output the names of the available plotter devices
+            acDoc.Editor.WriteMessage(vbLf & "  " & plotDevice)
+        Next
+    End Sub
+
 End Class
