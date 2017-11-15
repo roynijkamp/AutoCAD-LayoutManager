@@ -152,33 +152,36 @@ Public Class ucLayoutManager
         AddHandler myCntrl.View_Click, AddressOf ItemViewClick
         flowLayouts.Controls.Add(myCntrl)
         ' Get the layout dictionary of the current database
-        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-            Dim lays As DBDictionary = acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForRead)
-
-            ' Step through and list each named layout and Model
-            For Each item As DBDictionaryEntry In lays
-                'add name to list except Model
-                If item.Key = "Model" Then
-
-                Else
-                    myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
-                    myCntrl.LayoutName = item.Key
-                    myCntrl.updateItem()
-                    'add handlers to register functions for items
-                    AddHandler myCntrl.View_Click, AddressOf ItemViewClick
-                    AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
-                    AddHandler myCntrl.Plot_Click, AddressOf PlotLayout
-                    AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
-                    AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
-                    AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
-                    myCntrl.ContextMenuStrip = SubMenu
-                    flowLayouts.Controls.Add(myCntrl)
-                End If
+        Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+            Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+            For Each entry As DBDictionaryEntry In layDict
+                Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
+                layAndTab.Add(lay.TabOrder, lay.LayoutName)
             Next
-            ' Abort the changes to the database
-            acTrans.Abort()
+            trx.Commit()
         End Using
+        For Each sLayoutName In layAndTab.Values
+            'add name to list except Model
+            If sLayoutName = "Model" Then
+
+            Else
+                myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
+                myCntrl.LayoutName = sLayoutName
+                myCntrl.updateItem()
+                'add handlers to register functions for items
+                AddHandler myCntrl.View_Click, AddressOf ItemViewClick
+                AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
+                AddHandler myCntrl.Plot_Click, AddressOf PlotLayout
+                AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
+                AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
+                AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
+                myCntrl.ContextMenuStrip = SubMenu
+                flowLayouts.Controls.Add(myCntrl)
+            End If
+        Next
     End Sub
+
     ''' <summary>
     ''' 'Rename layout function
     ''' </summary>
