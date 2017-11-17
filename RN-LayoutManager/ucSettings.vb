@@ -7,11 +7,13 @@ Imports Autodesk.AutoCAD.DatabaseServices
 Public Class ucSettings
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
+    Dim sPlotPreferences As String = "PlotPresets.json"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
+    Dim dtPlotPresets As System.Data.DataTable
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
             txtUserSaveFolder.Enabled = True
@@ -96,16 +98,28 @@ Public Class ucSettings
     End Sub
 
     Public Sub loadPlotConfigs()
-        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
-        cmbPlottingDevice.Items.Clear()
-        cmbPlottingDevice.Items.Add(sDefaultPlottingDevice)
-        For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
-            ' Output the names of the available plotter devices
-            If plotDevice.Contains("AutoCAD PDF") And plotDevice <> sDefaultPlottingDevice Then
-                cmbPlottingDevice.Items.Add(plotDevice)
-            End If
-        Next
-        cmbPlottingDevice.SelectedIndex = 0
+        'Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        'cmbPlottingDevice.Items.Clear()
+        'cmbPlottingDevice.Items.Add(sDefaultPlottingDevice)
+        'For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
+        '    ' Output the names of the available plotter devices
+        '    If plotDevice.Contains("AutoCAD PDF") And plotDevice <> sDefaultPlottingDevice Then
+        '        cmbPlottingDevice.Items.Add(plotDevice)
+        '    End If
+        'Next
+        'cmbPlottingDevice.SelectedIndex = 0
+        cmbPlottingDevice.DataSource = Nothing
+        dtPlotPresets = New System.Data.DataTable
+        Dim iSelectedIndex As Integer = 0
+        Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+        clsFunctions.loadPlotPresets(sSettingsFile, dtPlotPresets, iSelectedIndex, sDefaultPlottingDevice)
+        If Not dtPlotPresets.Rows.Count = 0 Then
+            cmbPlottingDevice.DataSource = dtPlotPresets
+            cmbPlottingDevice.DisplayMember = "preset"
+            cmbPlottingDevice.ValueMember = "id"
+            cmbPlottingDevice.SelectedIndex = iSelectedIndex
+        Else
+        End If
     End Sub
 
     Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
