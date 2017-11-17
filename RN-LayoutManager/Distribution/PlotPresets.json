@@ -1,0 +1,60 @@
+{
+    "presets":[
+        {
+            "preset":"AutoCAD PDF (General Documentation).pc3",
+            "PdfOptions":[
+                {
+                    "IncludeHyperlinks":"TRUE",
+                    "CreateBookmarks":"TRUE",
+                    "CaptureFontsInDrawing":"TRUE",
+                    "ConvertTextToGeometry":"FALSE",
+                    "VectorResolution":"1200",
+                    "RasterResolution":"400",
+                    "IncludeLayer":"TRUE"
+                }
+            ]
+        },
+        {
+            "preset":"AutoCAD PDF (High Quality Print).pc3",
+            "PdfOptions":[
+                {
+                    "IncludeHyperlinks":"TRUE",
+                    "CreateBookmarks":"TRUE",
+                    "CaptureFontsInDrawing":"TRUE",
+                    "ConvertTextToGeometry":"FALSE",
+                    "VectorResolution":"2400",
+                    "RasterResolution":"600",
+                    "IncludeLayer":"TRUE"
+                }
+            ]
+        },
+        {
+            "preset":"AutoCAD PDF (Smallest File).pc3",
+            "PdfOptions":[
+                {
+                    "IncludeHyperlinks":"FALSE",
+                    "CreateBookmarks":"FALSE",
+                    "CaptureFontsInDrawing":"FALSE",
+                    "ConvertTextToGeometry":"FALSE",
+                    "VectorResolution":"400",
+                    "RasterResolution":"200",
+                    "IncludeLayer":"FALSE"
+                }
+            ]
+        },
+        {
+            "preset":"AutoCAD PDF (Web and Mobile).pc3",
+            "PdfOptions":[
+                {
+                    "IncludeHyperlinks":"TRUE",
+                    "CreateBookmarks":"TRUE",
+                    "CaptureFontsInDrawing":"TRUE",
+                    "ConvertTextToGeometry":"FALSE",
+                    "VectorResolution":"400",
+                    "RasterResolution":"200",
+                    "IncludeLayer":"TRUE"
+                }
+            ]
+        }
+    ]
+}

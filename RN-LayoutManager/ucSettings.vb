@@ -11,6 +11,7 @@ Public Class ucSettings
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
+    Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
             txtUserSaveFolder.Enabled = True
@@ -45,10 +46,15 @@ Public Class ucSettings
     End Sub
 
     Private Sub ucSettings_Load(sender As Object, e As EventArgs) Handles Me.Load
+        loadSettings()
+    End Sub
+    Public Sub loadSettings()
         'check of ini bestand bestaat, zo ja: instellingen laden
         If File.Exists(sIniDir & sIniFile) Then
             'bestand bestaat, instelingen laden
             iniFile = New clsINI(sIniDir & sIniFile)
+            'versie updaten
+            iniFile.WriteString("appsettings", "version", sCurrVersion)
             sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
             txtUserSaveFolder.Text = sPDFuserFolder
             sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
@@ -62,6 +68,8 @@ Public Class ucSettings
                 Case Else
                     radioPDFdrawingFolder.Checked = True
             End Select
+            sDefaultPlottingDevice = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            loadPlotConfigs()
         Else
             'eerst check of map wel bestaat
             If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
@@ -89,12 +97,25 @@ Public Class ucSettings
 
     Public Sub loadPlotConfigs()
         Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
-
-
+        cmbPlottingDevice.Items.Clear()
+        cmbPlottingDevice.Items.Add(sDefaultPlottingDevice)
         For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
             ' Output the names of the available plotter devices
-            acDoc.Editor.WriteMessage(vbLf & "  " & plotDevice)
+            If plotDevice.Contains("AutoCAD PDF") And plotDevice <> sDefaultPlottingDevice Then
+                cmbPlottingDevice.Items.Add(plotDevice)
+            End If
         Next
+        cmbPlottingDevice.SelectedIndex = 0
     End Sub
 
+    Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
+        iniFile = New clsINI(sIniDir & sIniFile)
+        sDefaultPlottingDevice = cmbPlottingDevice.Text
+        iniFile.WriteString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+    End Sub
+
+
+    Private Sub lblVersion_DoubleClick(sender As Object, e As EventArgs) Handles lblVersion.DoubleClick
+        loadSettings()
+    End Sub
 End Class

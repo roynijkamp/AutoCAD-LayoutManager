@@ -31,8 +31,8 @@ Partial Class ucSettings
         Me.radioPDFdrawingFolder = New System.Windows.Forms.RadioButton()
         Me.lblVersion = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.cmbPlottingDevice = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.cmbPlottingDevice = New System.Windows.Forms.ComboBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -140,16 +140,6 @@ Partial Class ucSettings
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Standaard Plotter"
         '
-        'cmbPlottingDevice
-        '
-        Me.cmbPlottingDevice.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmbPlottingDevice.FormattingEnabled = True
-        Me.cmbPlottingDevice.Location = New System.Drawing.Point(93, 14)
-        Me.cmbPlottingDevice.Name = "cmbPlottingDevice"
-        Me.cmbPlottingDevice.Size = New System.Drawing.Size(304, 21)
-        Me.cmbPlottingDevice.TabIndex = 0
-        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -158,6 +148,17 @@ Partial Class ucSettings
         Me.Label1.Size = New System.Drawing.Size(91, 13)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Standaard plotter:"
+        '
+        'cmbPlottingDevice
+        '
+        Me.cmbPlottingDevice.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbPlottingDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbPlottingDevice.FormattingEnabled = True
+        Me.cmbPlottingDevice.Location = New System.Drawing.Point(97, 14)
+        Me.cmbPlottingDevice.Name = "cmbPlottingDevice"
+        Me.cmbPlottingDevice.Size = New System.Drawing.Size(304, 21)
+        Me.cmbPlottingDevice.TabIndex = 0
         '
         'ucSettings
         '

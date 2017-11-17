@@ -116,15 +116,15 @@ Public Class plotting
                             End If
 
                         ElseIf str.Contains("OUT") Then
-                                newStr = Convert.ToString("OUT=") & Me.outputDir
-                            ElseIf str.Contains("IncludeLayer") Then
-                                newStr = "IncludeLayer=TRUE"
-                            ElseIf str.Contains("PromptForDwfName") Then
-                                newStr = "PromptForDwfName=FALSE"
-                            ElseIf str.Contains("LogFilePath") Then
-                                newStr = "LogFilePath=" + Path.Combine(Me.outputDir, LOG)
-                            Else
-                                newStr = str
+                            newStr = Convert.ToString("OUT=") & Me.outputDir
+                        ElseIf str.Contains("IncludeLayer") Then
+                            newStr = "IncludeLayer=TRUE"
+                        ElseIf str.Contains("PromptForDwfName") Then
+                            newStr = "PromptForDwfName=FALSE"
+                        ElseIf str.Contains("LogFilePath") Then
+                            newStr = "LogFilePath=" + Path.Combine(Me.outputDir, LOG)
+                        Else
+                            newStr = str
                         End If
                         writer.WriteLine(newStr)
                     End While
