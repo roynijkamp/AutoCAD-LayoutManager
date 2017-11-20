@@ -13,6 +13,7 @@ Public Class ucSettings
     Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
+    Dim bTrashDSD As Boolean = True
     Dim dtPlotPresets As System.Data.DataTable
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
@@ -98,16 +99,6 @@ Public Class ucSettings
     End Sub
 
     Public Sub loadPlotConfigs()
-        'Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
-        'cmbPlottingDevice.Items.Clear()
-        'cmbPlottingDevice.Items.Add(sDefaultPlottingDevice)
-        'For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
-        '    ' Output the names of the available plotter devices
-        '    If plotDevice.Contains("AutoCAD PDF") And plotDevice <> sDefaultPlottingDevice Then
-        '        cmbPlottingDevice.Items.Add(plotDevice)
-        '    End If
-        'Next
-        'cmbPlottingDevice.SelectedIndex = 0
         cmbPlottingDevice.DataSource = Nothing
         dtPlotPresets = New System.Data.DataTable
         Dim iSelectedIndex As Integer = 0
@@ -131,5 +122,32 @@ Public Class ucSettings
 
     Private Sub lblVersion_DoubleClick(sender As Object, e As EventArgs) Handles lblVersion.DoubleClick
         loadSettings()
+    End Sub
+
+    Private Sub grpDebugOptions_Enter(sender As Object, e As EventArgs) Handles grpDebugOptions.Enter
+
+    End Sub
+
+    Private Sub grpDebugOptions_DoubleClick(sender As Object, e As EventArgs) Handles grpDebugOptions.DoubleClick
+
+    End Sub
+
+
+    Private Sub chkTrashDSD_CheckedChanged(sender As Object, e As EventArgs) Handles chkTrashDSD.CheckedChanged
+        iniFile = New clsINI(sIniDir & sIniFile)
+        bTrashDSD = chkTrashDSD.Checked
+        iniFile.WriteBoolean("debugoptions", "trashdsd", bTrashDSD)
+    End Sub
+
+    Private Sub cmdDebugOptions_Click(sender As Object, e As EventArgs) Handles cmdDebugOptions.Click
+        grpDebugOptions.Enabled = Not grpDebugOptions.Enabled
+        If grpDebugOptions.Enabled Then
+            cmdDebugOptions.Text = "Disable debug options"
+            iniFile = New clsINI(sIniDir & sIniFile)
+            bTrashDSD = iniFile.GetBoolean("debugoptions", "trashdsd", bTrashDSD)
+            chkTrashDSD.Checked = bTrashDSD
+        Else
+            cmdDebugOptions.Text = "Enable debug options"
+        End If
     End Sub
 End Class

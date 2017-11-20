@@ -5,6 +5,11 @@ Imports Autodesk.AutoCAD.PlottingServices
 Imports Autodesk.AutoCAD.Publishing
 Public Class plotting
     Public Class MultiSheetsPdf
+        Private sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
+        Private sIniFile As String = "\layoutmanager.ini"
+        Private bTrashDSD As Boolean = True
+        Private iniFile As clsINI
+
         Private dwgFile As String, pdfFile As String, dsdFile As String, outputDir As String
         Private sheetNum As Integer
         Private layouts As IEnumerable(Of Layout)
@@ -14,6 +19,10 @@ Public Class plotting
         Private Const LOG As String = "publish.log"
 
         Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType)
+            'get settings from INI
+            iniFile = New clsINI(sIniDir & sIniFile)
+            bTrashDSD = iniFile.GetBoolean("debugoptions", "trashdsd", bTrashDSD)
+
             Dim db As Database = HostApplicationServices.WorkingDatabase
             Me.dwgFile = db.Filename
             Me.pdfFile = pdfFile
@@ -31,10 +40,12 @@ Public Class plotting
                 Dim plotDlg As New PlotProgressDialog(False, Me.sheetNum, True)
                 publisher.PublishDsd(Me.dsdFile, plotDlg)
                 plotDlg.Destroy()
-                File.Delete(Me.dsdFile)
+                If bTrashDSD Then
+                    File.Delete(Me.dsdFile)
+                End If
                 MsgBox("PDF aanmaken is voltooid!")
-            Else
-                MsgBox("Fout bij het maken van de DSD file")
+                Else
+                    MsgBox("Fout bij het maken van de DSD file")
             End If
         End Sub
 
@@ -130,7 +141,9 @@ Public Class plotting
                     End While
                 End Using
             End Using
+
             File.Delete(tmpFile)
+
         End Sub
     End Class
 
