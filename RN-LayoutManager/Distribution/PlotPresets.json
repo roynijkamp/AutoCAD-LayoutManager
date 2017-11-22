@@ -9,7 +9,11 @@
                     "CaptureFontsInDrawing":"TRUE",
                     "ConvertTextToGeometry":"FALSE",
                     "VectorResolution":"1200",
-                    "RasterResolution":"400",
+                    "RasterResolution":"400"
+                }
+            ],
+            "SheetSet Properties":[
+                {
                     "IncludeLayer":"TRUE"
                 }
             ]
@@ -23,7 +27,11 @@
                     "CaptureFontsInDrawing":"TRUE",
                     "ConvertTextToGeometry":"FALSE",
                     "VectorResolution":"2400",
-                    "RasterResolution":"600",
+                    "RasterResolution":"600"
+                }
+            ],
+            "SheetSet Properties":[
+                {
                     "IncludeLayer":"TRUE"
                 }
             ]
@@ -37,7 +45,11 @@
                     "CaptureFontsInDrawing":"FALSE",
                     "ConvertTextToGeometry":"FALSE",
                     "VectorResolution":"400",
-                    "RasterResolution":"200",
+                    "RasterResolution":"200"
+                }
+            ],
+            "SheetSet Properties":[
+                {
                     "IncludeLayer":"FALSE"
                 }
             ]
@@ -51,7 +63,11 @@
                     "CaptureFontsInDrawing":"TRUE",
                     "ConvertTextToGeometry":"FALSE",
                     "VectorResolution":"400",
-                    "RasterResolution":"200",
+                    "RasterResolution":"200"
+                }
+            ],
+            "SheetSet Properties":[
+                {
                     "IncludeLayer":"TRUE"
                 }
             ]

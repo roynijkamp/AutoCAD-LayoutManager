@@ -3,12 +3,16 @@ Imports System.Text
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.PlottingServices
 Imports Autodesk.AutoCAD.Publishing
+Imports Newtonsoft.Json.Linq
+
 Public Class plotting
     Public Class MultiSheetsPdf
         Private sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
         Private sIniFile As String = "\layoutmanager.ini"
+        Private sPlotPreferences As String = "PlotPresets.json"
         Private bTrashDSD As Boolean = True
         Private iniFile As clsINI
+        Private sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
 
         Private dwgFile As String, pdfFile As String, dsdFile As String, outputDir As String
         Private sheetNum As Integer
@@ -44,8 +48,8 @@ Public Class plotting
                     File.Delete(Me.dsdFile)
                 End If
                 MsgBox("PDF aanmaken is voltooid!")
-                Else
-                    MsgBox("Fout bij het maken van de DSD file")
+            Else
+                MsgBox("Fout bij het maken van de DSD file")
             End If
         End Sub
 
@@ -102,6 +106,42 @@ Public Class plotting
             Next
             Return entries
         End Function
+
+        Private Sub PostProcessDSDnew(dsd As DsdData)
+            Dim sPdfType As String
+            If Me.pdfSheetType = SheetType.MultiPdf Then
+                'Multi Sheet PDF
+                sPdfType = "6"
+            Else
+                'Single Sheet PDF
+                sPdfType = "5"
+            End If
+
+            'write dsd file
+            dsd.WriteDsd(Me.dsdFile)
+            'load DSD file for modify
+            iniFile = New clsINI(Me.dsdFile)
+            'selecte preset in options
+            Dim sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            'read settings
+            Dim sPresetFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+            If File.Exists(sPresetFile) Then
+                Dim sJson As String = File.ReadAllText(sPresetFile)
+                Dim myJsonObject As JObject = JObject.Parse(sJson)
+                Dim aPresets As JArray = myJsonObject("presets")
+                For i = 0 To aPresets.Count - 1
+                    Dim sPreset As String = aPresets(i).SelectToken("preset").ToString
+                    If sPreset = sSelectedPreset Then
+                        'deze settings moeten we inlezen en verwerken
+                        'eerste pdf type invullen
+                        iniFile.WriteString("Target", "Type", sPdfType)
+                        Dim aPdfOptions As JArray = aPresets(i).SelectToken("PdfOptions")
+
+                        Dim aSheetSetProperties As JArray = aPresets(i).SelectToken("SheetSet Properties")
+                    End If
+                Next
+            End If
+        End Sub
 
         Private Sub PostProcessDSD(dsd As DsdData)
             Dim str As String, newStr As String
