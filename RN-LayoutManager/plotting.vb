@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Linq
 Imports System.Text
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.PlottingServices
@@ -81,7 +82,8 @@ Public Class plotting
                     dsd.LogFilePath = Path.Combine(Me.outputDir, LOG)
 
                     PostProcessDSD(dsd)
-
+                    Dim dsdTest As DsdData = dsd
+                    PostProcessDSDnew(dsdTest)
                     Return True
                 End Using
             End Using
@@ -108,6 +110,10 @@ Public Class plotting
         End Function
 
         Private Sub PostProcessDSDnew(dsd As DsdData)
+            'selected plot preset in options
+            iniFile = New clsINI(sIniDir & sIniFile)
+            Dim sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            'define settings
             Dim sPdfType As String
             If Me.pdfSheetType = SheetType.MultiPdf Then
                 'Multi Sheet PDF
@@ -117,12 +123,17 @@ Public Class plotting
                 sPdfType = "5"
             End If
 
+            Dim tmpFileInput As String = Path.Combine(Me.outputDir, "tempTestInput.dsd")
+            Dim tmpFile As String = Path.Combine(Me.outputDir, "tempTest.dsd")
             'write dsd file
-            dsd.WriteDsd(Me.dsdFile)
+            'dsd.WriteDsd(Me.dsdFile)
+            dsd.WriteDsd(tmpFile)
+            dsd.WriteDsd(tmpFileInput)
             'load DSD file for modify
-            iniFile = New clsINI(Me.dsdFile)
-            'selecte preset in options
-            Dim sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            'iniFile = New clsINI(Me.dsdFile)
+            iniFile = New clsINI(tmpFile)
+
+
             'read settings
             Dim sPresetFile As String = clsFunctions.getCoreDir() & sPlotPreferences
             If File.Exists(sPresetFile) Then
@@ -132,12 +143,40 @@ Public Class plotting
                 For i = 0 To aPresets.Count - 1
                     Dim sPreset As String = aPresets(i).SelectToken("preset").ToString
                     If sPreset = sSelectedPreset Then
-                        'deze settings moeten we inlezen en verwerken
-                        'eerste pdf type invullen
-                        iniFile.WriteString("Target", "Type", sPdfType)
-                        Dim aPdfOptions As JArray = aPresets(i).SelectToken("PdfOptions")
+                        Try
+                            'deze settings moeten we inlezen en verwerken
+                            'eerste pdf type invullen
+                            iniFile.WriteString("Target", "Type", sPdfType)
+                            'Dim aPdfOptions As JArray = aPresets(i).SelectToken("PdfOptions")
+                            'For x = 0 To aPdfOptions.Count - 1
 
-                        Dim aSheetSetProperties As JArray = aPresets(i).SelectToken("SheetSet Properties")
+                            'Next
+                            'Dim aSheetSetProperties As JArray = aPresets(i).SelectToken("SheetSet Properties")
+                            Dim oPdfOptions As JArray = aPresets(i).SelectToken("PdfOptions")
+                            Dim opties As List(Of JToken) = oPdfOptions.Children().ToList
+                            For Each item As JProperty In opties
+                                MsgBox("item: " & item.Name & vbCrLf & "Value: " & item.Value.ToString)
+                            Next
+
+                            'MsgBox(aPdfOptions.Count.ToString & " items in PdfOptions")
+                            'Dim aParsedOptions As JArray = JArray.Parse(aPdfOptions)
+
+                            'For Each pPdfOption As JProperty In aParsedOptions
+                            '    Dim sKey As String = pPdfOption.Name
+                            '    Dim sValue As String = pPdfOption.Value
+                            '    iniFile.WriteString("PdfOptions", sKey, sValue)
+                            'Next
+
+                            'aPdfOptions = JArray.Parse(aPresets(i).SelectToken("SheetSet Properties"))
+                            'For Each pPdfOption As JProperty In aPdfOptions
+                            '    Dim sKey As String = pPdfOption.Name
+                            '    Dim sValue As String = pPdfOption.Value
+                            '    iniFile.WriteString("SheetSet Properties", sKey, sValue)
+                            'Next
+                        Catch ex As Exception
+                            MsgBox("Fout bij het schrijven in de DSD file" & vbCrLf & ex.Message & vbCrLf & ex.Source & vbCrLf & ex.StackTrace)
+                        End Try
+
                     End If
                 Next
             End If
