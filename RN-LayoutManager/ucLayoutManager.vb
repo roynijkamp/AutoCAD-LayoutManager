@@ -161,6 +161,7 @@ Public Class ucLayoutManager
             Next
             trx.Commit()
         End Using
+        Dim iTabIndex As Integer = 1 'model = 0
         For Each sLayoutName In layAndTab.Values
             'add name to list except Model
             If sLayoutName = "Model" Then
@@ -169,6 +170,7 @@ Public Class ucLayoutManager
                 myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
                 myCntrl.LayoutName = sLayoutName
                 myCntrl.updateItem()
+                myCntrl.TabIndex = iTabIndex
                 'add handlers to register functions for items
                 AddHandler myCntrl.View_Click, AddressOf ItemViewClick
                 AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
@@ -178,6 +180,7 @@ Public Class ucLayoutManager
                 AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
                 myCntrl.ContextMenuStrip = SubMenu
                 flowLayouts.Controls.Add(myCntrl)
+                iTabIndex += 1
             End If
         Next
     End Sub
@@ -679,7 +682,9 @@ Public Class ucLayoutManager
                     ElseIf sAction = "kopieren" Then
                         'layout kopieren
                         If LayoutExists(sNewName) = False Then
-                            acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
+                            'acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
+                            Dim iTabIndex = myCntrl.TabIndex + 1
+                            acLayoutMgr.CloneLayout(myCntrl.LayoutName, sNewName, iTabIndex)
                         End If
                     End If
 

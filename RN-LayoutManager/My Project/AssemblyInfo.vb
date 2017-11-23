@@ -24,8 +24,8 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("1.0.17326.1604")>
-<Assembly: AssemblyFileVersion("1.0.17326.1604")>
+<Assembly: AssemblyVersion("1.0.17327.1303")>
+<Assembly: AssemblyFileVersion("1.0.17327.1303")>
 
 ' In order to sign your assembly you must specify a key to use. Refer to the 
 ' Microsoft .NET Framework documentation for more information on assembly signing.

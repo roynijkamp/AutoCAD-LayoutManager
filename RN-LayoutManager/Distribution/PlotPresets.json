@@ -4,17 +4,34 @@
             "preset":"AutoCAD PDF (General Documentation).pc3",
             "PdfOptions":[
                 {
-                    "IncludeHyperlinks":"TRUE",
-                    "CreateBookmarks":"TRUE",
-                    "CaptureFontsInDrawing":"TRUE",
-                    "ConvertTextToGeometry":"FALSE",
-                    "VectorResolution":"1200",
-                    "RasterResolution":"400"
+                    "item":"IncludeHyperlinks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CreateBookmarks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CaptureFontsInDrawing",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"ConvertTextToGeometry",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"VectorResolution",
+                    "waarde":"1200"
+                },
+                {
+                    "item":"RasterResolution",
+                    "waarde":"400"
                 }
             ],
-            "SheetSet Properties":[
+            "SheetSet_Properties":[
                 {
-                    "IncludeLayer":"TRUE"
+                    "item":"IncludeLayer",
+                    "waarde":"TRUE"
                 }
             ]
         },
@@ -22,17 +39,34 @@
             "preset":"AutoCAD PDF (High Quality Print).pc3",
             "PdfOptions":[
                 {
-                    "IncludeHyperlinks":"TRUE",
-                    "CreateBookmarks":"TRUE",
-                    "CaptureFontsInDrawing":"TRUE",
-                    "ConvertTextToGeometry":"FALSE",
-                    "VectorResolution":"2400",
-                    "RasterResolution":"600"
+                    "item":"IncludeHyperlinks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CreateBookmarks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CaptureFontsInDrawing",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"ConvertTextToGeometry",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"VectorResolution",
+                    "waarde":"2400"
+                },
+                {
+                    "item":"RasterResolution",
+                    "waarde":"600"
                 }
             ],
-            "SheetSet Properties":[
+            "SheetSet_Properties":[
                 {
-                    "IncludeLayer":"TRUE"
+                    "item":"IncludeLayer",
+                    "waarde":"TRUE"
                 }
             ]
         },
@@ -40,17 +74,34 @@
             "preset":"AutoCAD PDF (Smallest File).pc3",
             "PdfOptions":[
                 {
-                    "IncludeHyperlinks":"FALSE",
-                    "CreateBookmarks":"FALSE",
-                    "CaptureFontsInDrawing":"FALSE",
-                    "ConvertTextToGeometry":"FALSE",
-                    "VectorResolution":"400",
-                    "RasterResolution":"200"
+                    "item":"IncludeHyperlinks",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"CreateBookmarks",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"CaptureFontsInDrawing",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"ConvertTextToGeometry",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"VectorResolution",
+                    "waarde":"400"
+                },
+                {
+                    "item":"RasterResolution",
+                    "waarde":"200"
                 }
             ],
-            "SheetSet Properties":[
+            "SheetSet_Properties":[
                 {
-                    "IncludeLayer":"FALSE"
+                    "item":"IncludeLayer",
+                    "waarde":"FALSE"
                 }
             ]
         },
@@ -58,17 +109,34 @@
             "preset":"AutoCAD PDF (Web and Mobile).pc3",
             "PdfOptions":[
                 {
-                    "IncludeHyperlinks":"TRUE",
-                    "CreateBookmarks":"TRUE",
-                    "CaptureFontsInDrawing":"TRUE",
-                    "ConvertTextToGeometry":"FALSE",
-                    "VectorResolution":"400",
-                    "RasterResolution":"200"
+                    "item":"IncludeHyperlinks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CreateBookmarks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CaptureFontsInDrawing",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"ConvertTextToGeometry",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"VectorResolution",
+                    "waarde":"400"
+                },
+                {
+                    "item":"RasterResolution",
+                    "waarde":"200"
                 }
             ],
-            "SheetSet Properties":[
+            "SheetSet_Properties":[
                 {
-                    "IncludeLayer":"TRUE"
+                    "item":"IncludeLayer",
+                    "waarde":"TRUE"
                 }
             ]
         }
