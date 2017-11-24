@@ -567,6 +567,7 @@ Public Class ucLayoutManager
             If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
                 If myCntrl.CheckState Then 'layout is checked
                     If sAction = "hide" Then
+                        myCntrl.SetCheckState(Not myCntrl.CheckState)
                         myCntrl.Visible = False
                     End If
                     If sAction = "invert" Then
@@ -682,9 +683,9 @@ Public Class ucLayoutManager
                     ElseIf sAction = "kopieren" Then
                         'layout kopieren
                         If LayoutExists(sNewName) = False Then
-                            'acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
-                            Dim iTabIndex = myCntrl.TabIndex + 1
-                            acLayoutMgr.CloneLayout(myCntrl.LayoutName, sNewName, iTabIndex)
+                            acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
+                            'Dim iTabIndex = myCntrl.TabIndex + 1
+                            'acLayoutMgr.CloneLayout(myCntrl.LayoutName, sNewName, iTabIndex)
                         End If
                     End If
 
