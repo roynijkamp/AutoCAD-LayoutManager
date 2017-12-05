@@ -17,7 +17,13 @@ Public Class ucLayoutManager
     Dim acCurDb As Database = acDoc.Database
     Dim acEd As Editor = acDoc.Editor
     Dim iCheckCount As Integer = 0 'counter for checks
+    'auto scroll during drag and drop
     Dim drag_drop_scroll_amount As Integer = 0
+    Dim iFlowYmin As Integer = 0
+    Dim iFlowYmax As Integer = 0
+    Dim iMouseCurrY As Integer = 0
+    Dim sScrollDirection As String = ""
+    '/auto scroll during drag and drop
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim iniFile As clsINI
@@ -322,6 +328,7 @@ Public Class ucLayoutManager
             myCntrl.isDragged()
             'save new order
             setLayoutOrder()
+            lblCheckCount.Text = iCheckCount.ToString
         End If
     End Sub
 
@@ -346,7 +353,61 @@ Public Class ucLayoutManager
         End If
     End Sub
 
+    Private Sub flowLayouts_DragOver(sender As Object, e As Forms.DragEventArgs) Handles flowLayouts.DragOver
+        calcMousePosition()
+    End Sub
 
+    Private Sub flowLayouts_DragLeave(sender As Object, e As EventArgs) Handles flowLayouts.DragLeave
+        calcMousePosition()
+    End Sub
+
+    Private Sub calcMousePosition()
+        Dim localMousePosition As System.Drawing.Point
+        localMousePosition = PointToClient(Cursor.Position)
+        iMouseCurrY = localMousePosition.Y
+        iFlowYmax = flowLayouts.Top + flowLayouts.Height
+        iFlowYmin = flowLayouts.Top
+        If iMouseCurrY < (iFlowYmin + drag_drop_scroll_amount) Then
+            'scroll down
+            sScrollDirection = "UP"
+            If tmrAutoScroll.Enabled = False Then
+                tmrAutoScroll.Enabled = True
+            End If
+        ElseIf iMouseCurrY > (iFlowYmax - drag_drop_scroll_amount) Then
+            'scroll up
+            sScrollDirection = "DOWN"
+            If tmrAutoScroll.Enabled = False Then
+                tmrAutoScroll.Enabled = True
+            End If
+        Else
+            'no scrolling
+            sScrollDirection = ""
+            tmrAutoScroll.Enabled = False
+        End If
+    End Sub
+
+    Private Sub tmrAutoScroll_Tick(sender As Object, e As EventArgs) Handles tmrAutoScroll.Tick
+        Dim iNewScrollValue As Integer = flowLayouts.VerticalScroll.Value
+        If sScrollDirection = "UP" Then
+            If flowLayouts.VerticalScroll.Value > drag_drop_scroll_amount Then
+                iNewScrollValue = flowLayouts.VerticalScroll.Value - drag_drop_scroll_amount
+            Else
+                iNewScrollValue = 0
+            End If
+            flowLayouts.VerticalScroll.Value = iNewScrollValue
+        ElseIf sScrollDirection = "DOWN" Then
+            If flowLayouts.VerticalScroll.Value < iFlowYmax - drag_drop_scroll_amount Then
+                iNewScrollValue = flowLayouts.VerticalScroll.Value + drag_drop_scroll_amount
+            Else
+                iNewScrollValue = iFlowYmax
+            End If
+            flowLayouts.VerticalScroll.Value = iNewScrollValue
+        End If
+    End Sub
+
+    Private Sub flowLayouts_MouseMove(sender As Object, e As MouseEventArgs) Handles flowLayouts.MouseMove
+        calcMousePosition()
+    End Sub
 
     ''' <summary>
     ''' 'Apply layout order to drawing
@@ -524,23 +585,6 @@ Public Class ucLayoutManager
     End Function
 
 
-    Private Sub flowLayouts_DragLeave(sender As Object, e As EventArgs) Handles flowLayouts.DragLeave
-        Dim iBegY As Integer = Me.flowLayouts.FindForm().PointToClient(Me.flowLayouts.Parent.PointToScreen(Me.flowLayouts.Location)).Y
-        Dim iFlowBoundY As Integer = Me.flowLayouts.Height + iBegY
-        Dim iMouseY As Integer = Me.flowLayouts.FindForm().PointToClient(MousePosition).Y
-
-        While iMouseY >= iFlowBoundY
-            flowLayouts.VerticalScroll.Value = flowLayouts.VerticalScroll.Value + drag_drop_scroll_amount
-            iMouseY = flowLayouts.FindForm().PointToClient(MousePosition).Y
-            flowLayouts.Refresh()
-        End While
-
-        While iMouseY <= iBegY
-            flowLayouts.VerticalScroll.Value = flowLayouts.VerticalScroll.Value - drag_drop_scroll_amount
-            iMouseY = flowLayouts.FindForm().PointToClient(MousePosition).Y
-            flowLayouts.Refresh()
-        End While
-    End Sub
 
     Private Sub cmdPlotMulitSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotMulitSheet.Click
         Dim layouts As New List(Of Layout)()
@@ -714,4 +758,6 @@ Public Class ucLayoutManager
     Private Sub SubMenu_Opening(sender As Object, e As CancelEventArgs) Handles SubMenu.Opening
         Me.SubMenu.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
     End Sub
+
+
 End Class

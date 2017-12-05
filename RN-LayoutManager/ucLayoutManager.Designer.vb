@@ -48,6 +48,7 @@ Partial Class ucLayoutManager
         Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -315,7 +316,7 @@ Partial Class ucLayoutManager
         '
         Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(175, 76)
+        Me.SubMenu.Size = New System.Drawing.Size(175, 54)
         '
         'LayoutKopierenToolStripMenuItem
         '
@@ -333,6 +334,10 @@ Partial Class ucLayoutManager
         Me.LayoutVerwijderenToolStripMenuItem.Name = "LayoutVerwijderenToolStripMenuItem"
         Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
         Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
+        '
+        'tmrAutoScroll
+        '
+        Me.tmrAutoScroll.Interval = 200
         '
         'ucLayoutManager
         '
@@ -376,4 +381,5 @@ Partial Class ucLayoutManager
     Friend WithEvents LayoutKopierenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As Windows.Forms.ToolStripSeparator
     Friend WithEvents LayoutVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tmrAutoScroll As Windows.Forms.Timer
 End Class
