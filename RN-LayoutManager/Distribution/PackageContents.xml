@@ -12,7 +12,7 @@
   <CompanyDetails
     Name="Roy Nijkamp"
     Phone="+31611101043"
-    Url="http://www.roynijkmap.nl"
+    Url="http://www.roynijkamp.nl"
     Email="roynijkamp@roynijkamp.nl" />
 
   <Components> <!-- Alle AutoCAD producten -->

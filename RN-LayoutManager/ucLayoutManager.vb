@@ -394,14 +394,18 @@ Public Class ucLayoutManager
             Else
                 iNewScrollValue = 0
             End If
-            flowLayouts.VerticalScroll.Value = iNewScrollValue
+            If iNewScrollValue > iFlowYmin And iNewScrollValue < iFlowYmax Then
+                flowLayouts.VerticalScroll.Value = iNewScrollValue
+            End If
         ElseIf sScrollDirection = "DOWN" Then
             If flowLayouts.VerticalScroll.Value < iFlowYmax - drag_drop_scroll_amount Then
                 iNewScrollValue = flowLayouts.VerticalScroll.Value + drag_drop_scroll_amount
             Else
                 iNewScrollValue = iFlowYmax
             End If
-            flowLayouts.VerticalScroll.Value = iNewScrollValue
+            If iNewScrollValue > iFlowYmin And iNewScrollValue < iFlowYmax Then
+                flowLayouts.VerticalScroll.Value = iNewScrollValue
+            End If
         End If
     End Sub
 

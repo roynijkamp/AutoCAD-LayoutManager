@@ -37,7 +37,6 @@ Partial Class ucLayoutManager
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.cmdSettings = New System.Windows.Forms.Button()
         Me.cmdFilter = New System.Windows.Forms.Button()
         Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
@@ -125,9 +124,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdTrash.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
         Me.cmdTrash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdTrash.Location = New System.Drawing.Point(271, 11)
+        Me.cmdTrash.Location = New System.Drawing.Point(206, 11)
         Me.cmdTrash.Name = "cmdTrash"
-        Me.cmdTrash.Size = New System.Drawing.Size(34, 34)
+        Me.cmdTrash.Size = New System.Drawing.Size(28, 28)
         Me.cmdTrash.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.cmdTrash, "Verwijder geselecteerde layouts")
         Me.cmdTrash.UseVisualStyleBackColor = True
@@ -136,9 +135,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdInvertSelection.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_invert
         Me.cmdInvertSelection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdInvertSelection.Location = New System.Drawing.Point(124, 11)
+        Me.cmdInvertSelection.Location = New System.Drawing.Point(95, 11)
         Me.cmdInvertSelection.Name = "cmdInvertSelection"
-        Me.cmdInvertSelection.Size = New System.Drawing.Size(34, 34)
+        Me.cmdInvertSelection.Size = New System.Drawing.Size(28, 28)
         Me.cmdInvertSelection.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.cmdInvertSelection, "Selectie omkeren")
         Me.cmdInvertSelection.UseVisualStyleBackColor = True
@@ -147,9 +146,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdSelectAll.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_all
         Me.cmdSelectAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSelectAll.Location = New System.Drawing.Point(84, 11)
+        Me.cmdSelectAll.Location = New System.Drawing.Point(65, 11)
         Me.cmdSelectAll.Name = "cmdSelectAll"
-        Me.cmdSelectAll.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSelectAll.Size = New System.Drawing.Size(28, 28)
         Me.cmdSelectAll.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.cmdSelectAll, "Selecteer alle layouts")
         Me.cmdSelectAll.UseVisualStyleBackColor = True
@@ -158,9 +157,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdHideItems.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_light_off_2
         Me.cmdHideItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdHideItems.Location = New System.Drawing.Point(222, 11)
+        Me.cmdHideItems.Location = New System.Drawing.Point(172, 11)
         Me.cmdHideItems.Name = "cmdHideItems"
-        Me.cmdHideItems.Size = New System.Drawing.Size(34, 34)
+        Me.cmdHideItems.Size = New System.Drawing.Size(28, 28)
         Me.cmdHideItems.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.cmdHideItems, "Geslecteerde items uit")
         Me.cmdHideItems.UseVisualStyleBackColor = True
@@ -169,9 +168,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdShowItems.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_light_on_2
         Me.cmdShowItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdShowItems.Location = New System.Drawing.Point(182, 11)
+        Me.cmdShowItems.Location = New System.Drawing.Point(138, 11)
         Me.cmdShowItems.Name = "cmdShowItems"
-        Me.cmdShowItems.Size = New System.Drawing.Size(34, 34)
+        Me.cmdShowItems.Size = New System.Drawing.Size(28, 28)
         Me.cmdShowItems.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.cmdShowItems, "Alle items aan")
         Me.cmdShowItems.UseVisualStyleBackColor = True
@@ -183,7 +182,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotSingleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 11)
         Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
-        Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(34, 34)
+        Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotSingleSheet.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.cmdPlotSingleSheet, "Geslecteerde layouts afdrukken naar Singlesheet PDF")
         Me.cmdPlotSingleSheet.UseVisualStyleBackColor = True
@@ -195,7 +194,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.cmdPlotMulitSheet.Location = New System.Drawing.Point(381, 11)
         Me.cmdPlotMulitSheet.Name = "cmdPlotMulitSheet"
-        Me.cmdPlotMulitSheet.Size = New System.Drawing.Size(34, 34)
+        Me.cmdPlotMulitSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotMulitSheet.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.cmdPlotMulitSheet, "Geslecteerde layouts afdrukken naar Multisheet PDF")
         Me.cmdPlotMulitSheet.UseVisualStyleBackColor = True
@@ -204,9 +203,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdSortDESC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_descending
         Me.cmdSortDESC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSortDESC.Location = New System.Drawing.Point(44, 11)
+        Me.cmdSortDESC.Location = New System.Drawing.Point(34, 11)
         Me.cmdSortDESC.Name = "cmdSortDESC"
-        Me.cmdSortDESC.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSortDESC.Size = New System.Drawing.Size(28, 28)
         Me.cmdSortDESC.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.cmdSortDESC, "Sorteren van Z-A")
         Me.cmdSortDESC.UseVisualStyleBackColor = True
@@ -217,14 +216,13 @@ Partial Class ucLayoutManager
         Me.cmdSortASC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.cmdSortASC.Location = New System.Drawing.Point(6, 11)
         Me.cmdSortASC.Name = "cmdSortASC"
-        Me.cmdSortASC.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSortASC.Size = New System.Drawing.Size(28, 28)
         Me.cmdSortASC.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.cmdSettings)
         Me.GroupBox2.Controls.Add(Me.cmdFilter)
         Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
         Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
@@ -239,24 +237,13 @@ Partial Class ucLayoutManager
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
         '
-        'cmdSettings
-        '
-        Me.cmdSettings.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_settings
-        Me.cmdSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSettings.Location = New System.Drawing.Point(84, 11)
-        Me.cmdSettings.Name = "cmdSettings"
-        Me.cmdSettings.Size = New System.Drawing.Size(34, 34)
-        Me.cmdSettings.TabIndex = 7
-        Me.ToolTip1.SetToolTip(Me.cmdSettings, "Instellingen")
-        Me.cmdSettings.UseVisualStyleBackColor = True
-        '
         'cmdFilter
         '
         Me.cmdFilter.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_filter
         Me.cmdFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdFilter.Location = New System.Drawing.Point(44, 11)
+        Me.cmdFilter.Location = New System.Drawing.Point(44, 16)
         Me.cmdFilter.Name = "cmdFilter"
-        Me.cmdFilter.Size = New System.Drawing.Size(34, 34)
+        Me.cmdFilter.Size = New System.Drawing.Size(28, 28)
         Me.cmdFilter.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.cmdFilter, "Weergave filter instellen")
         Me.cmdFilter.UseVisualStyleBackColor = True
@@ -277,9 +264,9 @@ Partial Class ucLayoutManager
         Me.cmdSaveOrder.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdSaveOrder.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_save
         Me.cmdSaveOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSaveOrder.Location = New System.Drawing.Point(341, 11)
+        Me.cmdSaveOrder.Location = New System.Drawing.Point(341, 16)
         Me.cmdSaveOrder.Name = "cmdSaveOrder"
-        Me.cmdSaveOrder.Size = New System.Drawing.Size(34, 34)
+        Me.cmdSaveOrder.Size = New System.Drawing.Size(28, 28)
         Me.cmdSaveOrder.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.cmdSaveOrder, "Layout volgorde opslaan in DWG")
         Me.cmdSaveOrder.UseVisualStyleBackColor = True
@@ -301,9 +288,9 @@ Partial Class ucLayoutManager
         '
         Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
         Me.cmdRefreshList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdRefreshList.Location = New System.Drawing.Point(4, 11)
+        Me.cmdRefreshList.Location = New System.Drawing.Point(4, 16)
         Me.cmdRefreshList.Name = "cmdRefreshList"
-        Me.cmdRefreshList.Size = New System.Drawing.Size(34, 34)
+        Me.cmdRefreshList.Size = New System.Drawing.Size(28, 28)
         Me.cmdRefreshList.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
         Me.cmdRefreshList.UseVisualStyleBackColor = True
@@ -370,7 +357,6 @@ Partial Class ucLayoutManager
     Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
     Friend WithEvents pgbVoortgang As Windows.Forms.ProgressBar
     Friend WithEvents cmdPlotSingleSheet As Windows.Forms.Button
-    Friend WithEvents cmdSettings As Windows.Forms.Button
     Friend WithEvents cmdFilter As Windows.Forms.Button
     Friend WithEvents cmdShowItems As Windows.Forms.Button
     Friend WithEvents cmdHideItems As Windows.Forms.Button
