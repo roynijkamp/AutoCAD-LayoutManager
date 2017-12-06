@@ -159,11 +159,13 @@ Public Class ucLayoutManager
         flowLayouts.Controls.Add(myCntrl)
         ' Get the layout dictionary of the current database
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
         Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
             Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
             For Each entry As DBDictionaryEntry In layDict
                 Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
                 layAndTab.Add(lay.TabOrder, lay.LayoutName)
+                layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
             Next
             trx.Commit()
         End Using
@@ -177,6 +179,9 @@ Public Class ucLayoutManager
                 myCntrl.LayoutName = sLayoutName
                 myCntrl.updateItem()
                 myCntrl.TabIndex = iTabIndex
+                If layAndTabOID.ContainsKey(iTabIndex) Then
+                    myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
+                End If
                 'add handlers to register functions for items
                 AddHandler myCntrl.View_Click, AddressOf ItemViewClick
                 AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
