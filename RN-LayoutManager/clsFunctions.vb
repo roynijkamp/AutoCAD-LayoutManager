@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Reflection
+Imports Autodesk.AutoCAD.ApplicationServices
 Imports Newtonsoft.Json.Linq
 
 Public Class clsFunctions
@@ -36,22 +37,37 @@ Public Class clsFunctions
         End If
     End Function
 
-    ' dtPlotPresets.Columns.Add("id")
-    '        dtRasterServicesZoom.Columns.Add("zoomlevel")
-    '        dtRasterServicesZoom.Columns.Add("unitsperpixel")
+    '<summary>
+    'log progress
+    '</summary>
+    Public Shared Sub makeLog(ByVal sLogFile As String, ByVal sMessage As String, Optional bVersionInfo As Boolean = False)
+        Try
+            If Not Directory.Exists(Path.GetDirectoryName(sLogFile)) Then
+                Directory.CreateDirectory(Path.GetDirectoryName(sLogFile))
+            End If
+            Dim dtDatum As DateTime = DateTime.Now
+            If Not File.Exists(sLogFile) Then
+                Using sw As StreamWriter = File.CreateText(sLogFile)
+                    sw.WriteLine("LOG FILE AANGEMAAKT OP: " & dtDatum.ToString("dd/MM/yyyy HH:mm:ss"))
+                    sw.WriteLine("----------------------------------------------------------------")
+                End Using
+            End If
+            Using sw As StreamWriter = File.AppendText(sLogFile)
+                If bVersionInfo Then
+                    sw.WriteLine("Computer: " & My.Computer.Name)
+                    Dim sAcadVersion As String = clsFunctions.AcadVersion.Major.ToString & "." & clsFunctions.AcadVersion.Minor.ToString & "." & clsFunctions.AcadVersion.Revision.ToString
+                    sw.WriteLine("Autodesk Software: R" & sAcadVersion)
+                End If
+                sw.WriteLine(dtDatum.ToString("dd/MM/yyyy HH:mm:ss") & " - " & sMessage)
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij maken LOG")
+        End Try
+    End Sub
 
-    '        Dim sJsonResponse As String = File.ReadAllText(sDataSet & sRasterJSON)
-    'Dim myObject As JObject = JObject.Parse(sJsonResponse)
-    'Dim aItems As JArray = myObject("items")
-
-    'Dim aZoomLevel As JArray = aItems(iId).SelectToken("zoomlevels")
-    'For i As Integer = 0 To aZoomLevel.Count - 1
-    'Dim dtRow As DataRow = dtRasterServicesZoom.NewRow()
-    'Dim sZoomLevel As String = aZoomLevel(i).SelectToken("level")
-    'Dim sUnitsPerPixel As String = aZoomLevel(i).SelectToken("units-per-pixel")
-    '            dtRow(0) = sZoomLevel
-    '            dtRow(1) = sZoomLevel
-    '            dtRow(2) = sUnitsPerPixel
-    '            dtRasterServicesZoom.Rows.Add(dtRow)
-    '        Next
+    Public Shared ReadOnly Property AcadVersion() As Version
+        Get
+            Return GetType(Document).Assembly.GetName().Version
+        End Get
+    End Property
 End Class

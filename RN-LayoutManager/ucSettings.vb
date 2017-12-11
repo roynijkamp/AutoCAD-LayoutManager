@@ -11,6 +11,7 @@ Public Class ucSettings
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
+    Dim sLayoutTemplate As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
     Dim bTrashDSD As Boolean = True
@@ -60,6 +61,8 @@ Public Class ucSettings
             iniFile.WriteString("appsettings", "version", sCurrVersion)
             sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
             txtUserSaveFolder.Text = sPDFuserFolder
+            sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
+            txtLayoutTemplate.Text = sLayoutTemplate
             sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
             Select Case sDefaultOutputLocation
                 Case "drawingfolder"
@@ -149,5 +152,25 @@ Public Class ucSettings
         Else
             cmdDebugOptions.Text = "Enable debug options"
         End If
+    End Sub
+
+    Private Sub cmdBrowseLayoutTemplate_Click(sender As Object, e As EventArgs) Handles cmdBrowseLayoutTemplate.Click
+        Using fldrDia As OpenFileDialog = New OpenFileDialog
+            If txtLayoutTemplate.Text.Length > 0 And Directory.Exists(txtLayoutTemplate.Text) Then
+                fldrDia.FileName = txtLayoutTemplate.Text
+            End If
+            If fldrDia.ShowDialog() = DialogResult.OK Then
+                'eerst check of map wel bestaat
+                If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
+                    My.Computer.FileSystem.CreateDirectory(sIniDir)
+                End If
+                sLayoutTemplate = fldrDia.FileName
+                txtLayoutTemplate.Text = sLayoutTemplate
+                'bestand aanmaken
+                'settings schrijven
+                iniFile = New clsINI(sIniDir & sIniFile)
+                iniFile.WriteString("template", "layout", sLayoutTemplate)
+            End If
+        End Using
     End Sub
 End Class

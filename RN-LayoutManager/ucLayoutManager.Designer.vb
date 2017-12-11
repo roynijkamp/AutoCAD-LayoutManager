@@ -48,6 +48,7 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
+        Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -223,6 +224,7 @@ Partial Class ucLayoutManager
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
         Me.GroupBox2.Controls.Add(Me.cmdFilter)
         Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
         Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
@@ -326,6 +328,16 @@ Partial Class ucLayoutManager
         '
         Me.tmrAutoScroll.Interval = 200
         '
+        'cmbNewLayout
+        '
+        Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbNewLayout.FormattingEnabled = True
+        Me.cmbNewLayout.Location = New System.Drawing.Point(82, 17)
+        Me.cmbNewLayout.Name = "cmbNewLayout"
+        Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
+        Me.cmbNewLayout.TabIndex = 8
+        Me.cmbNewLayout.Visible = False
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -368,4 +380,5 @@ Partial Class ucLayoutManager
     Friend WithEvents ToolStripMenuItem1 As Windows.Forms.ToolStripSeparator
     Friend WithEvents LayoutVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents tmrAutoScroll As Windows.Forms.Timer
+    Friend WithEvents cmbNewLayout As Windows.Forms.ComboBox
 End Class

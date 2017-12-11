@@ -31,6 +31,7 @@ Public Class ucLayoutManager
     Dim sDefaultOutputLocation As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sCurrentLayout As String
+    Dim sLayoutTemplate As String = ""
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -72,18 +73,23 @@ Public Class ucLayoutManager
 
     Private Sub DocumentManger_DocumentLayoutSwitched()
         'sub layout switched
+        getCurrentLayout()
+        itterateList("iscurrent")
+    End Sub
+
+    Private Sub DocumentManager_DocumentLayoutsModified()
+        getCurrentLayout()
+        loadLayouts()
+    End Sub
+
+    Public Sub getCurrentLayout()
         Dim acLayout As Layout = Nothing
         Using acLockDoc As DocumentLock = acDoc.LockDocument
             Dim acLayoutMgr As LayoutManager = LayoutManager.Current
             sCurrentLayout = acLayoutMgr.CurrentLayout
         End Using
-        itterateList("iscurrent")
     End Sub
 
-    Private Sub DocumentManager_DocumentLayoutsModified()
-        loadLayouts()
-        DocumentManger_DocumentLayoutSwitched()
-    End Sub
 
     '### /Active Drawing Tracking
 
@@ -115,12 +121,22 @@ Public Class ucLayoutManager
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+
         '### /Active Drawing Tracking
         loadLayouts()
         'set active layout
         DocumentManger_DocumentLayoutSwitched()
         'tool toevoegen aan trusted path
         getTrustedPaths(clsFunctions.getCoreDir())
+        'load settings
+        If File.Exists(sIniDir & sIniFile) Then
+            'bestand bestaat, instelingen laden
+            iniFile = New clsINI(sIniDir & sIniFile)
+            sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
+            If sLayoutTemplate.Length > 0 Then
+                loadExternalTemplate()
+            End If
+        End If
     End Sub
 
 
@@ -146,8 +162,12 @@ Public Class ucLayoutManager
         flowLayouts.AllowDrop = True
         flowLayouts.AutoScroll = True
         flowLayouts.SetAutoScrollMargin(5, 5)
+        'load current layout name
+        getCurrentLayout()
         'first add model item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
+        'current layout control
+        Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
         myCntrl.IsModel = True
         drag_drop_scroll_amount = myCntrl.Height + 40
@@ -160,40 +180,59 @@ Public Class ucLayoutManager
         ' Get the layout dictionary of the current database
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
-        Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
-            Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
-            For Each entry As DBDictionaryEntry In layDict
-                Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
-                layAndTab.Add(lay.TabOrder, lay.LayoutName)
-                layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
-            Next
-            trx.Commit()
-        End Using
+        Try
+            Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+                For Each entry As DBDictionaryEntry In layDict
+                    Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
+                    layAndTab.Add(lay.TabOrder, lay.LayoutName)
+                    layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
+                Next
+                trx.Commit()
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij het laden van de Layouts " & ex.Message)
+        End Try
         Dim iTabIndex As Integer = 1 'model = 0
-        For Each sLayoutName In layAndTab.Values
-            'add name to list except Model
-            If sLayoutName = "Model" Then
+        Try
+            For Each sLayoutName In layAndTab.Values
+                'add name to list except Model
+                If sLayoutName = "Model" Then
 
-            Else
-                myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
-                myCntrl.LayoutName = sLayoutName
-                myCntrl.updateItem()
-                myCntrl.TabIndex = iTabIndex
-                If layAndTabOID.ContainsKey(iTabIndex) Then
-                    myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
+                Else
+                    myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
+                    myCntrl.LayoutName = sLayoutName
+                    myCntrl.updateItem()
+                    myCntrl.TabIndex = iTabIndex
+                    If layAndTabOID.ContainsKey(iTabIndex) Then
+                        myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
+                    End If
+                    'add handlers to register functions for items
+                    AddHandler myCntrl.View_Click, AddressOf ItemViewClick
+                    AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
+                    AddHandler myCntrl.Plot_Click, AddressOf PlotLayout
+                    AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
+                    AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
+                    AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
+                    myCntrl.ContextMenuStrip = SubMenu
+                    'check if this is the current layout
+                    'active layout makeren
+                    If myCntrl.LayoutName = sCurrentLayout Then
+                        myCntrl.IsCurrent = True
+                        myCntrlCurrent = myCntrl
+                    Else
+                        myCntrl.IsCurrent = False
+                    End If
+                    myCntrl.isCurrentLayout()
+                    'add layout to control flow
+                    flowLayouts.Controls.Add(myCntrl)
+                    iTabIndex += 1
                 End If
-                'add handlers to register functions for items
-                AddHandler myCntrl.View_Click, AddressOf ItemViewClick
-                AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
-                AddHandler myCntrl.Plot_Click, AddressOf PlotLayout
-                AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
-                AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
-                AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
-                myCntrl.ContextMenuStrip = SubMenu
-                flowLayouts.Controls.Add(myCntrl)
-                iTabIndex += 1
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MsgBox("Fout bij het weergeven van de Layouts " & ex.Message)
+        End Try
+        scrollCurrentLayoutIntoView(myCntrlCurrent)
     End Sub
 
     ''' <summary>
@@ -295,16 +334,41 @@ Public Class ucLayoutManager
     ''' <param name="e"></param>
     Public Sub ItemViewClick(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
-        Using acLockDoc As DocumentLock = acDoc.LockDocument
+        setLayoutCurrent(myCntrl.LayoutName, myCntrl.IsModel)
+        'Using acLockDoc As DocumentLock = acDoc.LockDocument
+        '    Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+        '    acLayoutMgr.CurrentLayout = myCntrl.LayoutName
+        '    acDoc.Editor.Regen()
+        '    'zoom extends when not model view
+        '    If myCntrl.IsModel = False Then
+        '        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+        '            Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
+        '            Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+        '            'lock viewports when not locked
+        '            For Each vpId As ObjectId In lay.GetViewports()
+        '                Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
+        '                vp.Locked = True
+        '            Next
+        '            acTrans.Commit()
+        '            Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
+        '            acadApp.ZoomExtents()
+        '            acDoc.Editor.Regen()
+        '        End Using
+        '    End If
+        'End Using
+    End Sub
 
+    Public Sub setLayoutCurrent(ByVal sLayoutName As String, ByVal bIsModel As Boolean)
+        Using acLockDoc As DocumentLock = acDoc.LockDocument
             Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-            acLayoutMgr.CurrentLayout = myCntrl.LayoutName
+            acLayoutMgr.CurrentLayout = sLayoutName
             acDoc.Editor.Regen()
             'zoom extends when not model view
-            If myCntrl.IsModel = False Then
+            If bIsModel = False Then
                 Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
+                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(sLayoutName)
                     Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                    'lock viewports when not locked
                     For Each vpId As ObjectId In lay.GetViewports()
                         Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
                         vp.Locked = True
@@ -315,8 +379,11 @@ Public Class ucLayoutManager
                     acDoc.Editor.Regen()
                 End Using
             End If
-
         End Using
+    End Sub
+
+    Public Sub scrollCurrentLayoutIntoView(ByVal myCntrl As RN_LayoutItems.RN_UCLayoutItem)
+        flowLayouts.ScrollControlIntoView(myCntrl)
     End Sub
 
     ''' <summary>
@@ -616,6 +683,7 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function itterateList(ByVal sAction As String)
+        Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
                 If myCntrl.CheckState Then 'layout is checked
@@ -636,6 +704,7 @@ Public Class ucLayoutManager
                     'active layout makeren
                     If myCntrl.LayoutName = sCurrentLayout Then
                         myCntrl.IsCurrent = True
+                        myCntrlCurrent = myCntrl
                     Else
                         myCntrl.IsCurrent = False
                     End If
@@ -643,6 +712,9 @@ Public Class ucLayoutManager
                 End If
             End If
         Next
+        If sAction = "iscurrent" Then
+            scrollCurrentLayoutIntoView(myCntrlCurrent)
+        End If
         Return True
     End Function
 
@@ -707,6 +779,7 @@ Public Class ucLayoutManager
             Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
             ModifyLayout("kopieren", myCntrl, sNewLayoutName)
             loadLayouts()
+            setLayoutCurrent(sNewLayoutName, False)
         End If
     End Sub
 
@@ -725,7 +798,7 @@ Public Class ucLayoutManager
             Using acLockDoc As DocumentLock = acDoc.LockDocument
                 Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
                     Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-
+                    Dim iTabs As Integer = acLayoutMgr.LayoutCount()
 
                     Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
                     Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
@@ -736,14 +809,15 @@ Public Class ucLayoutManager
                     ElseIf sAction = "kopieren" Then
                         'layout kopieren
                         If LayoutExists(sNewName) = False Then
-                            acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
+                            'acLayoutMgr.CopyLayout(myCntrl.LayoutName, sNewName)
                             'Dim iTabIndex = myCntrl.TabIndex + 1
-                            'acLayoutMgr.CloneLayout(myCntrl.LayoutName, sNewName, iTabIndex)
+                            acLayoutMgr.CloneLayout(myCntrl.LayoutName, sNewName, iTabs)
                         End If
                     End If
 
                     acTrans.Commit()
                 End Using
+                acEd.Regen()
             End Using
         Catch ex As Exception
             MsgBox("Fout bij het " & sAction & " van de layout " & ex.Message & vbCrLf & ex.Source)
@@ -768,5 +842,38 @@ Public Class ucLayoutManager
         Me.SubMenu.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
     End Sub
 
+    Public Function loadExternalTemplate()
+        Dim acExDb As Database = New Database(False, True)
+        acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
 
+        ' Get the layout dictionary of the current database
+        Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+        Try
+            Using trx As Transaction = acExDb.TransactionManager.StartTransaction()
+                Dim layDict As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+                For Each entry As DBDictionaryEntry In layDict
+                    Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
+                    layAndTab.Add(lay.TabOrder, lay.LayoutName)
+                Next
+                trx.Commit()
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
+        End Try
+        Try
+            For Each sLayoutName In layAndTab.Values
+                'add name to list except Model
+                If sLayoutName = "Model" Then
+
+                Else
+                    cmbNewLayout.Items.Add(sLayoutName)
+                End If
+            Next
+            cmbNewLayout.Visible = True
+        Catch ex As Exception
+            MsgBox("Fout bij het weergeven van de Layouts uit de Template " & ex.Message)
+        End Try
+        Return True
+    End Function
 End Class

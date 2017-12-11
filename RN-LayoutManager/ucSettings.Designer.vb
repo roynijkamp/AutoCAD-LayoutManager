@@ -36,9 +36,13 @@ Partial Class ucSettings
         Me.grpDebugOptions = New System.Windows.Forms.GroupBox()
         Me.chkTrashDSD = New System.Windows.Forms.CheckBox()
         Me.cmdDebugOptions = New System.Windows.Forms.Button()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cmdBrowseLayoutTemplate = New System.Windows.Forms.Button()
+        Me.txtLayoutTemplate = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitel
@@ -139,7 +143,7 @@ Partial Class ucSettings
         Me.GroupBox2.Controls.Add(Me.cmbPlottingDevice)
         Me.GroupBox2.Location = New System.Drawing.Point(3, 150)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(415, 125)
+        Me.GroupBox2.Size = New System.Drawing.Size(415, 58)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Standaard Plotter"
@@ -196,10 +200,38 @@ Partial Class ucSettings
         Me.cmdDebugOptions.Text = "Enable Debug Options"
         Me.cmdDebugOptions.UseVisualStyleBackColor = True
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.cmdBrowseLayoutTemplate)
+        Me.GroupBox3.Controls.Add(Me.txtLayoutTemplate)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 217)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(415, 58)
+        Me.GroupBox3.TabIndex = 7
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Layout Template File"
+        '
+        'cmdBrowseLayoutTemplate
+        '
+        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(367, 22)
+        Me.cmdBrowseLayoutTemplate.Name = "cmdBrowseLayoutTemplate"
+        Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(30, 20)
+        Me.cmdBrowseLayoutTemplate.TabIndex = 1
+        Me.cmdBrowseLayoutTemplate.Text = "..."
+        Me.cmdBrowseLayoutTemplate.UseVisualStyleBackColor = True
+        '
+        'txtLayoutTemplate
+        '
+        Me.txtLayoutTemplate.Location = New System.Drawing.Point(12, 22)
+        Me.txtLayoutTemplate.Name = "txtLayoutTemplate"
+        Me.txtLayoutTemplate.Size = New System.Drawing.Size(355, 20)
+        Me.txtLayoutTemplate.TabIndex = 0
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.grpDebugOptions)
         Me.Controls.Add(Me.GroupBox2)
@@ -214,6 +246,8 @@ Partial Class ucSettings
         Me.GroupBox2.PerformLayout()
         Me.grpDebugOptions.ResumeLayout(False)
         Me.grpDebugOptions.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -233,4 +267,7 @@ Partial Class ucSettings
     Friend WithEvents grpDebugOptions As Windows.Forms.GroupBox
     Friend WithEvents chkTrashDSD As Windows.Forms.CheckBox
     Friend WithEvents cmdDebugOptions As Windows.Forms.Button
+    Friend WithEvents GroupBox3 As Windows.Forms.GroupBox
+    Friend WithEvents cmdBrowseLayoutTemplate As Windows.Forms.Button
+    Friend WithEvents txtLayoutTemplate As Windows.Forms.TextBox
 End Class
