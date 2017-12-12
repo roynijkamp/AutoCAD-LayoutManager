@@ -830,7 +830,7 @@ Public Class ucLayoutManager
         Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
             Dim lays As DBDictionary = acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForRead)
             If lays.Contains(sLayName) Then
-                MsgBox("Er bestaat al een layout met deze naam!")
+                MsgBox("Er bestaat al een layout met deze naam!" & vbCrLf & "Kies een andere naam")
                 Return True
             End If
             acTrans.Commit()
@@ -843,37 +843,152 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function loadExternalTemplate()
-        Dim acExDb As Database = New Database(False, True)
-        acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
+        If File.Exists(sLayoutTemplate) Then
+            Dim acExDb As Database = New Database(False, True)
+            acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
 
-        ' Get the layout dictionary of the current database
-        Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
-        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
-        Try
-            Using trx As Transaction = acExDb.TransactionManager.StartTransaction()
-                Dim layDict As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
-                For Each entry As DBDictionaryEntry In layDict
-                    Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
-                    layAndTab.Add(lay.TabOrder, lay.LayoutName)
+            ' Get the layout dictionary of the current database
+            Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+            Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+            Try
+                Using trx As Transaction = acExDb.TransactionManager.StartTransaction()
+                    Dim layDict As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+                    For Each entry As DBDictionaryEntry In layDict
+                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
+                        layAndTab.Add(lay.TabOrder, lay.LayoutName)
+                    Next
+                    trx.Commit()
+                End Using
+            Catch ex As Exception
+                MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
+            End Try
+            Try
+                For Each sLayoutName In layAndTab.Values
+                    'add name to list except Model
+                    If sLayoutName = "Model" Then
+
+                    Else
+                        cmbNewLayout.Items.Add(sLayoutName)
+                    End If
                 Next
-                trx.Commit()
-            End Using
-        Catch ex As Exception
-            MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
-        End Try
-        Try
-            For Each sLayoutName In layAndTab.Values
-                'add name to list except Model
-                If sLayoutName = "Model" Then
+                cmbNewLayout.Visible = True
+                cmdAddLayout.Visible = True
+            Catch ex As Exception
+                MsgBox("Fout bij het weergeven van de Layouts uit de Template " & ex.Message)
+            End Try
+            Return True
+        Else
+            cmbNewLayout.Visible = False
+            cmdAddLayout.Visible = False
+            Return False
+        End If
+    End Function
+
+    Private Sub cmdAddLayout_Click(sender As Object, e As EventArgs) Handles cmdAddLayout.Click
+        Dim sNewLayoutName As String = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
+        If LayoutExists(sNewLayoutName) = False Then
+
+            If sNewLayoutName <> "" Then
+                If File.Exists(sLayoutTemplate) Then
+                    Using acLockDoc As DocumentLock = acDoc.LockDocument
+                        Dim acExDb As Database = New Database(False, True)
+                        acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
+
+                        ' Get the layout dictionary of the current database
+                        Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+                        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+                        Try
+                            Using acTransEx As Transaction = acExDb.TransactionManager.StartTransaction()
+                                Dim layoutsEx As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+
+                                If layoutsEx.Contains(cmbNewLayout.Text) Then
+                                    Dim layEx As Layout = layoutsEx.GetAt(cmbNewLayout.Text).GetObject(OpenMode.ForRead)
+                                    Dim blkBlkRecEx As BlockTableRecord = acTransEx.GetObject(layEx.BlockTableRecordId, OpenMode.ForRead)
+
+                                    Dim idCol As ObjectIdCollection = New ObjectIdCollection()
+                                    For Each id As ObjectId In blkBlkRecEx
+                                        idCol.Add(id)
+                                    Next
+                                    'invoegen in huidige dwg
+                                    Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                        Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+
+                                        Using blkBlkRec As New BlockTableRecord
+                                            blkBlkRec.Name = "*Paper_Space" & CStr(layoutsEx.Count() - 1)
+                                            blkTbl.Add(blkBlkRec)
+                                            acTrans.AddNewlyCreatedDBObject(blkBlkRec, True)
+                                            acExDb.WblockCloneObjects(idCol,
+                                                                      blkBlkRec.ObjectId,
+                                                                      New IdMapping(),
+                                                                      DuplicateRecordCloning.Ignore,
+                                                                      False)
+
+                                            ' Create a new layout and then copy properties between drawings
+                                            Dim layouts As DBDictionary =
+                                                acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForWrite)
+
+                                            Using lay As New Layout
+                                                lay.LayoutName = sNewLayoutName
+                                                lay.AddToLayoutDictionary(acCurDb, blkBlkRec.ObjectId)
+                                                acTrans.AddNewlyCreatedDBObject(lay, True)
+                                                lay.CopyFrom(layEx)
+
+                                                Dim plSets As DBDictionary =
+                                                    acTrans.GetObject(
+                                                        acCurDb.PlotSettingsDictionaryId,
+                                                        OpenMode.ForRead)
+
+                                                ' Check to see if a named page setup was assigned to the layout,
+                                                ' if so then copy the page setup settings
+                                                If lay.PlotSettingsName <> "" Then
+
+                                                    ' Check to see if the page setup exists
+                                                    If plSets.Contains(lay.PlotSettingsName) = False Then
+                                                        plSets.UpgradeOpen()
+
+                                                        Using plSet As New PlotSettings(lay.ModelType)
+                                                            plSet.PlotSettingsName = lay.PlotSettingsName
+                                                            plSet.AddToPlotSettingsDictionary(acCurDb)
+                                                            acTrans.AddNewlyCreatedDBObject(plSet, True)
+
+                                                            Dim plSetsEx As DBDictionary =
+                                                                acTransEx.GetObject(
+                                                                    acExDb.PlotSettingsDictionaryId,
+                                                                    OpenMode.ForRead)
+
+                                                            Dim plSetEx As PlotSettings =
+                                                                plSetsEx.GetAt(
+                                                                    lay.PlotSettingsName).GetObject(
+                                                                    OpenMode.ForRead)
+
+                                                            plSet.CopyFrom(plSetEx)
+                                                        End Using
+                                                    End If
+                                                End If
+                                            End Using
+                                        End Using
+                                        ' Regen the drawing to get the layout tab to display
+                                        acDoc.Editor.Regen()
+
+                                        ' Save the changes made
+                                        acTrans.Commit()
+                                    End Using
+                                    setLayoutCurrent(sNewLayoutName, False)
+                                    loadLayouts()
+                                Else
+                                    MsgBox("Layout " & cmbNewLayout.Text & " kon niet worden ingevoegd!")
+                                End If
+                                acTransEx.Abort()
+                            End Using
+                        Catch ex As Exception
+                            MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
+                        End Try
+                    End Using
 
                 Else
-                    cmbNewLayout.Items.Add(sLayoutName)
+                    MsgBox("Kan de layout niet invoegen, Template bestand is niet gevonden!" & vbCrLf & "Het bestand: " & sLayoutTemplate & " is niet gevonden", MsgBoxStyle.Critical)
                 End If
-            Next
-            cmbNewLayout.Visible = True
-        Catch ex As Exception
-            MsgBox("Fout bij het weergeven van de Layouts uit de Template " & ex.Message)
-        End Try
-        Return True
-    End Function
+            End If
+        End If
+    End Sub
 End Class

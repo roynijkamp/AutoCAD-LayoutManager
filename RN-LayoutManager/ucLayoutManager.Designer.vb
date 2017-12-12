@@ -27,6 +27,17 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
+        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
+        Me.lblCheckCount = New System.Windows.Forms.Label()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
+        Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
         Me.cmdInvertSelection = New System.Windows.Forms.Button()
         Me.cmdSelectAll = New System.Windows.Forms.Button()
@@ -36,19 +47,9 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.cmdFilter = New System.Windows.Forms.Button()
-        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
-        Me.lblCheckCount = New System.Windows.Forms.Label()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
-        Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -120,6 +121,101 @@ Partial Class ucLayoutManager
         Me.GroupBox1.Size = New System.Drawing.Size(420, 50)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.cmdAddLayout)
+        Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
+        Me.GroupBox2.Controls.Add(Me.cmdFilter)
+        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
+        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
+        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
+        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
+        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
+        Me.GroupBox2.TabIndex = 4
+        Me.GroupBox2.TabStop = False
+        '
+        'cmbNewLayout
+        '
+        Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbNewLayout.FormattingEnabled = True
+        Me.cmbNewLayout.Location = New System.Drawing.Point(82, 20)
+        Me.cmbNewLayout.Name = "cmbNewLayout"
+        Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
+        Me.cmbNewLayout.TabIndex = 8
+        Me.cmbNewLayout.Visible = False
+        '
+        'pgbVoortgang
+        '
+        Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.pgbVoortgang.Location = New System.Drawing.Point(381, 11)
+        Me.pgbVoortgang.Name = "pgbVoortgang"
+        Me.pgbVoortgang.Size = New System.Drawing.Size(36, 18)
+        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+        Me.pgbVoortgang.TabIndex = 5
+        Me.pgbVoortgang.Visible = False
+        '
+        'lblCheckCount
+        '
+        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblCheckCount.AutoSize = True
+        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblCheckCount.Location = New System.Drawing.Point(389, 32)
+        Me.lblCheckCount.Name = "lblCheckCount"
+        Me.lblCheckCount.Size = New System.Drawing.Size(26, 13)
+        Me.lblCheckCount.TabIndex = 4
+        Me.lblCheckCount.Text = "# 0"
+        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.IsBalloon = True
+        '
+        'SubMenu
+        '
+        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem})
+        Me.SubMenu.Name = "SubMenu"
+        Me.SubMenu.Size = New System.Drawing.Size(175, 54)
+        '
+        'LayoutKopierenToolStripMenuItem
+        '
+        Me.LayoutKopierenToolStripMenuItem.Name = "LayoutKopierenToolStripMenuItem"
+        Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutKopierenToolStripMenuItem.Text = "Layout kopieren"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(171, 6)
+        '
+        'LayoutVerwijderenToolStripMenuItem
+        '
+        Me.LayoutVerwijderenToolStripMenuItem.Name = "LayoutVerwijderenToolStripMenuItem"
+        Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
+        '
+        'tmrAutoScroll
+        '
+        Me.tmrAutoScroll.Interval = 200
+        '
+        'cmdAddLayout
+        '
+        Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
+        Me.cmdAddLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdAddLayout.Location = New System.Drawing.Point(193, 16)
+        Me.cmdAddLayout.Name = "cmdAddLayout"
+        Me.cmdAddLayout.Size = New System.Drawing.Size(28, 28)
+        Me.cmdAddLayout.TabIndex = 9
+        Me.ToolTip1.SetToolTip(Me.cmdAddLayout, "Geselecteerde Layout toevoegen")
+        Me.cmdAddLayout.UseVisualStyleBackColor = True
+        Me.cmdAddLayout.Visible = False
         '
         'cmdTrash
         '
@@ -222,23 +318,6 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
-        Me.GroupBox2.Controls.Add(Me.cmdFilter)
-        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
-        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
-        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
-        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
-        Me.GroupBox2.TabIndex = 4
-        Me.GroupBox2.TabStop = False
-        '
         'cmdFilter
         '
         Me.cmdFilter.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_filter
@@ -249,17 +328,6 @@ Partial Class ucLayoutManager
         Me.cmdFilter.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.cmdFilter, "Weergave filter instellen")
         Me.cmdFilter.UseVisualStyleBackColor = True
-        '
-        'pgbVoortgang
-        '
-        Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.pgbVoortgang.Location = New System.Drawing.Point(381, 11)
-        Me.pgbVoortgang.Name = "pgbVoortgang"
-        Me.pgbVoortgang.Size = New System.Drawing.Size(36, 18)
-        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.pgbVoortgang.TabIndex = 5
-        Me.pgbVoortgang.Visible = False
         '
         'cmdSaveOrder
         '
@@ -273,19 +341,6 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSaveOrder, "Layout volgorde opslaan in DWG")
         Me.cmdSaveOrder.UseVisualStyleBackColor = True
         '
-        'lblCheckCount
-        '
-        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCheckCount.AutoSize = True
-        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.lblCheckCount.Location = New System.Drawing.Point(389, 32)
-        Me.lblCheckCount.Name = "lblCheckCount"
-        Me.lblCheckCount.Size = New System.Drawing.Size(26, 13)
-        Me.lblCheckCount.TabIndex = 4
-        Me.lblCheckCount.Text = "# 0"
-        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'cmdRefreshList
         '
         Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
@@ -296,47 +351,6 @@ Partial Class ucLayoutManager
         Me.cmdRefreshList.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
         Me.cmdRefreshList.UseVisualStyleBackColor = True
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.IsBalloon = True
-        '
-        'SubMenu
-        '
-        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem})
-        Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(175, 54)
-        '
-        'LayoutKopierenToolStripMenuItem
-        '
-        Me.LayoutKopierenToolStripMenuItem.Name = "LayoutKopierenToolStripMenuItem"
-        Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
-        Me.LayoutKopierenToolStripMenuItem.Text = "Layout kopieren"
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(171, 6)
-        '
-        'LayoutVerwijderenToolStripMenuItem
-        '
-        Me.LayoutVerwijderenToolStripMenuItem.Name = "LayoutVerwijderenToolStripMenuItem"
-        Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
-        Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
-        '
-        'tmrAutoScroll
-        '
-        Me.tmrAutoScroll.Interval = 200
-        '
-        'cmbNewLayout
-        '
-        Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbNewLayout.FormattingEnabled = True
-        Me.cmbNewLayout.Location = New System.Drawing.Point(82, 17)
-        Me.cmbNewLayout.Name = "cmbNewLayout"
-        Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
-        Me.cmbNewLayout.TabIndex = 8
-        Me.cmbNewLayout.Visible = False
         '
         'ucLayoutManager
         '
@@ -381,4 +395,5 @@ Partial Class ucLayoutManager
     Friend WithEvents LayoutVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents tmrAutoScroll As Windows.Forms.Timer
     Friend WithEvents cmbNewLayout As Windows.Forms.ComboBox
+    Friend WithEvents cmdAddLayout As Windows.Forms.Button
 End Class

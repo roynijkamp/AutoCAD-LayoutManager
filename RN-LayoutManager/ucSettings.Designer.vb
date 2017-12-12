@@ -222,7 +222,7 @@ Partial Class ucSettings
         '
         'txtLayoutTemplate
         '
-        Me.txtLayoutTemplate.Location = New System.Drawing.Point(12, 22)
+        Me.txtLayoutTemplate.Location = New System.Drawing.Point(14, 22)
         Me.txtLayoutTemplate.Name = "txtLayoutTemplate"
         Me.txtLayoutTemplate.Size = New System.Drawing.Size(355, 20)
         Me.txtLayoutTemplate.TabIndex = 0

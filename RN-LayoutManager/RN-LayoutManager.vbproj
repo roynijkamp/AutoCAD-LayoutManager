@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.11.12.1505</AssemblyVersion>
+    <AssemblyVersion>1.12.12.1000</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -334,6 +334,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon_trash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_add.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
