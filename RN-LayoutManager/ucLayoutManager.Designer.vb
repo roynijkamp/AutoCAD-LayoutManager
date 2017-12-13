@@ -37,7 +37,7 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
-        Me.cmdAddLayout = New System.Windows.Forms.Button()
+        Me.cmdBatchAttributes = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
         Me.cmdInvertSelection = New System.Windows.Forms.Button()
         Me.cmdSelectAll = New System.Windows.Forms.Button()
@@ -47,6 +47,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
+        Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmdFilter = New System.Windows.Forms.Button()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
@@ -104,6 +105,7 @@ Partial Class ucLayoutManager
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
         Me.GroupBox1.Controls.Add(Me.cmdTrash)
         Me.GroupBox1.Controls.Add(Me.cmdInvertSelection)
         Me.GroupBox1.Controls.Add(Me.cmdSelectAll)
@@ -205,17 +207,15 @@ Partial Class ucLayoutManager
         '
         Me.tmrAutoScroll.Interval = 200
         '
-        'cmdAddLayout
+        'cmdBatchAttributes
         '
-        Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
-        Me.cmdAddLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdAddLayout.Location = New System.Drawing.Point(193, 16)
-        Me.cmdAddLayout.Name = "cmdAddLayout"
-        Me.cmdAddLayout.Size = New System.Drawing.Size(28, 28)
-        Me.cmdAddLayout.TabIndex = 9
-        Me.ToolTip1.SetToolTip(Me.cmdAddLayout, "Geselecteerde Layout toevoegen")
-        Me.cmdAddLayout.UseVisualStyleBackColor = True
-        Me.cmdAddLayout.Visible = False
+        Me.cmdBatchAttributes.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_attrib_eddit
+        Me.cmdBatchAttributes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdBatchAttributes.Location = New System.Drawing.Point(240, 11)
+        Me.cmdBatchAttributes.Name = "cmdBatchAttributes"
+        Me.cmdBatchAttributes.Size = New System.Drawing.Size(28, 28)
+        Me.cmdBatchAttributes.TabIndex = 14
+        Me.cmdBatchAttributes.UseVisualStyleBackColor = True
         '
         'cmdTrash
         '
@@ -318,6 +318,18 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
+        'cmdAddLayout
+        '
+        Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
+        Me.cmdAddLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdAddLayout.Location = New System.Drawing.Point(193, 16)
+        Me.cmdAddLayout.Name = "cmdAddLayout"
+        Me.cmdAddLayout.Size = New System.Drawing.Size(28, 28)
+        Me.cmdAddLayout.TabIndex = 9
+        Me.ToolTip1.SetToolTip(Me.cmdAddLayout, "Geselecteerde Layout toevoegen")
+        Me.cmdAddLayout.UseVisualStyleBackColor = True
+        Me.cmdAddLayout.Visible = False
+        '
         'cmdFilter
         '
         Me.cmdFilter.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_filter
@@ -396,4 +408,5 @@ Partial Class ucLayoutManager
     Friend WithEvents tmrAutoScroll As Windows.Forms.Timer
     Friend WithEvents cmbNewLayout As Windows.Forms.ComboBox
     Friend WithEvents cmdAddLayout As Windows.Forms.Button
+    Friend WithEvents cmdBatchAttributes As Windows.Forms.Button
 End Class

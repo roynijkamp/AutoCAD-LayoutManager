@@ -701,7 +701,7 @@ Public Class ucLayoutManager
                 End If
 
                 If sAction = "iscurrent" Then
-                    'active layout makeren
+                    'active layout markeren
                     If myCntrl.LayoutName = sCurrentLayout Then
                         myCntrl.IsCurrent = True
                         myCntrlCurrent = myCntrl
@@ -893,7 +893,6 @@ Public Class ucLayoutManager
                     Using acLockDoc As DocumentLock = acDoc.LockDocument
                         Dim acExDb As Database = New Database(False, True)
                         acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
-
                         ' Get the layout dictionary of the current database
                         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
                         Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
@@ -990,5 +989,63 @@ Public Class ucLayoutManager
                 End If
             End If
         End If
+    End Sub
+
+    Private Sub cmdBatchAttributes_Click(sender As Object, e As EventArgs) Handles cmdBatchAttributes.Click
+
+    End Sub
+
+    Private Sub saveBlockAsThumbnail()
+        Dim sBlockName As String
+        Using acDbTmp As Database = New Database()
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Try
+                        Dim opts As PromptEntityOptions = New PromptEntityOptions("Selecteer een Block: ")
+                        opts.SetRejectMessage("Alleen block toegestaan!")
+                        opts.AddAllowedClass(GetType(BlockReference), True)
+                        Dim promptSS As PromptEntityResult
+                        promptSS = acEd.GetEntity(opts)
+
+                        If promptSS.Status = PromptStatus.OK Then
+                            Dim oBlockID As ObjectId = promptSS.ObjectId
+
+                            Dim oBlockIDcoll As ObjectIdCollection = New ObjectIdCollection()
+                            oBlockIDcoll.Add(oBlockID)
+
+                            Dim mapping As IdMapping = New IdMapping()
+
+                            acCurDb.WblockCloneObjects(oBlockIDcoll, acDbTmp.BlockTableId, mapping, DuplicateRecordCloning.Replace, False)
+
+                            Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
+                            Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
+                            sBlockName = btr.Name
+
+                            Using acTransEx As Transaction = acDbTmp.TransactionManager.StartTransaction()
+                                Dim btEx As BlockTable = acTransEx.GetObject(acDbTmp.BlockTableId, OpenMode.ForRead)
+
+                                Dim iNumBlocks As Integer = clsBlockThumbnail.ExtractThumbnails(sIniDir, acTransEx, btEx, sBlockName)
+                                MsgBox("Thumbnail gereed")
+                            End Using
+
+                            'Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
+                            'For Each oAttID As ObjectId In colATT
+                            '    'attributes doorlopen
+                            '    Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
+                            '    'cmbAttributes.Items.Add(refATT.Tag)
+
+                            'Next
+                        Else
+                            'geen block geselecteerd
+                        End If
+
+                    Catch ex As Autodesk.AutoCAD.Runtime.Exception
+                        MsgBox(ex.Message)
+                    End Try
+                    acTrans.Commit()
+                End Using
+
+            End Using
+        End Using
     End Sub
 End Class

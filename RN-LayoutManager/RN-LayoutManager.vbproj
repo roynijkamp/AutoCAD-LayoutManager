@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.12.12.1000</AssemblyVersion>
+    <AssemblyVersion>1.0.1213.1312</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,9 +61,9 @@
     <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
-    <AssemblyVersionSettings>IncrementOnDemand.DayStamp.MonthStamp.TimeStamp</AssemblyVersionSettings>
-    <AssemblyFileVersionSettings>IncrementOnDemand.DayStamp.MonthStamp.TimeStamp</AssemblyFileVersionSettings>
-    <AssemblyInfoVersionSettings>IncrementOnDemand.DayStamp.MonthStamp.TimeStamp</AssemblyInfoVersionSettings>
+    <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -186,7 +186,11 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsBlockThumbnail.vb" />
     <Compile Include="clsFunctions.vb" />
+    <Compile Include="clsImageForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="clsINI.vb" />
     <Compile Include="clsMyDocData.vb" />
     <Compile Include="clsNOD.vb" />
@@ -337,6 +341,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_attrib_eddit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
