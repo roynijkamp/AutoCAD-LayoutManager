@@ -32,6 +32,19 @@ Public Class ucLayoutManager
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sCurrentLayout As String
     Dim sLayoutTemplate As String = ""
+    'layout attributes replace
+    Dim layAndTabTemp As SortedDictionary(Of String, Integer) = New SortedDictionary(Of String, Integer)
+    Dim oBlockID As ObjectId
+    Dim sBlockName As String
+    Dim oModalSpace As ObjectId
+    Dim oPaperSpace As ObjectId
+    Dim sActiveLayout As String
+    Dim sAttribNames(0 To 99) As String
+    Dim sAttribValue(0 To 99) As String
+    Dim bAutoNumber(0 To 99) As Boolean
+    Dim dStartValue(0 To 99) As Double
+    Dim dCurrValue(0 To 99) As Double
+    Dim dIncrementValue(0 To 99) As Double
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -152,7 +165,7 @@ Public Class ucLayoutManager
     ''' <summary>
     ''' 'Load layouts into list
     ''' </summary>
-    Public Sub loadLayouts()
+    Public Sub loadLayouts(Optional ByVal bLoadFromList As Boolean = False)
         'reset and clear list
         'reset check count
         iCheckCount = 0
@@ -225,6 +238,18 @@ Public Class ucLayoutManager
                     End If
                     myCntrl.isCurrentLayout()
                     'add layout to control flow
+                    If bLoadFromList Then
+                        'layout list is saved in dictionary, load this list
+                        If layAndTabTemp.ContainsKey(sLayoutName) Then
+                            'add from list
+                            myCntrl.SetCheckState(CBool(layAndTabTemp.Item(sLayoutName)))
+                        Else
+                            'hide item
+                            myCntrl.SetCheckState(False)
+                            myCntrl.Visible = False
+                        End If
+
+                    End If
                     flowLayouts.Controls.Add(myCntrl)
                     iTabIndex += 1
                 End If
@@ -992,60 +1017,268 @@ Public Class ucLayoutManager
     End Sub
 
     Private Sub cmdBatchAttributes_Click(sender As Object, e As EventArgs) Handles cmdBatchAttributes.Click
+        cmdBatchAttributes.Enabled = False
+        cmdReplaceAttrib.Visible = True
+        cmdReplaceAttrib.Dock = DockStyle.Fill
+        cmdReplaceAttrib.BringToFront()
+        'copy visible layouts to dictionary
+        layAndTabTemp = New SortedDictionary(Of String, Integer)
+        For Each myCntr As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+            If myCntr.Visible Then
+                'only add visible controls
+                Dim iSelected As Integer = CInt(myCntr.CheckState)
+                Dim sName As String = myCntr.LayoutName
+                layAndTabTemp.Add(sName, iSelected)
+            End If
+        Next
+        flowLayouts.Controls.Clear()
 
-    End Sub
 
-    Private Sub saveBlockAsThumbnail()
-        Dim sBlockName As String
-        Using acDbTmp As Database = New Database()
-            Using acLockDoc As DocumentLock = acDoc.LockDocument
-                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                    Try
-                        Dim opts As PromptEntityOptions = New PromptEntityOptions("Selecteer een Block: ")
-                        opts.SetRejectMessage("Alleen block toegestaan!")
-                        opts.AddAllowedClass(GetType(BlockReference), True)
-                        Dim promptSS As PromptEntityResult
-                        promptSS = acEd.GetEntity(opts)
+        'set focus to modal space
+        Autodesk.AutoCAD.Internal.Utils.SetFocusToDwgView()
 
-                        If promptSS.Status = PromptStatus.OK Then
-                            Dim oBlockID As ObjectId = promptSS.ObjectId
+        Using acLockDoc As DocumentLock = acDoc.LockDocument()
+            '' Start a transaction
+            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                Try
+                    Dim opts As PromptEntityOptions = New PromptEntityOptions("Selecteer een Block: ")
+                    opts.SetRejectMessage("Alleen block toegestaan!")
+                    opts.AddAllowedClass(GetType(BlockReference), True)
+                    Dim promptSS As PromptEntityResult
+                    promptSS = acEd.GetEntity(opts)
 
-                            Dim oBlockIDcoll As ObjectIdCollection = New ObjectIdCollection()
-                            oBlockIDcoll.Add(oBlockID)
+                    If promptSS.Status = PromptStatus.OK Then
+                        oBlockID = promptSS.ObjectId
+                        Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
+                        Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
+                        sBlockName = btr.Name
+                        Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
+                        For Each oAttID As ObjectId In colATT
+                            'attributes doorlopen
+                            Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
+                            Dim attListItem As RN_attribute_listitem.AttributeListItem = New RN_attribute_listitem.AttributeListItem
+                            attListItem.AttribName = refATT.Tag
+                            flowLayouts.Controls.Add(attListItem)
+                        Next
+                    Else
+                        'geen block geselecteerd
+                    End If
 
-                            Dim mapping As IdMapping = New IdMapping()
-
-                            acCurDb.WblockCloneObjects(oBlockIDcoll, acDbTmp.BlockTableId, mapping, DuplicateRecordCloning.Replace, False)
-
-                            Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
-                            Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
-                            sBlockName = btr.Name
-
-                            Using acTransEx As Transaction = acDbTmp.TransactionManager.StartTransaction()
-                                Dim btEx As BlockTable = acTransEx.GetObject(acDbTmp.BlockTableId, OpenMode.ForRead)
-
-                                Dim iNumBlocks As Integer = clsBlockThumbnail.ExtractThumbnails(sIniDir, acTransEx, btEx, sBlockName)
-                                MsgBox("Thumbnail gereed")
-                            End Using
-
-                            'Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
-                            'For Each oAttID As ObjectId In colATT
-                            '    'attributes doorlopen
-                            '    Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
-                            '    'cmbAttributes.Items.Add(refATT.Tag)
-
-                            'Next
-                        Else
-                            'geen block geselecteerd
-                        End If
-
-                    Catch ex As Autodesk.AutoCAD.Runtime.Exception
-                        MsgBox(ex.Message)
-                    End Try
-                    acTrans.Commit()
-                End Using
-
+                Catch ex As Autodesk.AutoCAD.Runtime.Exception
+                    MsgBox(ex.Message)
+                End Try
+                acTrans.Commit()
             End Using
+            If flowLayouts.Controls.Count < 0 Then
+                'reset items
+                loadLayouts(True)
+                cmdBatchAttributes.Enabled = True
+                cmdReplaceAttrib.Visible = False
+            End If
         End Using
     End Sub
+
+
+    Private Sub cmdReplaceAttrib_Click(sender As Object, e As EventArgs) Handles cmdReplaceAttrib.Click
+        pgbVoortgang.Visible = True
+        Dim iItmCount As Integer = 0
+        For Each attListItem As RN_attribute_listitem.AttributeListItem In flowLayouts.Controls
+            If attListItem.IsItemSelected Then
+                'item is geselecteerd
+                If attListItem.AttribNewValue.Length > 0 Then
+                    'alleen verwerken indien groter dan 0
+                    sAttribNames(iItmCount) = attListItem.AttribName.ToUpper
+                    sAttribValue(iItmCount) = attListItem.AttribNewValue
+                    bAutoNumber(iItmCount) = attListItem.AutoNumber
+                    If Not attListItem.StartValue.ToString.Length = 0 Then
+                        dStartValue(iItmCount) = attListItem.StartValue
+                    Else
+                        dStartValue(iItmCount) = 0
+                    End If
+                    dCurrValue(iItmCount) = dStartValue(iItmCount)
+                    If Not attListItem.IncrementValue.ToString.Length = 0 Then
+                        dIncrementValue(iItmCount) = attListItem.IncrementValue
+                    Else
+                        dIncrementValue(iItmCount) = 1
+                    End If
+                    iItmCount += 1
+                End If
+            End If
+        Next
+        'layouts doorlopen
+        Dim iPaperSpaceCount As Integer = 0
+        LayoutWalker(iPaperSpaceCount)
+
+        'rest items
+        pgbVoortgang.Visible = False
+        loadLayouts(True)
+        cmdBatchAttributes.Enabled = True
+        cmdReplaceAttrib.Visible = False
+    End Sub
+
+    Public Function getSpaceID(ByVal sSpace As String) As ObjectId
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim acCurDb As Database = acDoc.Database
+        Dim acEd As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+        Using acLockDoc As DocumentLock = acDoc.LockDocument()
+            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                Dim bt As BlockTable = DirectCast(acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead), BlockTable)
+                'modal en paperspace ids
+                Select Case sSpace
+                    Case "modal"
+                        Return bt(BlockTableRecord.ModelSpace)
+                    Case "paper"
+                        Return bt(BlockTableRecord.PaperSpace)
+                End Select
+            End Using 'transaction
+        End Using 'lock dock
+        Dim oEmpty As ObjectId = Nothing
+        Return oEmpty
+    End Function
+
+    Public Function LayoutWalker(ByRef iPaperSpaceCount As Integer)
+        Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim db As Database = doc.Database
+        Dim ed As Editor = doc.Editor
+        Dim layoutMgr As LayoutManager = LayoutManager.Current
+        Dim iLayoutCnt As Integer = 1
+        Dim iLayoutCntMax As Integer = layoutMgr.LayoutCount
+        sActiveLayout = layoutMgr.CurrentLayout
+        pgbVoortgang.Value = 0
+        pgbVoortgang.Maximum = iLayoutCntMax
+        Using acLockDoc As DocumentLock = doc.LockDocument()
+            Using tr As Transaction = db.TransactionManager.StartTransaction()
+                Dim layoutDic As DBDictionary = TryCast(tr.GetObject(db.LayoutDictionaryId, OpenMode.ForRead, False), DBDictionary)
+                For Each entry As DBDictionaryEntry In layoutDic
+                    Dim layoutId As ObjectId = entry.Value
+                    Dim layout As Layout = TryCast(tr.GetObject(layoutId, OpenMode.ForRead), Layout)
+                    '## layout active zetten
+                    layoutMgr.CurrentLayout = layout.LayoutName
+                    '## paperspace id pakken en attributes updaten
+                    iPaperSpaceCount = UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+                    iLayoutCnt = iLayoutCnt + 1
+                Next
+                'originele layout terugzetten
+                layoutMgr.CurrentLayout = sActiveLayout
+                tr.Commit()
+            End Using
+        End Using
+        Return True
+    End Function
+
+
+    Public Function UpdateAttributesInBlock(ByVal oBtrId As ObjectId, ByVal sBlockName As String, Optional bRecursive As Boolean = False) As Integer
+        Dim iChangedCount As Integer = 0
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim acCurDb As Database = acDoc.Database
+        Dim acEd As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+        Using acLockDoc As DocumentLock = acDoc.LockDocument()
+            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(oBtrId, OpenMode.ForRead), BlockTableRecord)
+                If bRecursive = False Then
+                    pgbVoortgang.Value = 0
+                    pgbVoortgang.Maximum = btr.AcadObject.count
+                End If
+                For Each oEntId As ObjectId In btr
+                    Dim ent As Entity = TryCast(acTrans.GetObject(oEntId, OpenMode.ForRead), Entity)
+                    If ent IsNot Nothing Then
+                        Dim br As BlockReference = TryCast(ent, BlockReference)
+                        If br IsNot Nothing Then
+                            Dim bd As BlockTableRecord = DirectCast(acTrans.GetObject(br.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
+                            If bd.Name.ToUpper = sBlockName.ToUpper Then
+                                ' Check each of the attributes...
+                                For Each arId As ObjectId In br.AttributeCollection
+                                    Dim obj As DBObject = acTrans.GetObject(arId, OpenMode.ForRead)
+                                    Dim ar As AttributeReference = TryCast(obj, AttributeReference)
+                                    If ar IsNot Nothing Then
+                                        'kijken of we de tag in de array kunnen vinden
+                                        Dim iItemIndex As Integer = Array.IndexOf(sAttribNames, ar.Tag.ToUpper)
+                                        If iItemIndex >= 0 Then
+                                            ar.UpgradeOpen()
+                                            Dim sTmpValue As String = sAttribValue(iItemIndex)
+                                            'kijke of we autonumber hebben
+                                            If bAutoNumber(iItemIndex) = True Then
+                                                sTmpValue = sTmpValue.Replace("[#nummer]", dCurrValue(iItemIndex).ToString)
+                                                'sTmpValue = sTmpValue & " autonr"
+                                                dCurrValue(iItemIndex) += dIncrementValue(iItemIndex)
+                                            End If
+                                            ar.TextString = sTmpValue
+                                            ar.DowngradeOpen()
+                                            iChangedCount += 1
+                                        End If
+                                    End If
+                                Next 'for each attribute
+                            End If
+                            ' Recurse for nested blocks
+                            iChangedCount += UpdateAttributesInBlock(br.BlockTableRecord, sBlockName, True)
+                        End If
+                    End If
+                    If bRecursive = False Then
+                        'check of de max van de progress nog toereikend is
+                        If pgbVoortgang.Value = pgbVoortgang.Maximum Then
+                            'maximum is bereikt, value verlagen
+                            pgbVoortgang.Maximum = pgbVoortgang.Maximum + CInt(Math.Ceiling(Rnd() * (pgbVoortgang.Maximum - 1))) + 1
+                        End If
+                        pgbVoortgang.Value = pgbVoortgang.Value + 1
+                    End If
+                Next 'for each object
+                acTrans.Commit()
+            End Using 'transaction
+        End Using 'lockdock
+        Return iChangedCount
+    End Function
+
+    'Private Sub saveBlockAsThumbnail()
+
+    '    Using acDbTmp As Database = New Database()
+    '        Using acLockDoc As DocumentLock = acDoc.LockDocument
+    '            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+    '                Try
+    '                    Dim opts As PromptEntityOptions = New PromptEntityOptions("Selecteer een Block: ")
+    '                    opts.SetRejectMessage("Alleen block toegestaan!")
+    '                    opts.AddAllowedClass(GetType(BlockReference), True)
+    '                    Dim promptSS As PromptEntityResult
+    '                    promptSS = acEd.GetEntity(opts)
+
+    '                    If promptSS.Status = PromptStatus.OK Then
+    '                        oBlockID = promptSS.ObjectId
+
+    '                        Dim oBlockIDcoll As ObjectIdCollection = New ObjectIdCollection()
+    '                        oBlockIDcoll.Add(oBlockID)
+
+    '                        Dim mapping As IdMapping = New IdMapping()
+
+    '                        acCurDb.WblockCloneObjects(oBlockIDcoll, acDbTmp.BlockTableId, mapping, DuplicateRecordCloning.Replace, False)
+
+    '                        Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
+    '                        Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
+    '                        sBlockName = btr.Name
+
+    '                        Using acTransEx As Transaction = acDbTmp.TransactionManager.StartTransaction()
+    '                            Dim btEx As BlockTable = acTransEx.GetObject(acDbTmp.BlockTableId, OpenMode.ForRead)
+
+    '                            Dim iNumBlocks As Integer = clsBlockThumbnail.ExtractThumbnails(sIniDir, acTransEx, btEx, sBlockName)
+    '                            MsgBox("Thumbnail gereed")
+    '                        End Using
+
+    '                        'Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
+    '                        'For Each oAttID As ObjectId In colATT
+    '                        '    'attributes doorlopen
+    '                        '    Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
+    '                        '    'cmbAttributes.Items.Add(refATT.Tag)
+
+    '                        'Next
+    '                    Else
+    '                        'geen block geselecteerd
+    '                    End If
+
+    '                Catch ex As Autodesk.AutoCAD.Runtime.Exception
+    '                    MsgBox(ex.Message)
+    '                End Try
+    '                acTrans.Commit()
+    '            End Using
+
+    '        End Using
+    '    End Using
+    'End Sub
 End Class
