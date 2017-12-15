@@ -33,7 +33,7 @@ Public Class ucLayoutManager
     Dim sCurrentLayout As String
     Dim sLayoutTemplate As String = ""
     'layout attributes replace
-    Dim layAndTabTemp As SortedDictionary(Of String, Integer) = New SortedDictionary(Of String, Integer)
+    Dim layAndTabTemp As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer)
     Dim oBlockID As ObjectId
     Dim sBlockName As String
     Dim oModalSpace As ObjectId
@@ -360,27 +360,6 @@ Public Class ucLayoutManager
     Public Sub ItemViewClick(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         setLayoutCurrent(myCntrl.LayoutName, myCntrl.IsModel)
-        'Using acLockDoc As DocumentLock = acDoc.LockDocument
-        '    Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-        '    acLayoutMgr.CurrentLayout = myCntrl.LayoutName
-        '    acDoc.Editor.Regen()
-        '    'zoom extends when not model view
-        '    If myCntrl.IsModel = False Then
-        '        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-        '            Dim oId As ObjectId = acLayoutMgr.GetLayoutId(myCntrl.LayoutName)
-        '            Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
-        '            'lock viewports when not locked
-        '            For Each vpId As ObjectId In lay.GetViewports()
-        '                Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
-        '                vp.Locked = True
-        '            Next
-        '            acTrans.Commit()
-        '            Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
-        '            acadApp.ZoomExtents()
-        '            acDoc.Editor.Regen()
-        '        End Using
-        '    End If
-        'End Using
     End Sub
 
     Public Sub setLayoutCurrent(ByVal sLayoutName As String, ByVal bIsModel As Boolean)
@@ -1022,7 +1001,7 @@ Public Class ucLayoutManager
         cmdReplaceAttrib.Dock = DockStyle.Fill
         cmdReplaceAttrib.BringToFront()
         'copy visible layouts to dictionary
-        layAndTabTemp = New SortedDictionary(Of String, Integer)
+        layAndTabTemp = New Dictionary(Of String, Integer)
         For Each myCntr As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If myCntr.Visible Then
                 'only add visible controls
@@ -1106,14 +1085,20 @@ Public Class ucLayoutManager
             End If
         Next
         'layouts doorlopen
+        'layout lijst herladen
+        loadLayouts(True)
+        cmdReplaceAttrib.Visible = False
+        cmdReplaceAttrib.Update()
         Dim iPaperSpaceCount As Integer = 0
-        LayoutWalker(iPaperSpaceCount)
+        'LayoutWalker(iPaperSpaceCount)
+        LayoutWalker2()
 
         'rest items
         pgbVoortgang.Visible = False
-        loadLayouts(True)
+        'loadLayouts(True)
         cmdBatchAttributes.Enabled = True
-        cmdReplaceAttrib.Visible = False
+        pgbVoortgang.Visible = False
+        MsgBox("Bijwerken van tekeninghoofd is voltooid!")
     End Sub
 
     Public Function getSpaceID(ByVal sSpace As String) As ObjectId
@@ -1134,6 +1119,54 @@ Public Class ucLayoutManager
         End Using 'lock dock
         Dim oEmpty As ObjectId = Nothing
         Return oEmpty
+    End Function
+
+    Public Function LayoutWalker2()
+        Dim layoutMgr As LayoutManager = LayoutManager.Current
+        sActiveLayout = layoutMgr.CurrentLayout
+        'check of er ook layouts geselecteerd zijn, zo ja vragen of alleen de geselecteerde layouts verwerkt moeten worden
+        Dim bProcessChecked As Boolean = False
+        If iCheckCount > 0 Then
+            Dim sCheckResponse As MsgBoxResult = MsgBox("Wilt u de geselecteerde layouts verwerken (JA) of alle layouts in de lijst (NEE)", MsgBoxStyle.YesNoCancel)
+            Select Case sCheckResponse
+                Case MsgBoxResult.Yes
+                    bProcessChecked = True
+
+                Case MsgBoxResult.No
+                    bProcessChecked = False
+
+                Case MsgBoxResult.Cancel
+                    Return False
+            End Select
+        End If
+            For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+            If myCntrl.LayoutName = "Model" Then
+                'modal overslaan
+            Else
+                'enkel de in de lijst zichtbare items verwerken
+                If myCntrl.Visible Then
+                    If bProcessChecked Then
+                        'alleen de geselecteerde layouts
+                        If myCntrl.CheckState Then
+                            '## layout active zetten
+                            Dim sLayoutName As String = myCntrl.LayoutName
+                            setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
+                            '## paperspace id pakken en attributes updaten
+                            UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+                        End If
+                    Else
+                        '## layout active zetten
+                        Dim sLayoutName As String = myCntrl.LayoutName
+                        setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
+                        '## paperspace id pakken en attributes updaten
+                        UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+                    End If
+                End If
+            End If
+        Next
+        'originele layout terugzetten
+        setLayoutCurrent(sActiveLayout, True)
+        Return True
     End Function
 
     Public Function LayoutWalker(ByRef iPaperSpaceCount As Integer)

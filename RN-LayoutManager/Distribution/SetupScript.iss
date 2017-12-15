@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RN Layout Manager"
-#define MyAppVersion "1.0.17346.1110"
+#define MyAppVersion "1.0.17348.1602"
 #define MyAppPublisher "Roy Nijkamp"
 #define MyAppURL "http://www.roynijkamp.nl"
 
@@ -42,7 +42,9 @@ Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\Handleiding.pdf"; DestDir: "{app}\Docs"; Flags: ignoreversion recursesubdirs createallsubdirs
 ;## CORE
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\logo.ico"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Microsoft.VisualBasic.PowerPacks.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-LayoutItems.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-attribute-listitem.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-LayoutManager.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
