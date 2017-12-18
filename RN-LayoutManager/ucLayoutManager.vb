@@ -23,6 +23,7 @@ Public Class ucLayoutManager
     Dim iFlowYmax As Integer = 0
     Dim iMouseCurrY As Integer = 0
     Dim sScrollDirection As String = ""
+    Dim bIsDragging As Boolean = False
     '/auto scroll during drag and drop
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
@@ -391,7 +392,7 @@ Public Class ucLayoutManager
     End Sub
 
     ''' <summary>
-    ''' Move item on drag
+    ''' Move item on drag / end drag
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -402,6 +403,7 @@ Public Class ucLayoutManager
             'reset dragstate of control
             myCntrl.GetDragged = False
             myCntrl.isDragged()
+            bIsDragging = False
             'save new order
             setLayoutOrder()
             lblCheckCount.Text = iCheckCount.ToString
@@ -409,7 +411,7 @@ Public Class ucLayoutManager
     End Sub
 
     ''' <summary>
-    ''' Detect Drag
+    ''' Detect Drag / start drag
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -426,6 +428,7 @@ Public Class ucLayoutManager
             'reset dragstate of control
             myCntrlSrc.GetDragged = True
             myCntrlSrc.isDragged()
+            bIsDragging = True
         End If
     End Sub
 
@@ -438,27 +441,29 @@ Public Class ucLayoutManager
     End Sub
 
     Private Sub calcMousePosition()
-        Dim localMousePosition As System.Drawing.Point
-        localMousePosition = PointToClient(Cursor.Position)
-        iMouseCurrY = localMousePosition.Y
-        iFlowYmax = flowLayouts.Top + flowLayouts.Height
-        iFlowYmin = flowLayouts.Top
-        If iMouseCurrY < (iFlowYmin + drag_drop_scroll_amount) Then
-            'scroll down
-            sScrollDirection = "UP"
-            If tmrAutoScroll.Enabled = False Then
-                tmrAutoScroll.Enabled = True
+        If bIsDragging Then 'prevent autoscroll when no drag
+            Dim localMousePosition As System.Drawing.Point
+            localMousePosition = PointToClient(Cursor.Position)
+            iMouseCurrY = localMousePosition.Y
+            iFlowYmax = flowLayouts.Top + flowLayouts.Height
+            iFlowYmin = flowLayouts.Top
+            If iMouseCurrY < (iFlowYmin + drag_drop_scroll_amount) Then
+                'scroll down
+                sScrollDirection = "UP"
+                If tmrAutoScroll.Enabled = False Then
+                    tmrAutoScroll.Enabled = True
+                End If
+            ElseIf iMouseCurrY > (iFlowYmax - drag_drop_scroll_amount) Then
+                'scroll up
+                sScrollDirection = "DOWN"
+                If tmrAutoScroll.Enabled = False Then
+                    tmrAutoScroll.Enabled = True
+                End If
+            Else
+                'no scrolling
+                sScrollDirection = ""
+                tmrAutoScroll.Enabled = False
             End If
-        ElseIf iMouseCurrY > (iFlowYmax - drag_drop_scroll_amount) Then
-            'scroll up
-            sScrollDirection = "DOWN"
-            If tmrAutoScroll.Enabled = False Then
-                tmrAutoScroll.Enabled = True
-            End If
-        Else
-            'no scrolling
-            sScrollDirection = ""
-            tmrAutoScroll.Enabled = False
         End If
     End Sub
 
