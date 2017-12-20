@@ -192,6 +192,7 @@ Partial Class ucSettings
         '
         'cmdDebugOptions
         '
+        Me.cmdDebugOptions.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdDebugOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdDebugOptions.Location = New System.Drawing.Point(9, 686)
         Me.cmdDebugOptions.Name = "cmdDebugOptions"

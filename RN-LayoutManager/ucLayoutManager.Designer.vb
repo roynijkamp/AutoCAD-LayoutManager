@@ -38,6 +38,7 @@ Partial Class ucLayoutManager
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
         Me.cmdFilter = New System.Windows.Forms.Button()
@@ -50,8 +51,10 @@ Partial Class ucLayoutManager
         Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.mnuItmRenameSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
-        Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
+        Me.SubMenuFilter = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -255,6 +258,16 @@ Partial Class ucLayoutManager
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
         '
+        'cmdReplaceAttrib
+        '
+        Me.cmdReplaceAttrib.Location = New System.Drawing.Point(227, 19)
+        Me.cmdReplaceAttrib.Name = "cmdReplaceAttrib"
+        Me.cmdReplaceAttrib.Size = New System.Drawing.Size(41, 24)
+        Me.cmdReplaceAttrib.TabIndex = 10
+        Me.cmdReplaceAttrib.Text = "Geselecteerde attributes vervangen"
+        Me.cmdReplaceAttrib.UseVisualStyleBackColor = True
+        Me.cmdReplaceAttrib.Visible = False
+        '
         'cmdAddLayout
         '
         Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
@@ -341,40 +354,49 @@ Partial Class ucLayoutManager
         '
         'SubMenu
         '
-        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem})
+        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(175, 54)
+        Me.SubMenu.Size = New System.Drawing.Size(181, 82)
         '
         'LayoutKopierenToolStripMenuItem
         '
+        Me.LayoutKopierenToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_copy
         Me.LayoutKopierenToolStripMenuItem.Name = "LayoutKopierenToolStripMenuItem"
-        Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.LayoutKopierenToolStripMenuItem.Text = "Layout kopieren"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(171, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(177, 6)
         '
         'LayoutVerwijderenToolStripMenuItem
         '
+        Me.LayoutVerwijderenToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
         Me.LayoutVerwijderenToolStripMenuItem.Name = "LayoutVerwijderenToolStripMenuItem"
-        Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(177, 6)
+        '
+        'mnuItmRenameSelection
+        '
+        Me.mnuItmRenameSelection.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_attrib_eddit
+        Me.mnuItmRenameSelection.Name = "mnuItmRenameSelection"
+        Me.mnuItmRenameSelection.Size = New System.Drawing.Size(180, 22)
+        Me.mnuItmRenameSelection.Text = "Selectie Hernoemen"
         '
         'tmrAutoScroll
         '
         Me.tmrAutoScroll.Interval = 200
         '
-        'cmdReplaceAttrib
+        'SubMenuFilter
         '
-        Me.cmdReplaceAttrib.Location = New System.Drawing.Point(227, 19)
-        Me.cmdReplaceAttrib.Name = "cmdReplaceAttrib"
-        Me.cmdReplaceAttrib.Size = New System.Drawing.Size(41, 24)
-        Me.cmdReplaceAttrib.TabIndex = 10
-        Me.cmdReplaceAttrib.Text = "Geselecteerde attributes vervangen"
-        Me.cmdReplaceAttrib.UseVisualStyleBackColor = True
-        Me.cmdReplaceAttrib.Visible = False
+        Me.SubMenuFilter.Name = "SubMenuFilter"
+        Me.SubMenuFilter.Size = New System.Drawing.Size(61, 4)
         '
         'ucLayoutManager
         '
@@ -422,4 +444,7 @@ Partial Class ucLayoutManager
     Friend WithEvents cmdAddLayout As Windows.Forms.Button
     Friend WithEvents cmdBatchAttributes As Windows.Forms.Button
     Friend WithEvents cmdReplaceAttrib As Windows.Forms.Button
+    Friend WithEvents SubMenuFilter As Windows.Forms.ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem2 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents mnuItmRenameSelection As Windows.Forms.ToolStripMenuItem
 End Class

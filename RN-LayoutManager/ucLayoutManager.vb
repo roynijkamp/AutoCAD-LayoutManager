@@ -849,6 +849,12 @@ Public Class ucLayoutManager
 
     Private Sub SubMenu_Opening(sender As Object, e As CancelEventArgs) Handles SubMenu.Opening
         Me.SubMenu.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+        'disable rename batch if no items selected
+        If iCheckCount > 1 Then
+            mnuItmRenameSelection.Enabled = True
+        Else
+            mnuItmRenameSelection.Enabled = False
+        End If
     End Sub
 
     Public Function loadExternalTemplate()
@@ -894,6 +900,10 @@ Public Class ucLayoutManager
     End Function
 
     Private Sub cmdAddLayout_Click(sender As Object, e As EventArgs) Handles cmdAddLayout.Click
+        If cmbNewLayout.Text.Length = 0 Then
+            MsgBox("Selecteer eerst een layout!")
+            Exit Sub
+        End If
         Dim sNewLayoutName As String = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
         If LayoutExists(sNewLayoutName) = False Then
 
@@ -1265,6 +1275,11 @@ Public Class ucLayoutManager
         End Using 'lockdock
         Return iChangedCount
     End Function
+
+    Private Sub cmdFilter_Click(sender As Object, e As EventArgs) Handles cmdFilter.Click
+        Dim frmFilterDlg As frmFilter = New frmFilter()
+        frmFilterDlg.ShowDialog()
+    End Sub
 
     'Private Sub saveBlockAsThumbnail()
 
