@@ -29,21 +29,25 @@ Partial Class frmFilter
         Me.cmdDelFilter = New System.Windows.Forms.Button()
         Me.radioVisibleItems = New System.Windows.Forms.RadioButton()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.cmdNieuw = New System.Windows.Forms.Button()
+        Me.radioSaveAsSelection = New System.Windows.Forms.RadioButton()
         Me.SuspendLayout()
         '
         'radioSelectedItems
         '
         Me.radioSelectedItems.AutoSize = True
+        Me.radioSelectedItems.Enabled = False
         Me.radioSelectedItems.Location = New System.Drawing.Point(47, 35)
         Me.radioSelectedItems.Name = "radioSelectedItems"
-        Me.radioSelectedItems.Size = New System.Drawing.Size(226, 17)
+        Me.radioSelectedItems.Size = New System.Drawing.Size(194, 17)
         Me.radioSelectedItems.TabIndex = 0
         Me.radioSelectedItems.TabStop = True
-        Me.radioSelectedItems.Text = "Voeg geselecteerde items toe aan het filter"
+        Me.radioSelectedItems.Text = "Geselecteerde items opslaan als lijst"
         Me.radioSelectedItems.UseVisualStyleBackColor = True
         '
         'cmbFilter
         '
+        Me.cmbFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbFilter.FormattingEnabled = True
         Me.cmbFilter.Location = New System.Drawing.Point(47, 6)
         Me.cmbFilter.Name = "cmbFilter"
@@ -80,12 +84,13 @@ Partial Class frmFilter
         'radioVisibleItems
         '
         Me.radioVisibleItems.AutoSize = True
+        Me.radioVisibleItems.Enabled = False
         Me.radioVisibleItems.Location = New System.Drawing.Point(47, 58)
         Me.radioVisibleItems.Name = "radioVisibleItems"
-        Me.radioVisibleItems.Size = New System.Drawing.Size(248, 17)
+        Me.radioVisibleItems.Size = New System.Drawing.Size(170, 17)
         Me.radioVisibleItems.TabIndex = 5
         Me.radioVisibleItems.TabStop = True
-        Me.radioVisibleItems.Text = "Voeg zichtbare items uit de lijst toe aan het filter"
+        Me.radioVisibleItems.Text = "Zichtbare items opslaan als lijst"
         Me.radioVisibleItems.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -97,11 +102,33 @@ Partial Class frmFilter
         Me.TextBox1.Size = New System.Drawing.Size(435, 278)
         Me.TextBox1.TabIndex = 6
         '
+        'cmdNieuw
+        '
+        Me.cmdNieuw.Location = New System.Drawing.Point(411, 35)
+        Me.cmdNieuw.Name = "cmdNieuw"
+        Me.cmdNieuw.Size = New System.Drawing.Size(73, 21)
+        Me.cmdNieuw.TabIndex = 7
+        Me.cmdNieuw.Text = "Nieuw"
+        Me.cmdNieuw.UseVisualStyleBackColor = True
+        '
+        'radioSaveAsSelection
+        '
+        Me.radioSaveAsSelection.AutoSize = True
+        Me.radioSaveAsSelection.Location = New System.Drawing.Point(47, 81)
+        Me.radioSaveAsSelection.Name = "radioSaveAsSelection"
+        Me.radioSaveAsSelection.Size = New System.Drawing.Size(216, 17)
+        Me.radioSaveAsSelection.TabIndex = 8
+        Me.radioSaveAsSelection.TabStop = True
+        Me.radioSaveAsSelection.Text = "Geselecteerde items opslaan als selectie"
+        Me.radioSaveAsSelection.UseVisualStyleBackColor = True
+        '
         'frmFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(490, 422)
+        Me.Controls.Add(Me.radioSaveAsSelection)
+        Me.Controls.Add(Me.cmdNieuw)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.radioVisibleItems)
         Me.Controls.Add(Me.cmdDelFilter)
@@ -126,4 +153,6 @@ Partial Class frmFilter
     Friend WithEvents cmdDelFilter As Windows.Forms.Button
     Friend WithEvents radioVisibleItems As Windows.Forms.RadioButton
     Friend WithEvents TextBox1 As Windows.Forms.TextBox
+    Friend WithEvents cmdNieuw As Windows.Forms.Button
+    Friend WithEvents radioSaveAsSelection As Windows.Forms.RadioButton
 End Class

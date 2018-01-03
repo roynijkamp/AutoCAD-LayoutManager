@@ -55,10 +55,13 @@ Partial Class ucLayoutManager
         Me.mnuItmRenameSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
         Me.SubMenuFilter = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DdContainer1 = New DropDownContainer.DDContainer()
+        Me.flowDropDown = New System.Windows.Forms.FlowLayoutPanel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SubMenu.SuspendLayout()
+        Me.DdContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -74,7 +77,7 @@ Partial Class ucLayoutManager
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 4
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(420, 582)
@@ -101,14 +104,15 @@ Partial Class ucLayoutManager
         Me.flowLayouts.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.flowLayouts.Dock = System.Windows.Forms.DockStyle.Fill
         Me.flowLayouts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.flowLayouts.Location = New System.Drawing.Point(3, 73)
+        Me.flowLayouts.Location = New System.Drawing.Point(3, 83)
         Me.flowLayouts.Name = "flowLayouts"
-        Me.flowLayouts.Size = New System.Drawing.Size(414, 456)
+        Me.flowLayouts.Size = New System.Drawing.Size(414, 446)
         Me.flowLayouts.TabIndex = 0
         Me.flowLayouts.WrapContents = False
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.DdContainer1)
         Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
         Me.GroupBox1.Controls.Add(Me.cmdTrash)
         Me.GroupBox1.Controls.Add(Me.cmdInvertSelection)
@@ -124,7 +128,7 @@ Partial Class ucLayoutManager
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(0)
-        Me.GroupBox1.Size = New System.Drawing.Size(420, 50)
+        Me.GroupBox1.Size = New System.Drawing.Size(420, 60)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
@@ -132,7 +136,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdBatchAttributes.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_attrib_eddit
         Me.cmdBatchAttributes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdBatchAttributes.Location = New System.Drawing.Point(240, 11)
+        Me.cmdBatchAttributes.Location = New System.Drawing.Point(240, 30)
         Me.cmdBatchAttributes.Name = "cmdBatchAttributes"
         Me.cmdBatchAttributes.Size = New System.Drawing.Size(28, 28)
         Me.cmdBatchAttributes.TabIndex = 14
@@ -142,7 +146,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdTrash.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
         Me.cmdTrash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdTrash.Location = New System.Drawing.Point(206, 11)
+        Me.cmdTrash.Location = New System.Drawing.Point(206, 30)
         Me.cmdTrash.Name = "cmdTrash"
         Me.cmdTrash.Size = New System.Drawing.Size(28, 28)
         Me.cmdTrash.TabIndex = 13
@@ -153,7 +157,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdInvertSelection.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_invert
         Me.cmdInvertSelection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdInvertSelection.Location = New System.Drawing.Point(95, 11)
+        Me.cmdInvertSelection.Location = New System.Drawing.Point(95, 30)
         Me.cmdInvertSelection.Name = "cmdInvertSelection"
         Me.cmdInvertSelection.Size = New System.Drawing.Size(28, 28)
         Me.cmdInvertSelection.TabIndex = 12
@@ -164,7 +168,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdSelectAll.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_selection_all
         Me.cmdSelectAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSelectAll.Location = New System.Drawing.Point(65, 11)
+        Me.cmdSelectAll.Location = New System.Drawing.Point(65, 30)
         Me.cmdSelectAll.Name = "cmdSelectAll"
         Me.cmdSelectAll.Size = New System.Drawing.Size(28, 28)
         Me.cmdSelectAll.TabIndex = 11
@@ -175,7 +179,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdHideItems.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_light_off_2
         Me.cmdHideItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdHideItems.Location = New System.Drawing.Point(172, 11)
+        Me.cmdHideItems.Location = New System.Drawing.Point(172, 30)
         Me.cmdHideItems.Name = "cmdHideItems"
         Me.cmdHideItems.Size = New System.Drawing.Size(28, 28)
         Me.cmdHideItems.TabIndex = 10
@@ -186,7 +190,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdShowItems.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_light_on_2
         Me.cmdShowItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdShowItems.Location = New System.Drawing.Point(138, 11)
+        Me.cmdShowItems.Location = New System.Drawing.Point(138, 30)
         Me.cmdShowItems.Name = "cmdShowItems"
         Me.cmdShowItems.Size = New System.Drawing.Size(28, 28)
         Me.cmdShowItems.TabIndex = 9
@@ -198,7 +202,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotSingleSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdPlotSingleSheet.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_PDF
         Me.cmdPlotSingleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 11)
+        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 30)
         Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
         Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotSingleSheet.TabIndex = 8
@@ -210,7 +214,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdPlotMulitSheet.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_PDF_multi
         Me.cmdPlotMulitSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdPlotMulitSheet.Location = New System.Drawing.Point(381, 11)
+        Me.cmdPlotMulitSheet.Location = New System.Drawing.Point(381, 30)
         Me.cmdPlotMulitSheet.Name = "cmdPlotMulitSheet"
         Me.cmdPlotMulitSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotMulitSheet.TabIndex = 6
@@ -221,7 +225,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdSortDESC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_descending
         Me.cmdSortDESC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSortDESC.Location = New System.Drawing.Point(34, 11)
+        Me.cmdSortDESC.Location = New System.Drawing.Point(34, 30)
         Me.cmdSortDESC.Name = "cmdSortDESC"
         Me.cmdSortDESC.Size = New System.Drawing.Size(28, 28)
         Me.cmdSortDESC.TabIndex = 5
@@ -232,7 +236,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdSortASC.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_sort_ascending
         Me.cmdSortASC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdSortASC.Location = New System.Drawing.Point(6, 11)
+        Me.cmdSortASC.Location = New System.Drawing.Point(6, 30)
         Me.cmdSortASC.Name = "cmdSortASC"
         Me.cmdSortASC.Size = New System.Drawing.Size(28, 28)
         Me.cmdSortASC.TabIndex = 4
@@ -398,6 +402,34 @@ Partial Class ucLayoutManager
         Me.SubMenuFilter.Name = "SubMenuFilter"
         Me.SubMenuFilter.Size = New System.Drawing.Size(61, 4)
         '
+        'DdContainer1
+        '
+        Me.DdContainer1.ButtonShape = DropDownContainer.DDContainer.eButtonShape.Square
+        Me.DdContainer1.Controls.Add(Me.flowDropDown)
+        Me.DdContainer1.DDOpacity = 1.0R
+        Me.DdContainer1.DropControl = Me.flowDropDown
+        Me.DdContainer1.GraphicImage = Nothing
+        Me.DdContainer1.HeaderHeight = 20
+        Me.DdContainer1.HeaderWidth = 300
+        Me.DdContainer1.Location = New System.Drawing.Point(6, 3)
+        Me.DdContainer1.Name = "DdContainer1"
+        Me.DdContainer1.PanelSize = New System.Drawing.Size(303, 0)
+        Me.DdContainer1.Size = New System.Drawing.Size(303, 21)
+        Me.DdContainer1.TabIndex = 11
+        Me.DdContainer1.Text = "Filters"
+        Me.DdContainer1.TextBoxCornerRadius = 0
+        '
+        'flowDropDown
+        '
+        Me.flowDropDown.AutoSize = True
+        Me.flowDropDown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.flowDropDown.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.flowDropDown.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.flowDropDown.Location = New System.Drawing.Point(0, 22)
+        Me.flowDropDown.Name = "flowDropDown"
+        Me.flowDropDown.Size = New System.Drawing.Size(303, 0)
+        Me.flowDropDown.TabIndex = 0
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -411,6 +443,8 @@ Partial Class ucLayoutManager
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.SubMenu.ResumeLayout(False)
+        Me.DdContainer1.ResumeLayout(False)
+        Me.DdContainer1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -447,4 +481,6 @@ Partial Class ucLayoutManager
     Friend WithEvents SubMenuFilter As Windows.Forms.ContextMenuStrip
     Friend WithEvents ToolStripMenuItem2 As Windows.Forms.ToolStripSeparator
     Friend WithEvents mnuItmRenameSelection As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DdContainer1 As DropDownContainer.DDContainer
+    Friend WithEvents flowDropDown As Windows.Forms.FlowLayoutPanel
 End Class

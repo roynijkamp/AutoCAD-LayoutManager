@@ -46,6 +46,7 @@ Public Class ucLayoutManager
     Dim dStartValue(0 To 99) As Double
     Dim dCurrValue(0 To 99) As Double
     Dim dIncrementValue(0 To 99) As Double
+
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -151,6 +152,21 @@ Public Class ucLayoutManager
                 loadExternalTemplate()
             End If
         End If
+        'fill filter drop down as an test
+
+        Dim lbl As Label = New Label()
+        lbl.Text = "Label 1"
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
+        flowDropDown.Controls.Add(lbl)
     End Sub
 
 
@@ -1279,6 +1295,7 @@ Public Class ucLayoutManager
     Private Sub cmdFilter_Click(sender As Object, e As EventArgs) Handles cmdFilter.Click
         Dim frmFilterDlg As frmFilter = New frmFilter()
         frmFilterDlg.ShowDialog()
+
     End Sub
 
     'Private Sub saveBlockAsThumbnail()
