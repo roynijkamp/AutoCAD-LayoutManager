@@ -152,21 +152,7 @@ Public Class ucLayoutManager
                 loadExternalTemplate()
             End If
         End If
-        'fill filter drop down as an test
 
-        Dim lbl As Label = New Label()
-        lbl.Text = "Label 1"
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
-        flowDropDown.Controls.Add(lbl)
     End Sub
 
 
@@ -1031,6 +1017,8 @@ Public Class ucLayoutManager
         cmdReplaceAttrib.Visible = True
         cmdReplaceAttrib.Dock = DockStyle.Fill
         cmdReplaceAttrib.BringToFront()
+        cmdCancel.Visible = True
+        cmdCancel.BringToFront()
         'copy visible layouts to dictionary
         layAndTabTemp = New Dictionary(Of String, Integer)
         For Each myCntr As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
@@ -1129,6 +1117,7 @@ Public Class ucLayoutManager
         'loadLayouts(True)
         cmdBatchAttributes.Enabled = True
         pgbVoortgang.Visible = False
+        resetReplaceAttribButtons()
         MsgBox("Bijwerken van tekeninghoofd is voltooid!")
     End Sub
 
@@ -1293,62 +1282,85 @@ Public Class ucLayoutManager
     End Function
 
     Private Sub cmdFilter_Click(sender As Object, e As EventArgs) Handles cmdFilter.Click
-        Dim frmFilterDlg As frmFilter = New frmFilter()
-        frmFilterDlg.ShowDialog()
+        'Dim frmFilterDlg As frmFilter = New frmFilter()
+        'frmFilterDlg.ShowDialog()
+        ContextMenuFilters.Show(cmdFilter, 0, 0)
+    End Sub
+
+    Public Sub ShowContextMenu(ByVal myObject As Object)
 
     End Sub
 
-    'Private Sub saveBlockAsThumbnail()
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        resetReplaceAttribButtons()
+    End Sub
 
-    '    Using acDbTmp As Database = New Database()
-    '        Using acLockDoc As DocumentLock = acDoc.LockDocument
-    '            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-    '                Try
-    '                    Dim opts As PromptEntityOptions = New PromptEntityOptions("Selecteer een Block: ")
-    '                    opts.SetRejectMessage("Alleen block toegestaan!")
-    '                    opts.AddAllowedClass(GetType(BlockReference), True)
-    '                    Dim promptSS As PromptEntityResult
-    '                    promptSS = acEd.GetEntity(opts)
+    Public Sub resetReplaceAttribButtons()
+        cmdBatchAttributes.Enabled = True
+        cmdReplaceAttrib.Visible = False
+        cmdCancel.Visible = False
+    End Sub
 
-    '                    If promptSS.Status = PromptStatus.OK Then
-    '                        oBlockID = promptSS.ObjectId
+    Sub loadFilters(Optional ByVal sName As String = "", Optional ByVal bSetCurrent As Boolean = False)
+        Dim sCurrent As Integer = 0
+        cmbFilters.Items.Clear()
+        'load dict
+        Dim dictLoad As Dictionary(Of String, List(Of String)) = clsFilterData.getDBDictionaryToDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS")
+        If dictLoad Is Nothing Then
+            Exit Sub
+        End If
+        For Each pair As KeyValuePair(Of String, List(Of String)) In dictLoad
+            cmbFilters.Items.Add(pair.Key)
+            If bSetCurrent Then
+                If pair.Key = sName Then
+                    cmbFilters.SelectedIndex = cmbFilters.Items.Count - 1 'huidig item als actief zetten
+                End If
+            End If
+        Next
 
-    '                        Dim oBlockIDcoll As ObjectIdCollection = New ObjectIdCollection()
-    '                        oBlockIDcoll.Add(oBlockID)
+    End Sub
 
-    '                        Dim mapping As IdMapping = New IdMapping()
+    Sub saveNewFilter(ByVal sType As String, ByVal sName As String)
+        Dim dict As Dictionary(Of String, List(Of String)) = New Dictionary(Of String, List(Of String))
+        Dim dictLoad As Dictionary(Of String, List(Of String)) = clsFilterData.getDBDictionaryToDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS")
 
-    '                        acCurDb.WblockCloneObjects(oBlockIDcoll, acDbTmp.BlockTableId, mapping, DuplicateRecordCloning.Replace, False)
+        Dim val As List(Of String) = New List(Of String)
+        'dict.Add("foo", New List(Of String) From {"a", "b", "c"})
+        'dict.Add("bar", New List(Of String) From {"x", "y", "z"})
+        'dict.Add("baz", New List(Of String) From {"this", "is", "a", "test"})
+        For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+            If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
+                Select Case sType
+                    Case "selected"
+                        If myCntrl.CheckState Then 'layout is checked
+                            val.Add(myCntrl.LayoutID.ToString)
+                        End If
 
-    '                        Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
-    '                        Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
-    '                        sBlockName = btr.Name
+                    Case "visible"
+                        val.Add(myCntrl.LayoutID.ToString)
 
-    '                        Using acTransEx As Transaction = acDbTmp.TransactionManager.StartTransaction()
-    '                            Dim btEx As BlockTable = acTransEx.GetObject(acDbTmp.BlockTableId, OpenMode.ForRead)
+                End Select
+            End If
+        Next
+        MsgBox("add to dict")
+        dictLoad.Add(sName, val)
+        MsgBox("save dict")
+        'save dict
+        clsFilterData.filterToDBDictionary(acDoc, acCurDb, acEd, dictLoad, "FILTERSETTINGS")
+        loadFilters()
+    End Sub
 
-    '                            Dim iNumBlocks As Integer = clsBlockThumbnail.ExtractThumbnails(sIniDir, acTransEx, btEx, sBlockName)
-    '                            MsgBox("Thumbnail gereed")
-    '                        End Using
+    Private Sub GeselecteerdeItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GeselecteerdeItemsToolStripMenuItem.Click
+        Dim sFilterName As String = InputBox("Filternaam", "Filternaam", "Filter" & TimeOfDay.ToString)
+        If sFilterName.Length = 0 Then
+            Exit Sub
+        End If
+        saveNewFilter("selected", sFilterName)
+    End Sub
 
-    '                        'Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
-    '                        'For Each oAttID As ObjectId In colATT
-    '                        '    'attributes doorlopen
-    '                        '    Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
-    '                        '    'cmbAttributes.Items.Add(refATT.Tag)
-
-    '                        'Next
-    '                    Else
-    '                        'geen block geselecteerd
-    '                    End If
-
-    '                Catch ex As Autodesk.AutoCAD.Runtime.Exception
-    '                    MsgBox(ex.Message)
-    '                End Try
-    '                acTrans.Commit()
-    '            End Using
-
-    '        End Using
-    '    End Using
-    'End Sub
+    Private Sub cmdFilter_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdFilter.MouseDown
+        If e.Button = MouseButtons.Right Then
+            loadFilters()
+        End If
+    End Sub
 End Class

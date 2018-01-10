@@ -1,4 +1,5 @@
-﻿Imports Autodesk.AutoCAD.ApplicationServices
+﻿Imports System.Windows.Forms
+Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.EditorInput
 
@@ -79,6 +80,6 @@ Public Class frmFilter
     End Sub
 
     Private Sub cmdDelFilter_Click(sender As Object, e As EventArgs) Handles cmdDelFilter.Click
-        test()
+
     End Sub
 End Class

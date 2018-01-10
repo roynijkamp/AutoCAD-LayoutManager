@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.0103.1406</AssemblyVersion>
+    <AssemblyVersion>1.0.0110.1544</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -367,6 +367,9 @@
       <Project>{E0FF137C-8F24-4EBA-ADBB-8CC68775E260}</Project>
       <Name>DropDownContainer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_check.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

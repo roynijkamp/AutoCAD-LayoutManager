@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmFilter
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,9 +20,8 @@ Partial Class frmFilter
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.radioSelectedItems = New System.Windows.Forms.RadioButton()
         Me.cmbFilter = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmdSaveFilter = New System.Windows.Forms.Button()
@@ -32,18 +31,6 @@ Partial Class frmFilter
         Me.cmdNieuw = New System.Windows.Forms.Button()
         Me.radioSaveAsSelection = New System.Windows.Forms.RadioButton()
         Me.SuspendLayout()
-        '
-        'radioSelectedItems
-        '
-        Me.radioSelectedItems.AutoSize = True
-        Me.radioSelectedItems.Enabled = False
-        Me.radioSelectedItems.Location = New System.Drawing.Point(47, 35)
-        Me.radioSelectedItems.Name = "radioSelectedItems"
-        Me.radioSelectedItems.Size = New System.Drawing.Size(194, 17)
-        Me.radioSelectedItems.TabIndex = 0
-        Me.radioSelectedItems.TabStop = True
-        Me.radioSelectedItems.Text = "Geselecteerde items opslaan als lijst"
-        Me.radioSelectedItems.UseVisualStyleBackColor = True
         '
         'cmbFilter
         '
@@ -85,7 +72,7 @@ Partial Class frmFilter
         '
         Me.radioVisibleItems.AutoSize = True
         Me.radioVisibleItems.Enabled = False
-        Me.radioVisibleItems.Location = New System.Drawing.Point(47, 58)
+        Me.radioVisibleItems.Location = New System.Drawing.Point(47, 39)
         Me.radioVisibleItems.Name = "radioVisibleItems"
         Me.radioVisibleItems.Size = New System.Drawing.Size(170, 17)
         Me.radioVisibleItems.TabIndex = 5
@@ -95,11 +82,11 @@ Partial Class frmFilter
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(25, 127)
+        Me.TextBox1.Location = New System.Drawing.Point(25, 199)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox1.Size = New System.Drawing.Size(435, 278)
+        Me.TextBox1.Size = New System.Drawing.Size(435, 206)
         Me.TextBox1.TabIndex = 6
         '
         'cmdNieuw
@@ -114,7 +101,7 @@ Partial Class frmFilter
         'radioSaveAsSelection
         '
         Me.radioSaveAsSelection.AutoSize = True
-        Me.radioSaveAsSelection.Location = New System.Drawing.Point(47, 81)
+        Me.radioSaveAsSelection.Location = New System.Drawing.Point(47, 62)
         Me.radioSaveAsSelection.Name = "radioSaveAsSelection"
         Me.radioSaveAsSelection.Size = New System.Drawing.Size(216, 17)
         Me.radioSaveAsSelection.TabIndex = 8
@@ -135,7 +122,6 @@ Partial Class frmFilter
         Me.Controls.Add(Me.cmdSaveFilter)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.cmbFilter)
-        Me.Controls.Add(Me.radioSelectedItems)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmFilter"
@@ -145,8 +131,6 @@ Partial Class frmFilter
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents radioSelectedItems As Windows.Forms.RadioButton
     Friend WithEvents cmbFilter As Windows.Forms.ComboBox
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents cmdSaveFilter As Windows.Forms.Button

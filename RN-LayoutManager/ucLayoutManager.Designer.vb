@@ -27,9 +27,11 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmbFilters = New System.Windows.Forms.ComboBox()
         Me.cmdBatchAttributes = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
         Me.cmdInvertSelection = New System.Windows.Forms.Button()
+        Me.cmdFilter = New System.Windows.Forms.Button()
         Me.cmdSelectAll = New System.Windows.Forms.Button()
         Me.cmdHideItems = New System.Windows.Forms.Button()
         Me.cmdShowItems = New System.Windows.Forms.Button()
@@ -41,7 +43,6 @@ Partial Class ucLayoutManager
         Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
-        Me.cmdFilter = New System.Windows.Forms.Button()
         Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
         Me.lblCheckCount = New System.Windows.Forms.Label()
@@ -54,14 +55,17 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.mnuItmRenameSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
-        Me.SubMenuFilter = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.DdContainer1 = New DropDownContainer.DDContainer()
-        Me.flowDropDown = New System.Windows.Forms.FlowLayoutPanel()
+        Me.ContextMenuFilters = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.GeselecteerdeItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FilterVanZichtbareItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SubMenu.SuspendLayout()
-        Me.DdContainer1.SuspendLayout()
+        Me.ContextMenuFilters.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -112,10 +116,11 @@ Partial Class ucLayoutManager
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.DdContainer1)
+        Me.GroupBox1.Controls.Add(Me.cmbFilters)
         Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
         Me.GroupBox1.Controls.Add(Me.cmdTrash)
         Me.GroupBox1.Controls.Add(Me.cmdInvertSelection)
+        Me.GroupBox1.Controls.Add(Me.cmdFilter)
         Me.GroupBox1.Controls.Add(Me.cmdSelectAll)
         Me.GroupBox1.Controls.Add(Me.cmdHideItems)
         Me.GroupBox1.Controls.Add(Me.cmdShowItems)
@@ -123,6 +128,7 @@ Partial Class ucLayoutManager
         Me.GroupBox1.Controls.Add(Me.cmdPlotMulitSheet)
         Me.GroupBox1.Controls.Add(Me.cmdSortDESC)
         Me.GroupBox1.Controls.Add(Me.cmdSortASC)
+        Me.GroupBox1.Controls.Add(Me.cmdCancel)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.Location = New System.Drawing.Point(0, 20)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(0)
@@ -131,6 +137,15 @@ Partial Class ucLayoutManager
         Me.GroupBox1.Size = New System.Drawing.Size(420, 60)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
+        '
+        'cmbFilters
+        '
+        Me.cmbFilters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbFilters.FormattingEnabled = True
+        Me.cmbFilters.Location = New System.Drawing.Point(40, 5)
+        Me.cmbFilters.Name = "cmbFilters"
+        Me.cmbFilters.Size = New System.Drawing.Size(228, 21)
+        Me.cmbFilters.TabIndex = 15
         '
         'cmdBatchAttributes
         '
@@ -163,6 +178,17 @@ Partial Class ucLayoutManager
         Me.cmdInvertSelection.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.cmdInvertSelection, "Selectie omkeren")
         Me.cmdInvertSelection.UseVisualStyleBackColor = True
+        '
+        'cmdFilter
+        '
+        Me.cmdFilter.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_filter
+        Me.cmdFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdFilter.Location = New System.Drawing.Point(6, 0)
+        Me.cmdFilter.Name = "cmdFilter"
+        Me.cmdFilter.Size = New System.Drawing.Size(28, 28)
+        Me.cmdFilter.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.cmdFilter, "Weergave filter instellen")
+        Me.cmdFilter.UseVisualStyleBackColor = True
         '
         'cmdSelectAll
         '
@@ -248,7 +274,6 @@ Partial Class ucLayoutManager
         Me.GroupBox2.Controls.Add(Me.cmdReplaceAttrib)
         Me.GroupBox2.Controls.Add(Me.cmdAddLayout)
         Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
-        Me.GroupBox2.Controls.Add(Me.cmdFilter)
         Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
         Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
         Me.GroupBox2.Controls.Add(Me.lblCheckCount)
@@ -293,17 +318,6 @@ Partial Class ucLayoutManager
         Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
         Me.cmbNewLayout.TabIndex = 8
         Me.cmbNewLayout.Visible = False
-        '
-        'cmdFilter
-        '
-        Me.cmdFilter.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_filter
-        Me.cmdFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdFilter.Location = New System.Drawing.Point(44, 16)
-        Me.cmdFilter.Name = "cmdFilter"
-        Me.cmdFilter.Size = New System.Drawing.Size(28, 28)
-        Me.cmdFilter.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.cmdFilter, "Weergave filter instellen")
-        Me.cmdFilter.UseVisualStyleBackColor = True
         '
         'pgbVoortgang
         '
@@ -397,38 +411,47 @@ Partial Class ucLayoutManager
         '
         Me.tmrAutoScroll.Interval = 200
         '
-        'SubMenuFilter
+        'ContextMenuFilters
         '
-        Me.SubMenuFilter.Name = "SubMenuFilter"
-        Me.SubMenuFilter.Size = New System.Drawing.Size(61, 4)
+        Me.ContextMenuFilters.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GeselecteerdeItemsToolStripMenuItem, Me.FilterVanZichtbareItemsToolStripMenuItem, Me.ToolStripMenuItem3, Me.GeselecteerdFilterVerwijderenToolStripMenuItem})
+        Me.ContextMenuFilters.Name = "ContextMenuStrip1"
+        Me.ContextMenuFilters.Size = New System.Drawing.Size(233, 98)
         '
-        'DdContainer1
+        'GeselecteerdeItemsToolStripMenuItem
         '
-        Me.DdContainer1.ButtonShape = DropDownContainer.DDContainer.eButtonShape.Square
-        Me.DdContainer1.Controls.Add(Me.flowDropDown)
-        Me.DdContainer1.DDOpacity = 1.0R
-        Me.DdContainer1.DropControl = Me.flowDropDown
-        Me.DdContainer1.GraphicImage = Nothing
-        Me.DdContainer1.HeaderHeight = 20
-        Me.DdContainer1.HeaderWidth = 300
-        Me.DdContainer1.Location = New System.Drawing.Point(6, 3)
-        Me.DdContainer1.Name = "DdContainer1"
-        Me.DdContainer1.PanelSize = New System.Drawing.Size(303, 0)
-        Me.DdContainer1.Size = New System.Drawing.Size(303, 21)
-        Me.DdContainer1.TabIndex = 11
-        Me.DdContainer1.Text = "Filters"
-        Me.DdContainer1.TextBoxCornerRadius = 0
+        Me.GeselecteerdeItemsToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_check
+        Me.GeselecteerdeItemsToolStripMenuItem.Name = "GeselecteerdeItemsToolStripMenuItem"
+        Me.GeselecteerdeItemsToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
+        Me.GeselecteerdeItemsToolStripMenuItem.Text = "Filter van Geselecteerde items"
         '
-        'flowDropDown
+        'FilterVanZichtbareItemsToolStripMenuItem
         '
-        Me.flowDropDown.AutoSize = True
-        Me.flowDropDown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.flowDropDown.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.flowDropDown.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.flowDropDown.Location = New System.Drawing.Point(0, 22)
-        Me.flowDropDown.Name = "flowDropDown"
-        Me.flowDropDown.Size = New System.Drawing.Size(303, 0)
-        Me.flowDropDown.TabIndex = 0
+        Me.FilterVanZichtbareItemsToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_light_on_2
+        Me.FilterVanZichtbareItemsToolStripMenuItem.Name = "FilterVanZichtbareItemsToolStripMenuItem"
+        Me.FilterVanZichtbareItemsToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
+        Me.FilterVanZichtbareItemsToolStripMenuItem.Text = "Filter van Zichtbare items"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(229, 6)
+        '
+        'GeselecteerdFilterVerwijderenToolStripMenuItem
+        '
+        Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
+        Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Name = "GeselecteerdFilterVerwijderenToolStripMenuItem"
+        Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
+        Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Text = "Geselecteerd filter verwijderen"
+        '
+        'cmdCancel
+        '
+        Me.cmdCancel.Location = New System.Drawing.Point(3, 32)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(230, 24)
+        Me.cmdCancel.TabIndex = 16
+        Me.cmdCancel.Text = "Annuleren"
+        Me.cmdCancel.UseVisualStyleBackColor = True
+        Me.cmdCancel.Visible = False
         '
         'ucLayoutManager
         '
@@ -443,8 +466,7 @@ Partial Class ucLayoutManager
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.SubMenu.ResumeLayout(False)
-        Me.DdContainer1.ResumeLayout(False)
-        Me.DdContainer1.PerformLayout()
+        Me.ContextMenuFilters.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -478,9 +500,13 @@ Partial Class ucLayoutManager
     Friend WithEvents cmdAddLayout As Windows.Forms.Button
     Friend WithEvents cmdBatchAttributes As Windows.Forms.Button
     Friend WithEvents cmdReplaceAttrib As Windows.Forms.Button
-    Friend WithEvents SubMenuFilter As Windows.Forms.ContextMenuStrip
     Friend WithEvents ToolStripMenuItem2 As Windows.Forms.ToolStripSeparator
     Friend WithEvents mnuItmRenameSelection As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DdContainer1 As DropDownContainer.DDContainer
-    Friend WithEvents flowDropDown As Windows.Forms.FlowLayoutPanel
+    Friend WithEvents cmbFilters As Windows.Forms.ComboBox
+    Friend WithEvents ContextMenuFilters As Windows.Forms.ContextMenuStrip
+    Friend WithEvents GeselecteerdeItemsToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FilterVanZichtbareItemsToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem3 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents GeselecteerdFilterVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents cmdCancel As Windows.Forms.Button
 End Class
