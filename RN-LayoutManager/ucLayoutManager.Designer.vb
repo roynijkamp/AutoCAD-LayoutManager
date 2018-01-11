@@ -39,6 +39,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
+        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
@@ -60,7 +61,6 @@ Partial Class ucLayoutManager
         Me.FilterVanZichtbareItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmdCancel = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -269,6 +269,16 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
+        'cmdCancel
+        '
+        Me.cmdCancel.Location = New System.Drawing.Point(3, 32)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(230, 24)
+        Me.cmdCancel.TabIndex = 16
+        Me.cmdCancel.Text = "Annuleren"
+        Me.cmdCancel.UseVisualStyleBackColor = True
+        Me.cmdCancel.Visible = False
+        '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.cmdReplaceAttrib)
@@ -415,7 +425,7 @@ Partial Class ucLayoutManager
         '
         Me.ContextMenuFilters.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GeselecteerdeItemsToolStripMenuItem, Me.FilterVanZichtbareItemsToolStripMenuItem, Me.ToolStripMenuItem3, Me.GeselecteerdFilterVerwijderenToolStripMenuItem})
         Me.ContextMenuFilters.Name = "ContextMenuStrip1"
-        Me.ContextMenuFilters.Size = New System.Drawing.Size(233, 98)
+        Me.ContextMenuFilters.Size = New System.Drawing.Size(233, 76)
         '
         'GeselecteerdeItemsToolStripMenuItem
         '
@@ -442,16 +452,6 @@ Partial Class ucLayoutManager
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Name = "GeselecteerdFilterVerwijderenToolStripMenuItem"
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Text = "Geselecteerd filter verwijderen"
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Location = New System.Drawing.Point(3, 32)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(230, 24)
-        Me.cmdCancel.TabIndex = 16
-        Me.cmdCancel.Text = "Annuleren"
-        Me.cmdCancel.UseVisualStyleBackColor = True
-        Me.cmdCancel.Visible = False
         '
         'ucLayoutManager
         '

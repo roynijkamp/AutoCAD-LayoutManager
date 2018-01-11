@@ -11,6 +11,7 @@ Imports System.Windows.Forms
 Imports Autodesk.AutoCAD.PlottingServices
 Imports System.Reflection
 Imports System.ComponentModel
+Imports System.Text.RegularExpressions
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -66,6 +67,7 @@ Public Class ucLayoutManager
             acEd = acDoc.Editor
             loadLayouts()
             'Todo: implement load saved selection
+            loadFilters()
         Catch
             'MsgBox("Probleem bij DocumentActivated")
         End Try
@@ -152,7 +154,8 @@ Public Class ucLayoutManager
                 loadExternalTemplate()
             End If
         End If
-
+        'selectie filters laden
+        loadFilters()
     End Sub
 
 
@@ -1159,7 +1162,7 @@ Public Class ucLayoutManager
                     Return False
             End Select
         End If
-            For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+        For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If myCntrl.LayoutName = "Model" Then
                 'modal overslaan
             Else
@@ -1310,7 +1313,7 @@ Public Class ucLayoutManager
             Exit Sub
         End If
         For Each pair As KeyValuePair(Of String, List(Of String)) In dictLoad
-            cmbFilters.Items.Add(pair.Key)
+            cmbFilters.Items.Add(pair.Key.Substring(2))
             If bSetCurrent Then
                 If pair.Key = sName Then
                     cmbFilters.SelectedIndex = cmbFilters.Items.Count - 1 'huidig item als actief zetten
@@ -1321,46 +1324,92 @@ Public Class ucLayoutManager
     End Sub
 
     Sub saveNewFilter(ByVal sType As String, ByVal sName As String)
+        'strip unwanted chars
+        sName = Regex.Replace(sName, "[^A-Za-z0-9\- ]", "")
         Dim dict As Dictionary(Of String, List(Of String)) = New Dictionary(Of String, List(Of String))
         Dim dictLoad As Dictionary(Of String, List(Of String)) = clsFilterData.getDBDictionaryToDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS")
+
+        If dictLoad Is Nothing Then
+            MsgBox("Dict is empty, create new one")
+            dictLoad = New Dictionary(Of String, List(Of String))
+        ElseIf dictLoad.Count = 0 Then
+            MsgBox("Dict count = 0")
+            dictLoad = New Dictionary(Of String, List(Of String))
+        End If
 
         Dim val As List(Of String) = New List(Of String)
         'dict.Add("foo", New List(Of String) From {"a", "b", "c"})
         'dict.Add("bar", New List(Of String) From {"x", "y", "z"})
         'dict.Add("baz", New List(Of String) From {"this", "is", "a", "test"})
-        For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-            If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
-                Select Case sType
-                    Case "selected"
-                        If myCntrl.CheckState Then 'layout is checked
+        Try
+            For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+                If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
+                    Select Case sType
+                        Case "selected"
+                            If myCntrl.CheckState Then 'layout is checked
+                                val.Add(myCntrl.LayoutID.ToString)
+                            End If
+
+                        Case "visible"
                             val.Add(myCntrl.LayoutID.ToString)
-                        End If
 
-                    Case "visible"
-                        val.Add(myCntrl.LayoutID.ToString)
-
-                End Select
-            End If
-        Next
-        MsgBox("add to dict")
-        dictLoad.Add(sName, val)
-        MsgBox("save dict")
+                    End Select
+                End If
+            Next
+            'MsgBox("add to dict")
+            dictLoad.Add(sName, val)
+        Catch ex As Exception
+            MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
+        End Try
+        'MsgBox("save dict")
         'save dict
         clsFilterData.filterToDBDictionary(acDoc, acCurDb, acEd, dictLoad, "FILTERSETTINGS")
-        loadFilters()
+        loadFilters(sName, True)
     End Sub
 
     Private Sub GeselecteerdeItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GeselecteerdeItemsToolStripMenuItem.Click
-        Dim sFilterName As String = InputBox("Filternaam", "Filternaam", "Filter" & TimeOfDay.ToString)
+        Dim sFilterName As String = InputBox("Filternaam", "Filternaam", "Filter" & TimeOfDay.ToString.Replace(":", "-"))
         If sFilterName.Length = 0 Then
             Exit Sub
         End If
-        saveNewFilter("selected", sFilterName)
+        saveNewFilter("selected", "0-" & sFilterName)
     End Sub
 
     Private Sub cmdFilter_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdFilter.MouseDown
         If e.Button = MouseButtons.Right Then
             loadFilters()
         End If
+    End Sub
+
+    Private Sub FilterVanZichtbareItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FilterVanZichtbareItemsToolStripMenuItem.Click
+        Dim sFilterName As String = InputBox("Filternaam", "Filternaam", "Filter" & TimeOfDay.ToString.Replace(":", "-"))
+        If sFilterName.Length = 0 Then
+            Exit Sub
+        End If
+        saveNewFilter("visible", "1-" & sFilterName)
+    End Sub
+
+    Private Sub GeselecteerdFilterVerwijderenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GeselecteerdFilterVerwijderenToolStripMenuItem.Click
+        If cmbFilters.Text.Length > 0 Then
+            If MsgBox("Filter " & cmbFilters.Text & " zeker verwijderen?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                clsFilterData.delItemFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", cmbFilters.Text)
+                loadFilters()
+            End If
+        End If
+    End Sub
+
+    Private Sub cmbFilters_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFilters.SelectedIndexChanged
+        Dim dict As Dictionary(Of String, List(Of String)) = clsFilterData.getFilterFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", cmbFilters.Text)
+
+        For Each pair As KeyValuePair(Of String, List(Of String)) In dict
+            'pair.Key
+            Dim datas As String = String.Empty
+            For Each s As String In pair.Value
+                datas += " " & s
+            Next
+
+
+        Next
+
     End Sub
 End Class
