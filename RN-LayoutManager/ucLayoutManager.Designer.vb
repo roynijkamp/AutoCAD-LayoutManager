@@ -27,6 +27,8 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.pcbIconFilter = New System.Windows.Forms.PictureBox()
+        Me.txtFilter = New System.Windows.Forms.TextBox()
         Me.cmbFilters = New System.Windows.Forms.ComboBox()
         Me.cmdBatchAttributes = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
@@ -61,8 +63,10 @@ Partial Class ucLayoutManager
         Me.FilterVanZichtbareItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
         Me.SubMenu.SuspendLayout()
         Me.ContextMenuFilters.SuspendLayout()
@@ -116,6 +120,8 @@ Partial Class ucLayoutManager
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.pcbIconFilter)
+        Me.GroupBox1.Controls.Add(Me.txtFilter)
         Me.GroupBox1.Controls.Add(Me.cmbFilters)
         Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
         Me.GroupBox1.Controls.Add(Me.cmdTrash)
@@ -138,13 +144,31 @@ Partial Class ucLayoutManager
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
+        'pcbIconFilter
+        '
+        Me.pcbIconFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.pcbIconFilter.Location = New System.Drawing.Point(43, 5)
+        Me.pcbIconFilter.Name = "pcbIconFilter"
+        Me.pcbIconFilter.Size = New System.Drawing.Size(22, 20)
+        Me.pcbIconFilter.TabIndex = 18
+        Me.pcbIconFilter.TabStop = False
+        '
+        'txtFilter
+        '
+        Me.txtFilter.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.txtFilter.Location = New System.Drawing.Point(65, 5)
+        Me.txtFilter.Name = "txtFilter"
+        Me.txtFilter.ReadOnly = True
+        Me.txtFilter.Size = New System.Drawing.Size(203, 20)
+        Me.txtFilter.TabIndex = 17
+        '
         'cmbFilters
         '
         Me.cmbFilters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbFilters.FormattingEnabled = True
-        Me.cmbFilters.Location = New System.Drawing.Point(40, 5)
+        Me.cmbFilters.Location = New System.Drawing.Point(343, 5)
         Me.cmbFilters.Name = "cmbFilters"
-        Me.cmbFilters.Size = New System.Drawing.Size(228, 21)
+        Me.cmbFilters.Size = New System.Drawing.Size(53, 21)
         Me.cmbFilters.TabIndex = 15
         '
         'cmdBatchAttributes
@@ -453,6 +477,11 @@ Partial Class ucLayoutManager
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Text = "Geselecteerd filter verwijderen"
         '
+        'ContextMenuFilterList
+        '
+        Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
+        Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -463,6 +492,8 @@ Partial Class ucLayoutManager
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.SubMenu.ResumeLayout(False)
@@ -509,4 +540,7 @@ Partial Class ucLayoutManager
     Friend WithEvents ToolStripMenuItem3 As Windows.Forms.ToolStripSeparator
     Friend WithEvents GeselecteerdFilterVerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents cmdCancel As Windows.Forms.Button
+    Friend WithEvents ContextMenuFilterList As Windows.Forms.ContextMenuStrip
+    Friend WithEvents pcbIconFilter As Windows.Forms.PictureBox
+    Friend WithEvents txtFilter As Windows.Forms.TextBox
 End Class

@@ -38,6 +38,19 @@ Public Class clsFilterData
         End Try
     End Function
 
+    Public Shared Function saveFilter(ByRef acDoc As Document, ByRef acCurdDb As Database, ByRef acEd As Editor,
+                                     ByVal dict As Dictionary(Of String, List(Of String)), ByVal dictName As String)
+        If delNod(acDoc, acCurdDb, acEd, dictName) Then
+            'save filters
+            If filterToDBDictionary(acDoc, acCurdDb, acEd, dict, dictName) Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+            Return False
+        End If
+    End Function
 
     Public Shared Function filterToDBDictionary(ByRef acDoc As Document, ByRef acCurdDb As Database, ByRef acEd As Editor,
                                      ByVal dict As Dictionary(Of String, List(Of String)), ByVal dictName As String)
