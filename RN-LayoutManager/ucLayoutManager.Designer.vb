@@ -29,7 +29,6 @@ Partial Class ucLayoutManager
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.pcbIconFilter = New System.Windows.Forms.PictureBox()
         Me.txtFilter = New System.Windows.Forms.TextBox()
-        Me.cmbFilters = New System.Windows.Forms.ComboBox()
         Me.cmdBatchAttributes = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
         Me.cmdInvertSelection = New System.Windows.Forms.Button()
@@ -122,7 +121,6 @@ Partial Class ucLayoutManager
         '
         Me.GroupBox1.Controls.Add(Me.pcbIconFilter)
         Me.GroupBox1.Controls.Add(Me.txtFilter)
-        Me.GroupBox1.Controls.Add(Me.cmbFilters)
         Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
         Me.GroupBox1.Controls.Add(Me.cmdTrash)
         Me.GroupBox1.Controls.Add(Me.cmdInvertSelection)
@@ -161,15 +159,6 @@ Partial Class ucLayoutManager
         Me.txtFilter.ReadOnly = True
         Me.txtFilter.Size = New System.Drawing.Size(203, 20)
         Me.txtFilter.TabIndex = 17
-        '
-        'cmbFilters
-        '
-        Me.cmbFilters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbFilters.FormattingEnabled = True
-        Me.cmbFilters.Location = New System.Drawing.Point(343, 5)
-        Me.cmbFilters.Name = "cmbFilters"
-        Me.cmbFilters.Size = New System.Drawing.Size(53, 21)
-        Me.cmbFilters.TabIndex = 15
         '
         'cmdBatchAttributes
         '
@@ -335,7 +324,7 @@ Partial Class ucLayoutManager
         '
         Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
         Me.cmdAddLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdAddLayout.Location = New System.Drawing.Point(193, 16)
+        Me.cmdAddLayout.Location = New System.Drawing.Point(149, 17)
         Me.cmdAddLayout.Name = "cmdAddLayout"
         Me.cmdAddLayout.Size = New System.Drawing.Size(28, 28)
         Me.cmdAddLayout.TabIndex = 9
@@ -347,7 +336,7 @@ Partial Class ucLayoutManager
         '
         Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbNewLayout.FormattingEnabled = True
-        Me.cmbNewLayout.Location = New System.Drawing.Point(82, 20)
+        Me.cmbNewLayout.Location = New System.Drawing.Point(38, 21)
         Me.cmbNewLayout.Name = "cmbNewLayout"
         Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
         Me.cmbNewLayout.TabIndex = 8
@@ -533,7 +522,6 @@ Partial Class ucLayoutManager
     Friend WithEvents cmdReplaceAttrib As Windows.Forms.Button
     Friend WithEvents ToolStripMenuItem2 As Windows.Forms.ToolStripSeparator
     Friend WithEvents mnuItmRenameSelection As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents cmbFilters As Windows.Forms.ComboBox
     Friend WithEvents ContextMenuFilters As Windows.Forms.ContextMenuStrip
     Friend WithEvents GeselecteerdeItemsToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents FilterVanZichtbareItemsToolStripMenuItem As Windows.Forms.ToolStripMenuItem

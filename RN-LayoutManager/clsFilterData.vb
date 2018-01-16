@@ -202,7 +202,7 @@ Public Class clsFilterData
                                 strs.Add(CStr(tv.Value))
                             End If
                         Next
-                        If filterName <> entry.Key.Substring(2) Then
+                        If filterName = entry.Key.Substring(2) Then
                             result.Add(entry.Key, strs)
                             Exit For
                         End If

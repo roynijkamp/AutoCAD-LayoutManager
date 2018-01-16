@@ -84,7 +84,7 @@ Public Class ucLayoutManager
             acCurDb = acDoc.Database
             acEd = acDoc.Editor
             resetList()
-            loadFilters()
+            resetFilter()
         Catch
             'MsgBox("Probleem bij DocumentToBeDactivated")
         End Try
@@ -1342,6 +1342,13 @@ Public Class ucLayoutManager
         End Using
     End Sub
 
+    Sub resetFilter()
+        ContextMenuFilterList.Items.Clear()
+        txtFilter.Text = ""
+        pcbIconFilter.BackgroundImage = Nothing
+    End Sub
+
+
     Sub SelectFilter(ByVal sender As Object, ByVal e As EventArgs)
         Dim selectedItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
         txtFilter.Text = selectedItem.Text
@@ -1350,7 +1357,7 @@ Public Class ucLayoutManager
         Dim iFilterType As Integer = CInt(selectedItem.Name.ToString.Substring(0, 1))
 
         'filter toepassen op lijst
-        Dim dict As Dictionary(Of String, List(Of String)) = clsFilterData.getFilterFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", cmbFilters.Text)
+        Dim dict As Dictionary(Of String, List(Of String)) = clsFilterData.getFilterFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", txtFilter.Text)
         Dim aSelectedFilter As New List(Of String)
         For Each pair As KeyValuePair(Of String, List(Of String)) In dict
             'pair.Key
@@ -1361,12 +1368,14 @@ Public Class ucLayoutManager
                 aSelectedFilter.Add(s)
             Next
         Next
+        'Dim sFilter As String = ""
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If (myCntrl.IsModel = False) Then
                 Dim sObjectID As String = myCntrl.LayoutID.ToString
                 Select Case iFilterType
                     Case 0 'selected items
                         If aSelectedFilter.Contains(sObjectID) Then
+                            'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
                             myCntrl.SetCheckState(True)
@@ -1376,6 +1385,7 @@ Public Class ucLayoutManager
 
                     Case 1 'visible items
                         If aSelectedFilter.Contains(sObjectID) Then
+                            'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
                             myCntrl.SetCheckState(False)
