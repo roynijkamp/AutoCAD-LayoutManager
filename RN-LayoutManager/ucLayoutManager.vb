@@ -1365,30 +1365,19 @@ Public Class ucLayoutManager
         Dim iFilterType As Integer = CInt(selectedItem.Name.ToString.Substring(0, 1))
 
         'filter toepassen op lijst
-        'Dim sFilterList, sLayoutList As String
         Dim dict As Dictionary(Of String, List(Of String)) = clsFilterData.getFilterFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", txtFilter.Text)
         Dim aSelectedFilter As New List(Of String)
         For Each pair As KeyValuePair(Of String, List(Of String)) In dict
-            'pair.Key
-            'Dim datas As String = String.Empty
-
             For Each s As String In pair.Value
-                'datas += " " & s
                 aSelectedFilter.Add(s)
-                'sFilterList = sFilterList & s & ";"
             Next
         Next
-        'Dim sFilter As String = ""
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If (myCntrl.IsModel = False) Then
-                'Dim sObjectID As String = myCntrl.LayoutID.ToString
                 Dim sObjectHandle As String = myCntrl.LayoutHandle
-                'sLayoutList = sLayoutList & sObjectID & ";"
                 Select Case iFilterType
                     Case 0 'selected items
-                        'If aSelectedFilter.Contains(sObjectID) Then
                         If aSelectedFilter.Contains(sObjectHandle) Then
-                            'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
                             myCntrl.SetCheckState(True)
@@ -1397,9 +1386,7 @@ Public Class ucLayoutManager
                         End If
 
                     Case 1 'visible items
-                        'If aSelectedFilter.Contains(sObjectID) Then
                         If aSelectedFilter.Contains(sObjectHandle) Then
-                            'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
                             myCntrl.SetCheckState(False)
@@ -1410,8 +1397,6 @@ Public Class ucLayoutManager
                 End Select
             End If
         Next
-        'acEd.WriteMessage("Filterlist: " & sFilterList)
-        'acEd.WriteMessage("Layoutlist: " & sLayoutList)
     End Sub
 
     Sub saveNewFilter(ByVal sType As String, ByVal sName As String)
@@ -1432,21 +1417,16 @@ Public Class ucLayoutManager
             End If
 
             Dim val As List(Of String) = New List(Of String)
-            'dict.Add("foo", New List(Of String) From {"a", "b", "c"})
-            'dict.Add("bar", New List(Of String) From {"x", "y", "z"})
-            'dict.Add("baz", New List(Of String) From {"this", "is", "a", "test"})
             Try
                 For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
                     If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
                         Select Case sType
                             Case "selected"
                                 If myCntrl.CheckState Then 'layout is checked
-                                    'val.Add(myCntrl.LayoutID.ToString)
                                     val.Add(myCntrl.LayoutHandle)
                                 End If
 
                             Case "visible"
-                                'val.Add(myCntrl.LayoutID.ToString)
                                 val.Add(myCntrl.LayoutHandle)
                         End Select
                     End If
@@ -1457,7 +1437,6 @@ Public Class ucLayoutManager
                 MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
             End Try
             'save dict
-            'clsFilterData.filterToDBDictionary(acDoc, acCurDb, acEd, dictLoad, "FILTERSETTINGS")
             If clsFilterData.saveFilter(acDoc, acCurDb, acEd, dictLoad, "FILTERSETTINGS") Then
                 MsgBox("Filter is toegeveogd!")
             Else
@@ -1500,5 +1479,21 @@ Public Class ucLayoutManager
 
     Private Sub txtFilter_Click(sender As Object, e As EventArgs) Handles txtFilter.Click
         ContextMenuFilterList.Show(txtFilter, 0, 0)
+    End Sub
+
+    Private Sub mnuItmRenameSelection_Click(sender As Object, e As EventArgs) Handles mnuItmRenameSelection.Click
+        'rename selected layouts
+        Try
+            For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+                If (myCntrl.IsModel = False) And (myCntrl.Visible = True) And (myCntrl.CheckState = True) Then 'model can not be selected and item must be visible
+                    'change layout name
+
+                    'rename layout
+                    'renameLayout(CType(myCntrl, Object), e)
+                End If
+            Next
+        Catch ex As Exception
+            MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
+        End Try
     End Sub
 End Class

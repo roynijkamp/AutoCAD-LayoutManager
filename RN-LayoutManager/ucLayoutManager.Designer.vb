@@ -397,7 +397,7 @@ Partial Class ucLayoutManager
         '
         Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(181, 82)
+        Me.SubMenu.Size = New System.Drawing.Size(181, 104)
         '
         'LayoutKopierenToolStripMenuItem
         '

@@ -2,7 +2,7 @@
 <ApplicationPackage 
    SchemaVersion="1.0"
    Name="RN Layout Manager"
-   AppVersion="1.0.0.0"
+   AppVersion="1.0.18019.912"
    ProductCode="{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"
    Author="R. Nijkamp"
    Icon="./Contents/logo.ico"
@@ -17,7 +17,7 @@
 
   <Components> <!-- Alle AutoCAD producten -->
     <RuntimeRequirements
-      Platform="AutoCAD|AutoCAD*"
+      Platform="AutoCAD"
       OS="Win32|Win64"
       SeriesMin="R19.1"
       SeriesMax="R23.0" />
@@ -29,6 +29,23 @@
       LoadOnAppearance="True">
       <Commands GroupName="layoutman">
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
+      </Commands>
+    </ComponentEntry>
+	</Components>
+	<Components> <!-- Alle Civil3D producten -->
+    <RuntimeRequirements
+      Platform="Civil3D"
+      OS="Win32|Win64"
+      SeriesMin="R19.1"
+      SeriesMax="R23.0" />
+
+    <ComponentEntry
+      AppName="layoutman"
+      ModuleName="./Contents/RN-LayoutManager.dll"
+      AppDescription="layoutman"
+      LoadOnAppearance="True">
+      <Commands GroupName="layoutman">
+        <Command Local="layoutman" Global="layoutman" StartupCommand="True" />
       </Commands>
     </ComponentEntry>
 	</Components>
