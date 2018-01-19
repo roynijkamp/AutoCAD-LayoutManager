@@ -200,14 +200,15 @@ Public Class ucLayoutManager
         flowLayouts.Controls.Add(myCntrl)
         ' Get the layout dictionary of the current database
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
-        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+        Dim layAndTabOID As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Try
             Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
                 For Each entry As DBDictionaryEntry In layDict
                     Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
                     layAndTab.Add(lay.TabOrder, lay.LayoutName)
-                    layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
+                    'layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
+                    layAndTabOID.Add(lay.TabOrder, lay.Handle.ToString)
                 Next
                 trx.Commit()
             End Using
@@ -226,7 +227,8 @@ Public Class ucLayoutManager
                     myCntrl.updateItem()
                     myCntrl.TabIndex = iTabIndex
                     If layAndTabOID.ContainsKey(iTabIndex) Then
-                        myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
+                        'myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
+                        myCntrl.LayoutHandle = layAndTabOID.Item(iTabIndex)
                     End If
                     'add handlers to register functions for items
                     AddHandler myCntrl.View_Click, AddressOf ItemViewClick
@@ -682,6 +684,7 @@ Public Class ucLayoutManager
         Dim layouts As New List(Of Layout)()
         layouts = checkedLayouts()
         If layouts.Count > 1 Then
+            regenDrawing()
             plotLayouts(SheetType.MultiPdf, checkedLayouts())
         End If
     End Sub
@@ -690,8 +693,13 @@ Public Class ucLayoutManager
         Dim layouts As New List(Of Layout)()
         layouts = checkedLayouts()
         If layouts.Count > 1 Then
+            regenDrawing()
             plotLayouts(SheetType.SinglePdf, checkedLayouts())
         End If
+    End Sub
+
+    Public Sub regenDrawing()
+        acEd.Regen()
     End Sub
 
     Private Sub cmdRefreshList_Click(sender As Object, e As EventArgs) Handles cmdRefreshList.Click
@@ -1357,6 +1365,7 @@ Public Class ucLayoutManager
         Dim iFilterType As Integer = CInt(selectedItem.Name.ToString.Substring(0, 1))
 
         'filter toepassen op lijst
+        'Dim sFilterList, sLayoutList As String
         Dim dict As Dictionary(Of String, List(Of String)) = clsFilterData.getFilterFromDictionary(acDoc, acCurDb, acEd, "FILTERSETTINGS", txtFilter.Text)
         Dim aSelectedFilter As New List(Of String)
         For Each pair As KeyValuePair(Of String, List(Of String)) In dict
@@ -1366,15 +1375,19 @@ Public Class ucLayoutManager
             For Each s As String In pair.Value
                 'datas += " " & s
                 aSelectedFilter.Add(s)
+                'sFilterList = sFilterList & s & ";"
             Next
         Next
         'Dim sFilter As String = ""
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If (myCntrl.IsModel = False) Then
-                Dim sObjectID As String = myCntrl.LayoutID.ToString
+                'Dim sObjectID As String = myCntrl.LayoutID.ToString
+                Dim sObjectHandle As String = myCntrl.LayoutHandle
+                'sLayoutList = sLayoutList & sObjectID & ";"
                 Select Case iFilterType
                     Case 0 'selected items
-                        If aSelectedFilter.Contains(sObjectID) Then
+                        'If aSelectedFilter.Contains(sObjectID) Then
+                        If aSelectedFilter.Contains(sObjectHandle) Then
                             'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
@@ -1384,7 +1397,8 @@ Public Class ucLayoutManager
                         End If
 
                     Case 1 'visible items
-                        If aSelectedFilter.Contains(sObjectID) Then
+                        'If aSelectedFilter.Contains(sObjectID) Then
+                        If aSelectedFilter.Contains(sObjectHandle) Then
                             'sFilter = sFilter & ";" & sObjectID
                             'item zit in het filter
                             myCntrl.Visible = True
@@ -1396,6 +1410,8 @@ Public Class ucLayoutManager
                 End Select
             End If
         Next
+        'acEd.WriteMessage("Filterlist: " & sFilterList)
+        'acEd.WriteMessage("Layoutlist: " & sLayoutList)
     End Sub
 
     Sub saveNewFilter(ByVal sType As String, ByVal sName As String)
@@ -1425,12 +1441,13 @@ Public Class ucLayoutManager
                         Select Case sType
                             Case "selected"
                                 If myCntrl.CheckState Then 'layout is checked
-                                    val.Add(myCntrl.LayoutID.ToString)
+                                    'val.Add(myCntrl.LayoutID.ToString)
+                                    val.Add(myCntrl.LayoutHandle)
                                 End If
 
                             Case "visible"
-                                val.Add(myCntrl.LayoutID.ToString)
-
+                                'val.Add(myCntrl.LayoutID.ToString)
+                                val.Add(myCntrl.LayoutHandle)
                         End Select
                     End If
                 Next
