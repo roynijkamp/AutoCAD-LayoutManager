@@ -158,6 +158,10 @@ Public Class ucLayoutManager
         End If
         'selectie filters laden
         loadFilters()
+        If clsFunctions.isDebugMode() Then
+            'debug modus = true
+            lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
+        End If
     End Sub
 
 
@@ -1121,6 +1125,8 @@ Public Class ucLayoutManager
         loadLayouts(True)
         cmdReplaceAttrib.Visible = False
         cmdReplaceAttrib.Update()
+        cmdCancel.Visible = False
+        Me.Update()
         Dim iPaperSpaceCount As Integer = 0
         'LayoutWalker(iPaperSpaceCount)
         LayoutWalker2()
@@ -1172,6 +1178,7 @@ Public Class ucLayoutManager
                     Return False
             End Select
         End If
+        updateProgressBar(False, iCheckCount + 1, 0)
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If myCntrl.LayoutName = "Model" Then
                 'modal overslaan
@@ -1185,6 +1192,7 @@ Public Class ucLayoutManager
                             Dim sLayoutName As String = myCntrl.LayoutName
                             setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                             '## paperspace id pakken en attributes updaten
+                            updateProgressBar(True)
                             UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
                         End If
                     Else
@@ -1192,6 +1200,7 @@ Public Class ucLayoutManager
                         Dim sLayoutName As String = myCntrl.LayoutName
                         setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                         '## paperspace id pakken en attributes updaten
+                        updateProgressBar(True)
                         UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
                     End If
                 End If
@@ -1200,6 +1209,21 @@ Public Class ucLayoutManager
         'originele layout terugzetten
         setLayoutCurrent(sActiveLayout, True)
         Return True
+    End Function
+
+    Public Function updateProgressBar(bIncrement As Boolean, Optional iMax As Integer = 0, Optional iValue As Integer = 9999999)
+        If iMax > 0 Then
+            pgbVoortgang.Maximum = iMax
+        End If
+        If iValue < 9999999 Then
+            pgbVoortgang.Value = iValue
+        End If
+        If bIncrement Then
+            If (pgbVoortgang.Value + 1) > pgbVoortgang.Maximum Then
+                pgbVoortgang.Maximum = pgbVoortgang.Maximum + 2
+            End If
+            pgbVoortgang.Value = pgbVoortgang.Value + 1
+        End If
     End Function
 
     Public Function LayoutWalker(ByRef iPaperSpaceCount As Integer)

@@ -168,6 +168,7 @@ Partial Class ucLayoutManager
         Me.cmdBatchAttributes.Name = "cmdBatchAttributes"
         Me.cmdBatchAttributes.Size = New System.Drawing.Size(28, 28)
         Me.cmdBatchAttributes.TabIndex = 14
+        Me.ToolTip1.SetToolTip(Me.cmdBatchAttributes, "Hernoemen van Tekeninghoofd")
         Me.cmdBatchAttributes.UseVisualStyleBackColor = True
         '
         'cmdTrash
@@ -284,9 +285,9 @@ Partial Class ucLayoutManager
         '
         'cmdCancel
         '
-        Me.cmdCancel.Location = New System.Drawing.Point(3, 32)
+        Me.cmdCancel.Location = New System.Drawing.Point(3, 30)
         Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(230, 24)
+        Me.cmdCancel.Size = New System.Drawing.Size(230, 28)
         Me.cmdCancel.TabIndex = 16
         Me.cmdCancel.Text = "Annuleren"
         Me.cmdCancel.UseVisualStyleBackColor = True
@@ -364,6 +365,7 @@ Partial Class ucLayoutManager
         Me.cmdSaveOrder.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.cmdSaveOrder, "Layout volgorde opslaan in DWG")
         Me.cmdSaveOrder.UseVisualStyleBackColor = True
+        Me.cmdSaveOrder.Visible = False
         '
         'lblCheckCount
         '
@@ -397,7 +399,7 @@ Partial Class ucLayoutManager
         '
         Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(181, 104)
+        Me.SubMenu.Size = New System.Drawing.Size(181, 82)
         '
         'LayoutKopierenToolStripMenuItem
         '

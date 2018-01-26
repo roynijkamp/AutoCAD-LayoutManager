@@ -70,4 +70,36 @@ Public Class clsFunctions
             Return GetType(Document).Assembly.GetName().Version
         End Get
     End Property
+
+    Public Shared Function isDebugMode() As Boolean
+        Return IsInDebugMode(Assembly.GetExecutingAssembly.Location, False)
+    End Function
+
+    Public Overloads Shared Function IsInDebugMode(ByVal FileName As String, ByVal IsAssemlbyName As Boolean) As Boolean
+        Dim assembly As System.Reflection.Assembly
+        If IsAssemlbyName Then
+            assembly = System.Reflection.Assembly.Load(FileName)
+        Else
+            assembly = System.Reflection.Assembly.LoadFile(FileName)
+        End If
+
+        Return IsInDebugMode(assembly)
+    End Function
+
+    Public Overloads Shared Function IsInDebugMode(ByVal Assembly As System.Reflection.Assembly) As Boolean
+        Dim attributes = Assembly.GetCustomAttributes(GetType(System.Diagnostics.DebuggableAttribute), False)
+        If (attributes.Length > 0) Then
+            Dim debuggable = CType(attributes(0), System.Diagnostics.DebuggableAttribute)
+            If (Not (debuggable) Is Nothing) Then
+                Return ((debuggable.DebuggingFlags And System.Diagnostics.DebuggableAttribute.DebuggingModes.Default) _
+                            = System.Diagnostics.DebuggableAttribute.DebuggingModes.Default)
+            Else
+                Return False
+            End If
+
+        Else
+            Return False
+        End If
+
+    End Function
 End Class
