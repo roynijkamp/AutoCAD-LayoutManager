@@ -1330,6 +1330,7 @@ Public Class ucLayoutManager
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         resetReplaceAttribButtons()
+        loadLayouts(True)
     End Sub
 
     Public Sub resetReplaceAttribButtons()
@@ -1507,17 +1508,30 @@ Public Class ucLayoutManager
 
     Private Sub mnuItmRenameSelection_Click(sender As Object, e As EventArgs) Handles mnuItmRenameSelection.Click
         'rename selected layouts
-        Try
-            For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-                If (myCntrl.IsModel = False) And (myCntrl.Visible = True) And (myCntrl.CheckState = True) Then 'model can not be selected and item must be visible
-                    'change layout name
+        Dim renameOptions As New frmRenameLayouts
+        If renameOptions.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            Dim sNewName As String = renameOptions.txtLayoutNaam.Text
+            Dim dAutoNr As Double = CDbl(renameOptions.txtAutoNummer.Text)
+            Dim bResolveConflict As Boolean 'true (add autonumber on conflic) / false (skip rename)
+            If renameOptions.radioLayoutNameExists.Checked = True Then
+                bResolveConflict = True
+            Else
+                bResolveConflict = False
+            End If
+            Try
+                For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
+                    If (myCntrl.IsModel = False) And (myCntrl.Visible = True) And (myCntrl.CheckState = True) Then 'model can not be selected and item must be visible
+                        'change layout name
 
-                    'rename layout
-                    'renameLayout(CType(myCntrl, Object), e)
-                End If
-            Next
-        Catch ex As Exception
-            MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
-        End Try
+                        'rename layout
+                        'renameLayout(CType(myCntrl, Object), e)
+                    End If
+                Next
+            Catch ex As Exception
+                MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
+            End Try
+        Else
+            'rename is geannuleerd
+        End If
     End Sub
 End Class
