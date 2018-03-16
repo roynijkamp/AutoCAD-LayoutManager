@@ -52,37 +52,40 @@ Public Class ucLayoutManager
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
+    Dim _lm As LayoutManager
 
 
 
     '### Active Drawing Tracking
     Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
-        'display the current active document
-
-        'If Not m_DocData Is Nothing Then
-        'm_Container2.txtADwg.Text = m_DocData.Current.Stuff
+        'tekening wordt geactiveerd
         Try
             'remap vars to current document
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
             acEd = acDoc.Editor
+            _lm = LayoutManager.Current
             loadLayouts()
             'Todo: implement load saved selection
             loadFilters()
+            'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
         Catch
             'MsgBox("Probleem bij DocumentActivated")
         End Try
     End Sub
     Private Sub DocumentManager_DocumentToBeDeactivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
-        'store the current contents
-        'If Not m_DocData Is Nothing Then
-        'm_DocData.Current.Stuff = m_Container2.txtADwg.Text
+        'switch naar een andere tekening
         Try
             'Todo: implement save selection
             'remap vars to current document
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
             acEd = acDoc.Editor
+            'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            RemoveHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             resetList()
             resetFilter()
         Catch
@@ -100,6 +103,8 @@ Public Class ucLayoutManager
         getCurrentLayout()
         loadLayouts()
     End Sub
+
+
 
     Public Sub getCurrentLayout()
         Dim acLayout As Layout = Nothing
@@ -139,7 +144,9 @@ Public Class ucLayoutManager
         '### Active Drawing Tracking
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
-        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDestroyed, AddressOf Me.DocumentManager_DocumentToBeDeactivated
+        'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+        'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
 
         '### /Active Drawing Tracking
         loadLayouts()
@@ -279,7 +286,7 @@ Public Class ucLayoutManager
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    ''' <returns></returns>
+    ''' <returns>true or false</returns>
     Public Function renameLayout(ByVal sender As Object, e As EventArgs)
         'get current edited list item
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
@@ -325,6 +332,29 @@ Public Class ucLayoutManager
         Return True
     End Function
 
+    ''' <summary>
+    ''' 'Rename layout
+    ''' </summary>
+    ''' <param name="sNewName"></param>
+    ''' <param name="sOldName"></param>
+    ''' <returns></returns>
+    Public Function renameLayoutByValue(ByVal sNewName As String, ByVal sOldName As String)
+        Using acLockDoc As DocumentLock = acDoc.LockDocument
+            Try
+                Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+                acLayoutMgr.RenameLayout(sOldName, sNewName)
+                acDoc.Editor.Regen()
+                'MsgBox("hernoemen geslaagd")
+                Return True
+            Catch ex As Exception
+                'MsgBox("fout bij hernoemen")
+                Return False
+            End Try
+        End Using
+    End Function
+
+
+
     Public Function PlotCheck(ByVal sender As Object, e As EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
 
@@ -362,7 +392,6 @@ Public Class ucLayoutManager
             MsgBox("Fout bij het laden van de layout lijst" & ex.Message & vbCrLf & ex.Source)
             Return False
         End Try
-
         Return True
     End Function
 
@@ -374,6 +403,7 @@ Public Class ucLayoutManager
     Public Sub ItemViewClick(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         setLayoutCurrent(myCntrl.LayoutName, myCntrl.IsModel)
+        itterateList("iscurrent")
     End Sub
 
     Public Sub setLayoutCurrent(ByVal sLayoutName As String, ByVal bIsModel As Boolean)
@@ -712,6 +742,7 @@ Public Class ucLayoutManager
 
     Public Function itterateList(ByVal sAction As String)
         Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem
+        getCurrentLayout()
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
             If (myCntrl.IsModel = False) And (myCntrl.Visible = True) Then 'model can not be selected and item must be visible
                 If myCntrl.CheckState Then 'layout is checked
@@ -1511,7 +1542,9 @@ Public Class ucLayoutManager
         Dim renameOptions As New frmRenameLayouts
         If renameOptions.ShowDialog() = Windows.Forms.DialogResult.OK Then
             Dim sNewName As String = renameOptions.txtLayoutNaam.Text
-            Dim dAutoNr As Double = CDbl(renameOptions.txtAutoNummer.Text)
+            Dim dAutoNr As Double = CDbl(renameOptions.txtAutoNummer.Value)
+            Dim bAutoNr As Boolean = renameOptions.chkAutoNummer.Checked
+            Dim dConflictNr As Double = 0
             Dim bResolveConflict As Boolean 'true (add autonumber on conflic) / false (skip rename)
             If renameOptions.radioLayoutNameExists.Checked = True Then
                 bResolveConflict = True
@@ -1520,18 +1553,67 @@ Public Class ucLayoutManager
             End If
             Try
                 For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
-                    If (myCntrl.IsModel = False) And (myCntrl.Visible = True) And (myCntrl.CheckState = True) Then 'model can not be selected and item must be visible
+                    If (myCntrl.IsModel = False) And (myCntrl.Visible = True) And (myCntrl.CheckState = True) Then 'model can not be selected and item must be visible and checked
                         'change layout name
+                        Dim sLayoutNewName As String
+                        myCntrl.LayoutNameOld = myCntrl.LayoutName
+                        If bAutoNr = True Then
+                            sLayoutNewName = sNewName.Replace("[#nummer]", CStr(dAutoNr))
+                            dAutoNr = dAutoNr + 1
+                        Else
+                            sLayoutNewName = sNewName
+                        End If
+                        'check of we wildcard replacement moeten doen
+                        If sLayoutNewName.Contains("*") Then
+                            sLayoutNewName = sLayoutNewName.Replace("*", myCntrl.LayoutNameOld)
+                        End If
+                        myCntrl.LayoutName = sLayoutNewName
+                        Using acLockDoc As DocumentLock = acDoc.LockDocument
+                            Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                Dim lays As DBDictionary = acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForRead)
+                                If lays.Contains(myCntrl.LayoutName) Then
+                                    'nieuwe naam bestaat al, kijken hoe dit conflict op te lossen
+                                    If bResolveConflict = True Then
+                                        'conflict oplossen door volgnummer toe te voegen
+                                        myCntrl.LayoutName = myCntrl.LayoutName & "-" & CStr(dConflictNr)
+                                        dConflictNr = dConflictNr + 1
+                                        If lays.Contains(myCntrl.LayoutNameOld) Then
+                                            'rename layout
+                                            renameLayoutByValue(myCntrl.LayoutName, myCntrl.LayoutNameOld)
+                                        Else
+                                            'te hernoemen layout bestaat niet overslaan dus
+                                            myCntrl.LayoutName = myCntrl.LayoutNameOld
 
-                        'rename layout
-                        'renameLayout(CType(myCntrl, Object), e)
+                                        End If
+                                    Else
+                                        'niets doen rename overslaan
+                                        myCntrl.LayoutName = myCntrl.LayoutNameOld
+                                    End If
+                                    myCntrl.updateItem()
+                                Else
+                                    'nieuwe naam bestaat niet, hernoemen
+                                    If lays.Contains(myCntrl.LayoutNameOld) Then
+                                        'rename layout
+                                        renameLayoutByValue(myCntrl.LayoutName, myCntrl.LayoutNameOld)
+                                    Else
+                                        'te hernoemen layout bestaat niet overslaan dus
+                                        myCntrl.LayoutName = myCntrl.LayoutNameOld
+                                    End If
+                                    myCntrl.updateItem()
+                                End If
+                                acTrans.Commit()
+                            End Using
+                        End Using
                     End If
                 Next
             Catch ex As Exception
-                MsgBox("Fout bij het aanmaken van het filter!" & vbCrLf & ex.Message & ex.InnerException.ToString)
+                MsgBox("Fout bij het hernoemen van de geselecteerde layouts!" & vbCrLf & ex.Message & ex.InnerException.ToString)
             End Try
         Else
             'rename is geannuleerd
+            MsgBox("annuleren")
         End If
+        loadLayouts()
+        MsgBox("Hernoemen van de Layouts is voltooid!")
     End Sub
 End Class
