@@ -12,6 +12,7 @@ Public Class ucSettings
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
     Dim sLayoutTemplate As String = ""
+    Dim sLayoutTemplates As List(Of String)
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
     Dim bTrashDSD As Boolean = True
@@ -62,6 +63,29 @@ Public Class ucSettings
             sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
             txtUserSaveFolder.Text = sPDFuserFolder
             sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
+            'layout templates laden
+            Dim temp As String = iniFile.GetString("template", "layouts", "")
+            sLayoutTemplates = New List(Of String)(temp.Split(","c))
+            lstTemplates.Items.Clear()
+            chkListboxTemplates.Items.Clear()
+            For Each sItem As String In sLayoutTemplates
+                If Not sItem = vbNullString Then
+                    lstTemplates.Items.Add(sItem)
+                    Dim bChecked As Boolean = False
+                    If sItem = sLayoutTemplate Then
+                        bChecked = True
+                    End If
+                    chkListboxTemplates.Items.Add(sItem, bChecked)
+                End If
+            Next
+            If chkListboxTemplates.CheckedItems.Count = 0 Then
+                'niets geselecteerd, eerste item selecteren
+                If chkListboxTemplates.Items.Count > 0 Then
+                    sLayoutTemplate = chkListboxTemplates.Items(0).ToString
+                    chkListboxTemplates.SetSelected(0, True)
+                End If
+            End If
+
             txtLayoutTemplate.Text = sLayoutTemplate
             sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
             Select Case sDefaultOutputLocation
@@ -166,11 +190,54 @@ Public Class ucSettings
                 End If
                 sLayoutTemplate = fldrDia.FileName
                 txtLayoutTemplate.Text = sLayoutTemplate
+                If Not sLayoutTemplates.Contains(sLayoutTemplate) Then
+                    sLayoutTemplates.Add(sLayoutTemplate)
+                    lstTemplates.Items.Add(sLayoutTemplate)
+                End If
+
                 'bestand aanmaken
                 'settings schrijven
                 iniFile = New clsINI(sIniDir & sIniFile)
                 iniFile.WriteString("template", "layout", sLayoutTemplate)
+                If sLayoutTemplates.Count > 0 Then
+                    iniFile.WriteString("template", "layouts", String.Join(",", sLayoutTemplates.ToArray()))
+                Else
+                    iniFile.WriteString("template", "layouts", "")
+                End If
             End If
         End Using
+    End Sub
+
+    Private Sub lstTemplates_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstTemplates.SelectedIndexChanged
+        sLayoutTemplate = lstTemplates.SelectedValue
+        txtLayoutTemplate.Text = sLayoutTemplate
+        'settings schrijven
+        iniFile = New clsINI(sIniDir & sIniFile)
+        iniFile.WriteString("template", "layout", sLayoutTemplate)
+    End Sub
+
+    Private Sub VerwijderenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VerwijderenToolStripMenuItem.Click
+        If MsgBox("Weet u zeker dat u deze template wilt verwijderen uit de lijst?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            lstTemplates.Items.Remove(lstTemplates.SelectedItem)
+            sLayoutTemplates = New List(Of String)
+            For Each item In lstTemplates.Items
+                sLayoutTemplates.Add(item.ToString)
+            Next
+            If sLayoutTemplates.Count > 0 Then
+                iniFile.WriteString("template", "layouts", String.Join(",", sLayoutTemplates.ToArray()))
+            Else
+                iniFile.WriteString("template", "layouts", "")
+            End If
+        End If
+    End Sub
+
+    Private Sub lstTemplates_MouseDown(sender As Object, e As MouseEventArgs) Handles lstTemplates.MouseDown
+        If e.Button = MouseButtons.Right Then
+            lstTemplates.SelectedIndex = lstTemplates.IndexFromPoint(e.X, e.Y)
+        End If
+    End Sub
+
+    Private Sub chkListboxTemplates_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles chkListboxTemplates.ItemCheck
+
     End Sub
 End Class

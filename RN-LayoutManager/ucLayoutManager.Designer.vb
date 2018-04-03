@@ -63,6 +63,7 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -335,6 +336,7 @@ Partial Class ucLayoutManager
         '
         'cmbNewLayout
         '
+        Me.cmbNewLayout.ContextMenuStrip = Me.ContextMenuTemplates
         Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbNewLayout.FormattingEnabled = True
         Me.cmbNewLayout.Location = New System.Drawing.Point(38, 21)
@@ -473,6 +475,11 @@ Partial Class ucLayoutManager
         Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
         Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
         '
+        'ContextMenuTemplates
+        '
+        Me.ContextMenuTemplates.Name = "ContextMenuTemplates"
+        Me.ContextMenuTemplates.Size = New System.Drawing.Size(61, 4)
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -533,4 +540,5 @@ Partial Class ucLayoutManager
     Friend WithEvents ContextMenuFilterList As Windows.Forms.ContextMenuStrip
     Friend WithEvents pcbIconFilter As Windows.Forms.PictureBox
     Friend WithEvents txtFilter As Windows.Forms.TextBox
+    Friend WithEvents ContextMenuTemplates As Windows.Forms.ContextMenuStrip
 End Class

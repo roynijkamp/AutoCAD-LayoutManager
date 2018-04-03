@@ -162,6 +162,19 @@ Public Class ucLayoutManager
             If sLayoutTemplate.Length > 0 Then
                 loadExternalTemplate()
             End If
+            'laad extra template files
+            'layout templates laden
+            Dim temp As String = iniFile.GetString("template", "layouts", "")
+            Dim sLayoutTemplates As List(Of String) = New List(Of String)(temp.Split(","c))
+            ContextMenuTemplates.Items.Clear()
+            For Each sItem As String In sLayoutTemplates
+                If Not sItem = vbNullString Then
+                    Dim mItem As New ToolStripMenuItem()
+                    mItem.Text = sItem
+                    mItem.Name = sItem
+                    ContextMenuTemplates.Items.Add(mItem)
+                End If
+            Next
         End If
         'selectie filters laden
         loadFilters()
