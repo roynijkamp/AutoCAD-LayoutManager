@@ -17,6 +17,7 @@ Public Class ucSettings
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
     Dim bTrashDSD As Boolean = True
     Dim dtPlotPresets As System.Data.DataTable
+    Dim bIsLoading As Boolean = False
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
             txtUserSaveFolder.Enabled = True
@@ -54,6 +55,7 @@ Public Class ucSettings
         loadSettings()
     End Sub
     Public Sub loadSettings()
+        bIsLoading = True
         'check of ini bestand bestaat, zo ja: instellingen laden
         If File.Exists(sIniDir & sIniFile) Then
             'bestand bestaat, instelingen laden
@@ -66,11 +68,9 @@ Public Class ucSettings
             'layout templates laden
             Dim temp As String = iniFile.GetString("template", "layouts", "")
             sLayoutTemplates = New List(Of String)(temp.Split(","c))
-            lstTemplates.Items.Clear()
             chkListboxTemplates.Items.Clear()
             For Each sItem As String In sLayoutTemplates
                 If Not sItem = vbNullString Then
-                    lstTemplates.Items.Add(sItem)
                     Dim bChecked As Boolean = False
                     If sItem = sLayoutTemplate Then
                         bChecked = True
@@ -82,11 +82,11 @@ Public Class ucSettings
                 'niets geselecteerd, eerste item selecteren
                 If chkListboxTemplates.Items.Count > 0 Then
                     sLayoutTemplate = chkListboxTemplates.Items(0).ToString
+                    iniFile.WriteString("template", "layout", sLayoutTemplate)
                     chkListboxTemplates.SetSelected(0, True)
                 End If
             End If
 
-            txtLayoutTemplate.Text = sLayoutTemplate
             sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
             Select Case sDefaultOutputLocation
                 Case "drawingfolder"
@@ -109,6 +109,7 @@ Public Class ucSettings
             End If
         End If
         lblVersion.Text = sCurrVersion
+        bIsLoading = False
     End Sub
 
     Private Sub radioPDFfolderAsk_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFfolderAsk.CheckedChanged
@@ -151,15 +152,6 @@ Public Class ucSettings
         loadSettings()
     End Sub
 
-    Private Sub grpDebugOptions_Enter(sender As Object, e As EventArgs) Handles grpDebugOptions.Enter
-
-    End Sub
-
-    Private Sub grpDebugOptions_DoubleClick(sender As Object, e As EventArgs) Handles grpDebugOptions.DoubleClick
-
-    End Sub
-
-
     Private Sub chkTrashDSD_CheckedChanged(sender As Object, e As EventArgs) Handles chkTrashDSD.CheckedChanged
         iniFile = New clsINI(sIniDir & sIniFile)
         bTrashDSD = chkTrashDSD.Checked
@@ -180,25 +172,20 @@ Public Class ucSettings
 
     Private Sub cmdBrowseLayoutTemplate_Click(sender As Object, e As EventArgs) Handles cmdBrowseLayoutTemplate.Click
         Using fldrDia As OpenFileDialog = New OpenFileDialog
-            If txtLayoutTemplate.Text.Length > 0 And Directory.Exists(txtLayoutTemplate.Text) Then
-                fldrDia.FileName = txtLayoutTemplate.Text
-            End If
             If fldrDia.ShowDialog() = DialogResult.OK Then
                 'eerst check of map wel bestaat
                 If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
                     My.Computer.FileSystem.CreateDirectory(sIniDir)
                 End If
-                sLayoutTemplate = fldrDia.FileName
-                txtLayoutTemplate.Text = sLayoutTemplate
-                If Not sLayoutTemplates.Contains(sLayoutTemplate) Then
-                    sLayoutTemplates.Add(sLayoutTemplate)
-                    lstTemplates.Items.Add(sLayoutTemplate)
+                'sLayoutTemplate = fldrDia.FileName
+                If Not sLayoutTemplates.Contains(fldrDia.FileName) Then
+                    sLayoutTemplates.Add(fldrDia.FileName)
+                    chkListboxTemplates.Items.Add(fldrDia.FileName, False)
                 End If
 
                 'bestand aanmaken
                 'settings schrijven
                 iniFile = New clsINI(sIniDir & sIniFile)
-                iniFile.WriteString("template", "layout", sLayoutTemplate)
                 If sLayoutTemplates.Count > 0 Then
                     iniFile.WriteString("template", "layouts", String.Join(",", sLayoutTemplates.ToArray()))
                 Else
@@ -208,19 +195,11 @@ Public Class ucSettings
         End Using
     End Sub
 
-    Private Sub lstTemplates_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstTemplates.SelectedIndexChanged
-        sLayoutTemplate = lstTemplates.SelectedValue
-        txtLayoutTemplate.Text = sLayoutTemplate
-        'settings schrijven
-        iniFile = New clsINI(sIniDir & sIniFile)
-        iniFile.WriteString("template", "layout", sLayoutTemplate)
-    End Sub
-
     Private Sub VerwijderenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VerwijderenToolStripMenuItem.Click
         If MsgBox("Weet u zeker dat u deze template wilt verwijderen uit de lijst?", MsgBoxStyle.Critical + MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            lstTemplates.Items.Remove(lstTemplates.SelectedItem)
+            chkListboxTemplates.Items.Remove(chkListboxTemplates.SelectedItem)
             sLayoutTemplates = New List(Of String)
-            For Each item In lstTemplates.Items
+            For Each item In chkListboxTemplates.Items
                 sLayoutTemplates.Add(item.ToString)
             Next
             If sLayoutTemplates.Count > 0 Then
@@ -231,13 +210,35 @@ Public Class ucSettings
         End If
     End Sub
 
-    Private Sub lstTemplates_MouseDown(sender As Object, e As MouseEventArgs) Handles lstTemplates.MouseDown
-        If e.Button = MouseButtons.Right Then
-            lstTemplates.SelectedIndex = lstTemplates.IndexFromPoint(e.X, e.Y)
-        End If
-    End Sub
 
     Private Sub chkListboxTemplates_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles chkListboxTemplates.ItemCheck
+        If bIsLoading = True Then
+            Exit Sub
+        End If
+        If e.NewValue = CheckState.Checked Then
+            For i As Integer = 0 To chkListboxTemplates.Items.Count - 1 Step 1
+                If i <> e.Index Then
+                    chkListboxTemplates.SetItemChecked(i, False)
+                Else
+                    sLayoutTemplate = chkListboxTemplates.Items(i)
+                    'settings schrijven
+                    iniFile = New clsINI(sIniDir & sIniFile)
+                    iniFile.WriteString("template", "layout", sLayoutTemplate)
+                End If
+            Next i
+        End If
+        'If chkListboxTemplates.CheckedItems.Count = 0 Then
+        '    If chkListboxTemplates.Items.Count > 0 Then
+        '        'geen item geselecteerd, 1e item selecteren
+        '        chkListboxTemplates.SetItemChecked(0, True)
+        '        sLayoutTemplate = chkListboxTemplates.Items(0)
+        '    End If
+        'End If
+    End Sub
 
+    Private Sub chkListboxTemplates_MouseDown(sender As Object, e As MouseEventArgs) Handles chkListboxTemplates.MouseDown
+        If e.Button = MouseButtons.Right Then
+            chkListboxTemplates.SelectedIndex = chkListboxTemplates.IndexFromPoint(e.X, e.Y)
+        End If
     End Sub
 End Class

@@ -45,6 +45,7 @@ Partial Class ucLayoutManager
         Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
+        Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
         Me.lblCheckCount = New System.Windows.Forms.Label()
@@ -63,7 +64,6 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -345,6 +345,11 @@ Partial Class ucLayoutManager
         Me.cmbNewLayout.TabIndex = 8
         Me.cmbNewLayout.Visible = False
         '
+        'ContextMenuTemplates
+        '
+        Me.ContextMenuTemplates.Name = "ContextMenuTemplates"
+        Me.ContextMenuTemplates.Size = New System.Drawing.Size(61, 4)
+        '
         'pgbVoortgang
         '
         Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -474,11 +479,6 @@ Partial Class ucLayoutManager
         '
         Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
         Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
-        '
-        'ContextMenuTemplates
-        '
-        Me.ContextMenuTemplates.Name = "ContextMenuTemplates"
-        Me.ContextMenuTemplates.Size = New System.Drawing.Size(61, 4)
         '
         'ucLayoutManager
         '

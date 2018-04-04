@@ -38,12 +38,10 @@ Partial Class ucSettings
         Me.chkTrashDSD = New System.Windows.Forms.CheckBox()
         Me.cmdDebugOptions = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.lstTemplates = New System.Windows.Forms.ListBox()
+        Me.chkListboxTemplates = New System.Windows.Forms.CheckedListBox()
         Me.editListTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.VerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdBrowseLayoutTemplate = New System.Windows.Forms.Button()
-        Me.txtLayoutTemplate = New System.Windows.Forms.TextBox()
-        Me.chkListboxTemplates = New System.Windows.Forms.CheckedListBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -210,24 +208,21 @@ Partial Class ucSettings
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.chkListboxTemplates)
-        Me.GroupBox3.Controls.Add(Me.lstTemplates)
         Me.GroupBox3.Controls.Add(Me.cmdBrowseLayoutTemplate)
-        Me.GroupBox3.Controls.Add(Me.txtLayoutTemplate)
         Me.GroupBox3.Location = New System.Drawing.Point(3, 217)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(415, 267)
+        Me.GroupBox3.Size = New System.Drawing.Size(415, 200)
         Me.GroupBox3.TabIndex = 7
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Layout Template File"
         '
-        'lstTemplates
+        'chkListboxTemplates
         '
-        Me.lstTemplates.ContextMenuStrip = Me.editListTemplates
-        Me.lstTemplates.FormattingEnabled = True
-        Me.lstTemplates.Location = New System.Drawing.Point(14, 48)
-        Me.lstTemplates.Name = "lstTemplates"
-        Me.lstTemplates.Size = New System.Drawing.Size(383, 82)
-        Me.lstTemplates.TabIndex = 2
+        Me.chkListboxTemplates.FormattingEnabled = True
+        Me.chkListboxTemplates.Location = New System.Drawing.Point(18, 48)
+        Me.chkListboxTemplates.Name = "chkListboxTemplates"
+        Me.chkListboxTemplates.Size = New System.Drawing.Size(383, 139)
+        Me.chkListboxTemplates.TabIndex = 3
         '
         'editListTemplates
         '
@@ -243,27 +238,12 @@ Partial Class ucSettings
         '
         'cmdBrowseLayoutTemplate
         '
-        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(367, 22)
+        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(18, 22)
         Me.cmdBrowseLayoutTemplate.Name = "cmdBrowseLayoutTemplate"
-        Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(30, 20)
+        Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(379, 20)
         Me.cmdBrowseLayoutTemplate.TabIndex = 1
-        Me.cmdBrowseLayoutTemplate.Text = "..."
+        Me.cmdBrowseLayoutTemplate.Text = "Template File toevoegen"
         Me.cmdBrowseLayoutTemplate.UseVisualStyleBackColor = True
-        '
-        'txtLayoutTemplate
-        '
-        Me.txtLayoutTemplate.Location = New System.Drawing.Point(14, 22)
-        Me.txtLayoutTemplate.Name = "txtLayoutTemplate"
-        Me.txtLayoutTemplate.Size = New System.Drawing.Size(355, 20)
-        Me.txtLayoutTemplate.TabIndex = 0
-        '
-        'chkListboxTemplates
-        '
-        Me.chkListboxTemplates.FormattingEnabled = True
-        Me.chkListboxTemplates.Location = New System.Drawing.Point(14, 148)
-        Me.chkListboxTemplates.Name = "chkListboxTemplates"
-        Me.chkListboxTemplates.Size = New System.Drawing.Size(383, 94)
-        Me.chkListboxTemplates.TabIndex = 3
         '
         'ucSettings
         '
@@ -285,7 +265,6 @@ Partial Class ucSettings
         Me.grpDebugOptions.ResumeLayout(False)
         Me.grpDebugOptions.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.editListTemplates.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -308,8 +287,6 @@ Partial Class ucSettings
     Friend WithEvents cmdDebugOptions As Windows.Forms.Button
     Friend WithEvents GroupBox3 As Windows.Forms.GroupBox
     Friend WithEvents cmdBrowseLayoutTemplate As Windows.Forms.Button
-    Friend WithEvents txtLayoutTemplate As Windows.Forms.TextBox
-    Friend WithEvents lstTemplates As Windows.Forms.ListBox
     Friend WithEvents editListTemplates As Windows.Forms.ContextMenuStrip
     Friend WithEvents VerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents chkListboxTemplates As Windows.Forms.CheckedListBox

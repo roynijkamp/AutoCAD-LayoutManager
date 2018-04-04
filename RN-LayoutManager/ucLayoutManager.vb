@@ -172,6 +172,7 @@ Public Class ucLayoutManager
                     Dim mItem As New ToolStripMenuItem()
                     mItem.Text = sItem
                     mItem.Name = sItem
+                    AddHandler mItem.Click, AddressOf selectExternalTemplate
                     ContextMenuTemplates.Items.Add(mItem)
                 End If
             Next
@@ -920,6 +921,12 @@ Public Class ucLayoutManager
         End If
     End Sub
 
+    Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)
+        Dim selectedItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        sLayoutTemplate = selectedItem.Text
+        loadExternalTemplate()
+    End Function
+
     Public Function loadExternalTemplate()
         If File.Exists(sLayoutTemplate) Then
             Dim acExDb As Database = New Database(False, True)
@@ -1628,5 +1635,15 @@ Public Class ucLayoutManager
         End If
         loadLayouts()
         MsgBox("Hernoemen van de Layouts is voltooid!")
+    End Sub
+
+
+    Private Sub cmbNewLayout_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles cmbNewLayout.MouseDoubleClick
+        'bestand bestaat, instelingen laden
+        iniFile = New clsINI(sIniDir & sIniFile)
+        sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
+        If sLayoutTemplate.Length > 0 Then
+            loadExternalTemplate()
+        End If
     End Sub
 End Class
