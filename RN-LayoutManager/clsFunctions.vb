@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports Autodesk.AutoCAD.ApplicationServices
+Imports Autodesk.AutoCAD.DatabaseServices
 Imports Newtonsoft.Json.Linq
 
 Public Class clsFunctions
@@ -102,4 +103,34 @@ Public Class clsFunctions
         End If
 
     End Function
+
+
+    Public Shared Function startCommandMonitor() As Boolean
+        'To avoid ambiguity, we have to use the full type here.
+        Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim db As Database = HostApplicationServices.WorkingDatabase()
+        'AddHandler db.ObjectOpenedForModify, New ObjectEventHandler(AddressOf objOpenedForMod)
+        AddHandler doc.CommandWillStart, New CommandEventHandler(AddressOf commandStart)
+        AddHandler doc.CommandEnded, New CommandEventHandler(AddressOf commandEnd)
+        'modFunctions.writeLOGtxt("Command monitor started!")
+        startCommandMonitor = True
+    End Function
+
+    Public Shared Function endCommandMonitor() As Boolean
+        Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim db As Database = HostApplicationServices.WorkingDatabase()
+
+        RemoveHandler doc.CommandWillStart, AddressOf commandStart
+        RemoveHandler doc.CommandEnded, AddressOf commandEnd
+        endCommandMonitor = True
+    End Function
+
+    Public Shared Function commandStart(ByVal o As Object, ByVal e As CommandEventArgs)
+        'MsgBox(e.GlobalCommandName)
+    End Function
+
+    Public Shared Function commandEnd(ByVal o As Object, ByVal e As CommandEventArgs)
+        'MsgBox(e.GlobalCommandName)
+    End Function
+
 End Class

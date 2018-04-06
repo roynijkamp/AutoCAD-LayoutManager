@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RN Layout Manager"
-#define MyAppVersion "1.0.18075.1542"
+#define MyAppVersion "1.0.18096.1018"
 #define MyAppPublisher "Roy Nijkamp"
 #define MyAppURL "http://www.roynijkamp.nl"
 

@@ -332,7 +332,6 @@ Partial Class ucLayoutManager
         Me.cmdAddLayout.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.cmdAddLayout, "Geselecteerde Layout toevoegen")
         Me.cmdAddLayout.UseVisualStyleBackColor = True
-        Me.cmdAddLayout.Visible = False
         '
         'cmbNewLayout
         '
@@ -343,7 +342,6 @@ Partial Class ucLayoutManager
         Me.cmbNewLayout.Name = "cmbNewLayout"
         Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
         Me.cmbNewLayout.TabIndex = 8
-        Me.cmbNewLayout.Visible = False
         '
         'ContextMenuTemplates
         '

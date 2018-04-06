@@ -68,9 +68,8 @@ Public Class ucLayoutManager
             loadLayouts()
             'Todo: implement load saved selection
             loadFilters()
-            'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
-            'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            AddHandler acDoc.CommandEnded, New CommandEventHandler(AddressOf commandEnd)
         Catch
             'MsgBox("Probleem bij DocumentActivated")
         End Try
@@ -83,9 +82,8 @@ Public Class ucLayoutManager
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
             acEd = acDoc.Editor
-            'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
-            'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             RemoveHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            RemoveHandler acDoc.CommandEnded, AddressOf commandEnd
             resetList()
             resetFilter()
         Catch
@@ -104,6 +102,22 @@ Public Class ucLayoutManager
         loadLayouts()
     End Sub
 
+    Public Shared Function commandStart(ByVal o As Object, ByVal e As CommandEventArgs)
+        'MsgBox(e.GlobalCommandName)
+        Return True
+    End Function
+
+    Public Function commandEnd(ByVal o As Object, ByVal e As CommandEventArgs)
+        'MsgBox(e.GlobalCommandName)
+        Select Case e.GlobalCommandName
+            Case "LAYOUT_CONTROL"
+                loadLayouts()
+                'Todo: implement load saved selection
+                loadFilters()
+
+        End Select
+        Return True
+    End Function
 
 
     Public Sub getCurrentLayout()
@@ -145,8 +159,10 @@ Public Class ucLayoutManager
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDestroyed, AddressOf Me.DocumentManager_DocumentToBeDeactivated
-        'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
-        'AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LayoutSwitching, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+        'set current layoutmanager
+        _lm = LayoutManager.Current
+        AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+
 
         '### /Active Drawing Tracking
         loadLayouts()
@@ -653,7 +669,7 @@ Public Class ucLayoutManager
     End Sub
 
     Private Sub cmdSaveOrder_Click(sender As Object, e As EventArgs) Handles cmdSaveOrder.Click
-        setLayoutOrder()
+        'setLayoutOrder()
     End Sub
 
     Public Function checkedLayouts(Optional ByVal bTrash As Boolean = False)
@@ -755,6 +771,7 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function itterateList(ByVal sAction As String)
+        Dim CurrFound As Boolean = False
         Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem
         getCurrentLayout()
         For Each myCntrl As RN_LayoutItems.RN_UCLayoutItem In flowLayouts.Controls
@@ -778,6 +795,7 @@ Public Class ucLayoutManager
                     If myCntrl.LayoutName = sCurrentLayout Then
                         myCntrl.IsCurrent = True
                         myCntrlCurrent = myCntrl
+                        CurrFound = True
                     Else
                         myCntrl.IsCurrent = False
                     End If
@@ -786,9 +804,14 @@ Public Class ucLayoutManager
             End If
         Next
         If sAction = "iscurrent" Then
-            scrollCurrentLayoutIntoView(myCntrlCurrent)
+            If CurrFound = True Then
+                scrollCurrentLayoutIntoView(myCntrlCurrent)
+            Else
+                'layout niet gevonden, ff herladen
+                loadLayouts()
+            End If
         End If
-        Return True
+            Return True
     End Function
 
 
@@ -948,6 +971,7 @@ Public Class ucLayoutManager
                 MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
             End Try
             Try
+                cmbNewLayout.Items.Clear()
                 For Each sLayoutName In layAndTab.Values
                     'add name to list except Model
                     If sLayoutName = "Model" Then
