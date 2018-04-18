@@ -21,9 +21,11 @@ Public Class plotting
         Private pdfSheetType As SheetType = SheetType.MultiPdf
         Private pdfOutputDIR As String
 
+        Private bSuppressMessage As Boolean
+
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType)
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, bSuppressMessage As Boolean)
             'get settings from INI
             iniFile = New clsINI(sIniDir & sIniFile)
             bTrashDSD = iniFile.GetBoolean("debugoptions", "trashdsd", bTrashDSD)
@@ -37,6 +39,7 @@ Public Class plotting
             Me.dsdFile = Path.ChangeExtension(Me.pdfFile, "dsd")
             Me.layouts = layouts
             Me.pdfSheetType = pdfSheetType
+            Me.bSuppressMessage = bSuppressMessage
         End Sub
 
         Public Sub Publish()
@@ -48,9 +51,11 @@ Public Class plotting
                 If bTrashDSD Then
                     File.Delete(Me.dsdFile)
                 End If
-                MsgBox("PDF aanmaken is voltooid!")
+                If bSuppressMessage = False Then
+                    MsgBox("Plot bestanden aanmaken is voltooid!")
+                End If
             Else
-                MsgBox("Fout bij het maken van de DSD file")
+                MsgBox("Fout bij het maken van de plot bestanden / DSD file")
             End If
         End Sub
 
@@ -95,7 +100,7 @@ Public Class plotting
                 dsdEntry.DwgName = Me.dwgFile
                 dsdEntry.Layout = layout.LayoutName
                 dsdEntry.NpsSourceDwg = dsdEntry.DwgName
-                If Me.pdfSheetType = SheetType.MultiPdf Then
+                If Me.pdfSheetType = SheetType.MultiPdf Or Me.pdfSheetType = SheetType.MultiDwf Then
                     dsdEntry.Title = layout.LayoutName
                     dsdEntry.Nps = layout.TabOrder.ToString()
                 Else
@@ -153,13 +158,16 @@ Public Class plotting
             iniFile = New clsINI(sIniDir & sIniFile)
             Dim sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
             'define settings
-            Dim sPdfType As String
+            Dim sPdfType As String = "5" 'default single sheet PDF
             If Me.pdfSheetType = SheetType.MultiPdf Then
                 'Multi Sheet PDF
                 sPdfType = "6"
-            Else
+            ElseIf Me.pdfSheetType = SheetType.SinglePdf Then
                 'Single Sheet PDF
                 sPdfType = "5"
+            ElseIf Me.pdfSheetType = SheetType.MultiDwf Then
+                sPdfType = "1"
+                sSelectedPreset = "DWF"
             End If
 
             'write dsd file

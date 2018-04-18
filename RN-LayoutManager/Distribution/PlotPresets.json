@@ -139,6 +139,41 @@
                     "waarde":"TRUE"
                 }
             ]
+        },
+        {
+            "preset":"DWF",
+            "PdfOptions":[
+                {
+                    "item":"IncludeHyperlinks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CreateBookmarks",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"CaptureFontsInDrawing",
+                    "waarde":"TRUE"
+                },
+                {
+                    "item":"ConvertTextToGeometry",
+                    "waarde":"FALSE"
+                },
+                {
+                    "item":"VectorResolution",
+                    "waarde":"1200"
+                },
+                {
+                    "item":"RasterResolution",
+                    "waarde":"400"
+                }
+            ],
+            "SheetSet_Properties":[
+                {
+                    "item":"IncludeLayer",
+                    "waarde":"TRUE"
+                }
+            ]
         }
     ]
 }

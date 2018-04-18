@@ -27,6 +27,7 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmdPrintDWF = New System.Windows.Forms.Button()
         Me.pcbIconFilter = New System.Windows.Forms.PictureBox()
         Me.txtFilter = New System.Windows.Forms.TextBox()
         Me.cmdBatchAttributes = New System.Windows.Forms.Button()
@@ -64,12 +65,16 @@ Partial Class ucLayoutManager
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ContextMenuDWFoptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
         Me.SubMenu.SuspendLayout()
         Me.ContextMenuFilters.SuspendLayout()
+        Me.ContextMenuDWFoptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -120,6 +125,7 @@ Partial Class ucLayoutManager
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmdPrintDWF)
         Me.GroupBox1.Controls.Add(Me.pcbIconFilter)
         Me.GroupBox1.Controls.Add(Me.txtFilter)
         Me.GroupBox1.Controls.Add(Me.cmdBatchAttributes)
@@ -142,6 +148,18 @@ Partial Class ucLayoutManager
         Me.GroupBox1.Size = New System.Drawing.Size(420, 60)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
+        '
+        'cmdPrintDWF
+        '
+        Me.cmdPrintDWF.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdPrintDWF.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_DWF
+        Me.cmdPrintDWF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.cmdPrintDWF.Location = New System.Drawing.Point(319, 30)
+        Me.cmdPrintDWF.Name = "cmdPrintDWF"
+        Me.cmdPrintDWF.Size = New System.Drawing.Size(28, 28)
+        Me.cmdPrintDWF.TabIndex = 19
+        Me.ToolTip1.SetToolTip(Me.cmdPrintDWF, "Geselecteerde layouts afdrukken naar DWF")
+        Me.cmdPrintDWF.UseVisualStyleBackColor = True
         '
         'pcbIconFilter
         '
@@ -243,7 +261,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotSingleSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdPlotSingleSheet.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_PDF
         Me.cmdPlotSingleSheet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(343, 30)
+        Me.cmdPlotSingleSheet.Location = New System.Drawing.Point(350, 30)
         Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
         Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotSingleSheet.TabIndex = 8
@@ -478,6 +496,24 @@ Partial Class ucLayoutManager
         Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
         Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
         '
+        'ContextMenuDWFoptions
+        '
+        Me.ContextMenuDWFoptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sPDFenMDWF, Me.mPDFenMDWF})
+        Me.ContextMenuDWFoptions.Name = "ContextMenuStrip1"
+        Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 70)
+        '
+        'sPDFenMDWF
+        '
+        Me.sPDFenMDWF.Name = "sPDFenMDWF"
+        Me.sPDFenMDWF.Size = New System.Drawing.Size(256, 22)
+        Me.sPDFenMDWF.Text = "Singlesheet PDF + Multisheet DWF"
+        '
+        'mPDFenMDWF
+        '
+        Me.mPDFenMDWF.Name = "mPDFenMDWF"
+        Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
+        Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -494,6 +530,7 @@ Partial Class ucLayoutManager
         Me.GroupBox2.PerformLayout()
         Me.SubMenu.ResumeLayout(False)
         Me.ContextMenuFilters.ResumeLayout(False)
+        Me.ContextMenuDWFoptions.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -539,4 +576,8 @@ Partial Class ucLayoutManager
     Friend WithEvents pcbIconFilter As Windows.Forms.PictureBox
     Friend WithEvents txtFilter As Windows.Forms.TextBox
     Friend WithEvents ContextMenuTemplates As Windows.Forms.ContextMenuStrip
+    Friend WithEvents cmdPrintDWF As Windows.Forms.Button
+    Friend WithEvents ContextMenuDWFoptions As Windows.Forms.ContextMenuStrip
+    Friend WithEvents sPDFenMDWF As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mPDFenMDWF As Windows.Forms.ToolStripMenuItem
 End Class

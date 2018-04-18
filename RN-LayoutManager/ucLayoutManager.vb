@@ -164,10 +164,6 @@ Public Class ucLayoutManager
         AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
 
 
-        '### /Active Drawing Tracking
-        loadLayouts()
-        'set active layout
-        DocumentManger_DocumentLayoutSwitched()
         'tool toevoegen aan trusted path
         getTrustedPaths(clsFunctions.getCoreDir())
         'load settings
@@ -195,6 +191,9 @@ Public Class ucLayoutManager
         End If
         'selectie filters laden
         loadFilters()
+        loadLayouts()
+        'set active layout
+        DocumentManger_DocumentLayoutSwitched()
         If clsFunctions.isDebugMode() Then
             'debug modus = true
             lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
@@ -711,7 +710,7 @@ Public Class ucLayoutManager
     ''' </summary>
     ''' <param name="pdfSheetType"></param>
     ''' <returns></returns>
-    Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout))
+    Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout), Optional bSuppressMessage As Boolean = False, Optional sFileExt As String = "pdf")
         Dim sOutputLocation As String = PDFoutputLocation()
 
         Dim db As Database = HostApplicationServices.WorkingDatabase
@@ -722,19 +721,23 @@ Public Class ucLayoutManager
             Dim filename As String
             If sOutputLocation = "" Then
                 'drawing location
-                filename = Path.ChangeExtension(db.Filename, "pdf")
+                'filename = Path.ChangeExtension(db.Filename, "pdf")
+                filename = Path.ChangeExtension(db.Filename, sFileExt)
             Else
                 'user chosen location
-                filename = sOutputLocation & "\" & Path.GetFileName(Path.ChangeExtension(db.Filename, "pdf"))
+                'filename = sOutputLocation & "\" & Path.GetFileName(Path.ChangeExtension(db.Filename, "pdf"))
+                filename = sOutputLocation & "\" & Path.GetFileName(Path.ChangeExtension(db.Filename, sFileExt))
             End If
 
 
-            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType)
+            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, bSuppressMessage)
             plotter.Publish()
 
         Catch e As System.Exception
             Dim ed As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
             ed.WriteMessage(vbLf & "Error: {0}" & vbLf & "{1}", e.Message, e.StackTrace)
+            MsgBox("Fout bij het plotten!" & vbCrLf & e.Message & vbCrLf & e.StackTrace)
+            Return False
         Finally
             Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", bgp)
         End Try
@@ -753,6 +756,12 @@ Public Class ucLayoutManager
         End If
     End Sub
 
+    Private Sub cmdPlotMulitSheet_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdPlotMulitSheet.MouseDown
+        If e.Button = MouseButtons.Right Then
+            ContextMenuDWFoptions.Show(cmdPrintDWF, 0, 0)
+        End If
+    End Sub
+
     Private Sub cmdPlotSingleSheet_Click(sender As Object, e As EventArgs) Handles cmdPlotSingleSheet.Click
         Dim layouts As New List(Of Layout)()
         layouts = checkedLayouts()
@@ -761,6 +770,52 @@ Public Class ucLayoutManager
             plotLayouts(SheetType.SinglePdf, checkedLayouts())
         End If
     End Sub
+
+    Private Sub cmdPlotSingleSheet_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdPlotSingleSheet.MouseDown
+        If e.Button = MouseButtons.Right Then
+            ContextMenuDWFoptions.Show(cmdPrintDWF, 0, 0)
+        End If
+    End Sub
+
+    Private Sub cmdPrintDWF_Click(sender As Object, e As EventArgs) Handles cmdPrintDWF.Click
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            regenDrawing()
+            plotLayouts(SheetType.MultiDwf, checkedLayouts(), False, "dwf")
+        End If
+    End Sub
+
+    Private Sub cmdPrintDWF_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdPrintDWF.MouseDown
+        If e.Button = MouseButtons.Right Then
+            ContextMenuDWFoptions.Show(cmdPrintDWF, 0, 0)
+        End If
+    End Sub
+
+    Private Sub sPDFenMDWF_Click(sender As Object, e As EventArgs) Handles sPDFenMDWF.Click
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            regenDrawing()
+            If plotLayouts(SheetType.SinglePdf, checkedLayouts(), True) = True Then
+                regenDrawing()
+                plotLayouts(SheetType.MultiDwf, checkedLayouts(), False, "dwf")
+            End If
+        End If
+    End Sub
+
+    Private Sub mPDFenMDWF_Click(sender As Object, e As EventArgs) Handles mPDFenMDWF.Click
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            regenDrawing()
+            If plotLayouts(SheetType.MultiPdf, checkedLayouts(), True) = True Then
+                regenDrawing()
+                plotLayouts(SheetType.MultiDwf, checkedLayouts(), False, "dwf")
+            End If
+        End If
+    End Sub
+
 
     Public Sub regenDrawing()
         acEd.Regen()
@@ -1670,4 +1725,6 @@ Public Class ucLayoutManager
             loadExternalTemplate()
         End If
     End Sub
+
+
 End Class
