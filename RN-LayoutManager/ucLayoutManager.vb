@@ -47,6 +47,8 @@ Public Class ucLayoutManager
     Dim dStartValue(0 To 99) As Double
     Dim dCurrValue(0 To 99) As Double
     Dim dIncrementValue(0 To 99) As Double
+    'plot vars
+    Dim pstylemode As String
     'filter values
     Dim aFilters As List(Of String)
     'Active Drawing Tracking
@@ -70,6 +72,7 @@ Public Class ucLayoutManager
             loadFilters()
             AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             AddHandler acDoc.CommandEnded, New CommandEventHandler(AddressOf commandEnd)
+            pstylemode = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("PSTYLEMODE").ToString
         Catch
             'MsgBox("Probleem bij DocumentActivated")
         End Try
@@ -717,7 +720,6 @@ Public Class ucLayoutManager
         Dim bgp As Short = CShort(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("BACKGROUNDPLOT"))
         Try
             Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("BACKGROUNDPLOT", 0)
-
             Dim filename As String
             If sOutputLocation = "" Then
                 'drawing location
@@ -997,6 +999,26 @@ Public Class ucLayoutManager
         Else
             mnuItmRenameSelection.Enabled = False
         End If
+        'disable change plotstyle if drawing is STB
+        If pstylemode = 0 Then
+            PlotstyleTableWijzigenToolStripMenuItem.Enabled = False
+        Else
+            PlotstyleTableWijzigenToolStripMenuItem.Enabled = True
+            'submenu items toevoegen
+            Dim pstyleArray As List(Of String) = New List(Of String)
+            If PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Count > 0 Then
+                PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Clear()
+            End If
+            For Each plotStyle As String In PlotSettingsValidator.Current.GetPlotStyleSheetList()
+                    If Not pstyleArray.Contains(plotStyle) Then
+                        Dim mnuItm As New ToolStripMenuItem
+                        mnuItm.Text = plotStyle
+                        mnuItm.Tag = plotStyle
+                        PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Add(mnuItm)
+                        pstyleArray.Add(plotStyle)
+                    End If
+                Next
+            End If
     End Sub
 
     Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)
@@ -1726,5 +1748,13 @@ Public Class ucLayoutManager
         End If
     End Sub
 
+    Private Sub PlotstyleTableWijzigenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PlotstyleTableWijzigenToolStripMenuItem.Click
+        acDoc.Editor.WriteMessage(vbLf & "Plot styles: ")
 
+        acDoc.Editor.WriteMessage(vbLf & "Pstylemode: " & pstylemode)
+        For Each plotStyle As String In PlotSettingsValidator.Current.GetPlotStyleSheetList()
+            ' Output the names of the available plot styles
+            acDoc.Editor.WriteMessage(vbLf & "  " & plotStyle)
+        Next
+    End Sub
 End Class

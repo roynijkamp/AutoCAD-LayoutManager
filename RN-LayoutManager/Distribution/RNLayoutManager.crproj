@@ -1,0 +1,28 @@
+<project outputDir="K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused" baseDir="K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" preset="aggressive" inherit="false">
+    <protection id="anti ildasm" />
+    <protection id="anti debug" />
+    <protection id="anti tamper" />
+  </rule>
+  <module path="RN-LayoutManager.dll">
+    <rule pattern="true" preset="aggressive" inherit="false">
+      <protection id="anti ildasm" />
+      <protection id="anti debug" />
+      <protection id="anti tamper" />
+    </rule>
+  </module>
+  <module path="RN-LayoutItems.dll">
+    <rule pattern="true" preset="aggressive" inherit="false">
+      <protection id="anti ildasm" />
+      <protection id="anti debug" />
+      <protection id="anti tamper" />
+    </rule>
+  </module>
+  <module path="RN-attribute-listitem.dll">
+    <rule pattern="true" preset="aggressive" inherit="false">
+      <protection id="anti ildasm" />
+      <protection id="anti debug" />
+      <protection id="anti tamper" />
+    </rule>
+  </module>
+</project>
