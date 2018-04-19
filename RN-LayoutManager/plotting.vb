@@ -168,6 +168,9 @@ Public Class plotting
             ElseIf Me.pdfSheetType = SheetType.MultiDwf Then
                 sPdfType = "1"
                 sSelectedPreset = "DWF"
+            ElseIf Me.pdfSheetType = SheetType.SingleDwf Then
+                sPdfType = "0"
+                sSelectedPreset = "DWF"
             End If
 
             'write dsd file

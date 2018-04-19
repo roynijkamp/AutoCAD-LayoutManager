@@ -403,9 +403,15 @@ Public Class ucLayoutManager
         lblCheckCount.Text = "# " & iCheckCount.ToString ' & " selected"
     End Sub
 
-    Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs)
+    Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs, Optional sDWF As Boolean = False, Optional myTmpCntrl As RN_LayoutItems.RN_UCLayoutItem = Nothing)
         Dim sOutputLocation As String = PDFoutputLocation()
-        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem
+        If sDWF = True Then
+            myCntrl = myTmpCntrl
+        Else
+            myCntrl = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        End If
+
         Dim layouts As New List(Of Layout)()
         Try
             Using acLockDoc As DocumentLock = acDoc.LockDocument
@@ -417,7 +423,11 @@ Public Class ucLayoutManager
                     layouts.Add(lay)
 
                     acTrans.Commit()
-                    plotLayouts(SheetType.SinglePdf, layouts)
+                    If sDWF = False Then
+                        plotLayouts(SheetType.SinglePdf, layouts)
+                    Else
+                        plotLayouts(SheetType.SingleDwf, layouts, False, "dwf")
+                    End If
                 End Using
             End Using
         Catch ex As Exception
@@ -794,6 +804,16 @@ Public Class ucLayoutManager
         End If
     End Sub
 
+
+    Private Sub SinglesheetDWFToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SinglesheetDWFToolStripMenuItem.Click
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            regenDrawing()
+            plotLayouts(SheetType.SingleDwf, checkedLayouts(), False, "dwf")
+        End If
+    End Sub
+
     Private Sub sPDFenMDWF_Click(sender As Object, e As EventArgs) Handles sPDFenMDWF.Click
         Dim layouts As New List(Of Layout)()
         layouts = checkedLayouts()
@@ -943,6 +963,14 @@ Public Class ucLayoutManager
             ModifyLayout("verwijderen", myCntrl)
             loadLayouts()
         End If
+    End Sub
+
+
+    Private Sub PlotSinglesheetDWFToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PlotSinglesheetDWFToolStripMenuItem.Click
+        'plot to DWF Singlesheet
+        Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        PlotLayout(sender, e, True, myCntrl)
     End Sub
 
     Public Function ModifyLayout(ByVal sAction As String, ByVal myCntrl As RN_LayoutItems.RN_UCLayoutItem, Optional ByVal sNewName As String = "")
@@ -1757,4 +1785,5 @@ Public Class ucLayoutManager
             acDoc.Editor.WriteMessage(vbLf & "  " & plotStyle)
         Next
     End Sub
+
 End Class
