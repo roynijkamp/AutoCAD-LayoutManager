@@ -41,6 +41,7 @@ Public Class ucLayoutManager
     Dim oModalSpace As ObjectId
     Dim oPaperSpace As ObjectId
     Dim sActiveLayout As String
+    Dim sCurrLayout As String
     Dim sAttribNames(0 To 99) As String
     Dim sAttribValue(0 To 99) As String
     Dim bAutoNumber(0 To 99) As Boolean
@@ -970,6 +971,7 @@ Public Class ucLayoutManager
         'plot to DWF Singlesheet
         Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        'send to plotter
         PlotLayout(sender, e, True, myCntrl)
     End Sub
 
@@ -1370,6 +1372,7 @@ Public Class ucLayoutManager
                         If myCntrl.CheckState Then
                             '## layout active zetten
                             Dim sLayoutName As String = myCntrl.LayoutName
+                            sCurrLayout = sLayoutName
                             setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                             '## paperspace id pakken en attributes updaten
                             updateProgressBar(True)
@@ -1378,6 +1381,7 @@ Public Class ucLayoutManager
                     Else
                         '## layout active zetten
                         Dim sLayoutName As String = myCntrl.LayoutName
+                        sCurrLayout = sLayoutName
                         setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                         '## paperspace id pakken en attributes updaten
                         updateProgressBar(True)
@@ -1471,6 +1475,11 @@ Public Class ucLayoutManager
                                                 sTmpValue = sTmpValue.Replace("[#nummer]", dCurrValue(iItemIndex).ToString)
                                                 'sTmpValue = sTmpValue & " autonr"
                                                 dCurrValue(iItemIndex) += dIncrementValue(iItemIndex)
+                                            End If
+                                            'check of we de layoutnaam moeten invoegen
+                                            If sTmpValue.Contains("[#layout]") = True Then
+                                                'layoutnaam vervangen
+                                                sTmpValue = sTmpValue.Replace("[#layout]", sCurrLayout)
                                             End If
                                             ar.TextString = sTmpValue
                                             ar.DowngradeOpen()
