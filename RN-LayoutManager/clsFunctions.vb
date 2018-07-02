@@ -38,6 +38,18 @@ Public Class clsFunctions
         End If
     End Function
 
+    ''' <summary>
+    ''' Get Current plotstyle
+    ''' </summary>
+    ''' <returns>integer 0 = STB, 1 = CTB</returns>
+    Public Shared Function getPlotStyleTable() As Integer
+        'plotstyletable achterhalen en instellen
+        '1 = CTB
+        '0 = STB
+        Dim oCurrPlotStyleTable As System.Object = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("PSTYLEMODE")
+        getPlotStyleTable = CInt(oCurrPlotStyleTable.ToString)
+    End Function
+
     '<summary>
     'log progress
     '</summary>
@@ -132,5 +144,30 @@ Public Class clsFunctions
     Public Shared Function commandEnd(ByVal o As Object, ByVal e As CommandEventArgs)
         'MsgBox(e.GlobalCommandName)
     End Function
+
+    Public Shared Function getActiveDrawings(Optional boolBlank As Boolean = False, Optional bSuppressMessage As Boolean = False)
+        'functie om het aantal actieve tekeningen weer te geven
+        Dim AcadDocs As DocumentCollection = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager
+        'melding weergeven indien geen actieve tekening gevonden
+        If AcadDocs.Count = 0 Then
+            If bSuppressMessage = False Then
+                MsgBox("Er is geen document geopend!" & vbCrLf & "Open eerst een document voordat u verder gaat.", MsgBoxStyle.Exclamation + vbOKOnly)
+            End If
+            Return AcadDocs.Count
+        Else
+            'kijken of we moeten checken of een Lege tekening actief is
+            If boolBlank = True Then
+                Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+                If acDoc.IsNamedDrawing = False Then
+                    'lege tekening niet opgeslagen
+                    Return False
+                Else
+                    Return True
+                End If
+            End If
+            Return AcadDocs.Count
+        End If
+    End Function
+
 
 End Class

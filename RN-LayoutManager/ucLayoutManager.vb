@@ -204,8 +204,6 @@ Public Class ucLayoutManager
         End If
     End Sub
 
-
-
     Public Sub resetList()
         'reset check count
         iCheckCount = 0
@@ -234,6 +232,7 @@ Public Class ucLayoutManager
         'current layout control
         Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
+        myCntrl.PlotStyle = "" 'model has no plotstyle
         myCntrl.IsModel = True
         drag_drop_scroll_amount = myCntrl.Height + 40
         'hide button print and checkbox
@@ -245,14 +244,17 @@ Public Class ucLayoutManager
         ' Get the layout dictionary of the current database
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layAndTabOID As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Dim layPlotStyle As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Try
             Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
                 For Each entry As DBDictionaryEntry In layDict
                     Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
+                    Dim sPlotStyleTmp As String = lay.CurrentStyleSheet & " | " & lay.PlotConfigurationName
                     layAndTab.Add(lay.TabOrder, lay.LayoutName)
                     'layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
                     layAndTabOID.Add(lay.TabOrder, lay.Handle.ToString)
+                    layPlotStyle.Add(lay.TabOrder, sPlotStyleTmp)
                 Next
                 trx.Commit()
             End Using
@@ -260,20 +262,24 @@ Public Class ucLayoutManager
             MsgBox("Fout bij het laden van de Layouts " & ex.Message)
         End Try
         Dim iTabIndex As Integer = 1 'model = 0
+        Dim sPlotStyle As String = "PlotStyle.ctb"
         Try
             For Each sLayoutName In layAndTab.Values
                 'add name to list except Model
                 If sLayoutName = "Model" Then
 
                 Else
+                    sPlotStyle = "-"
                     myCntrl = New RN_LayoutItems.RN_UCLayoutItem()
                     myCntrl.LayoutName = sLayoutName
-                    myCntrl.updateItem()
                     myCntrl.TabIndex = iTabIndex
                     If layAndTabOID.ContainsKey(iTabIndex) Then
                         'myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
                         myCntrl.LayoutHandle = layAndTabOID.Item(iTabIndex)
+                        sPlotStyle = layPlotStyle.Item(iTabIndex)
                     End If
+                    myCntrl.PlotStyle = sPlotStyle
+                    myCntrl.updateItem()
                     'add handlers to register functions for items
                     AddHandler myCntrl.View_Click, AddressOf ItemViewClick
                     AddHandler myCntrl.LayoutNameEdit_KeyDown, AddressOf renameLayout
@@ -291,6 +297,7 @@ Public Class ucLayoutManager
                         myCntrl.IsCurrent = False
                     End If
                     myCntrl.isCurrentLayout()
+                    myCntrl.Width = flowLayouts.Width
                     'add layout to control flow
                     If bLoadFromList Then
                         'layout list is saved in dictionary, load this list
@@ -1040,16 +1047,51 @@ Public Class ucLayoutManager
                 PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Clear()
             End If
             For Each plotStyle As String In PlotSettingsValidator.Current.GetPlotStyleSheetList()
-                    If Not pstyleArray.Contains(plotStyle) Then
-                        Dim mnuItm As New ToolStripMenuItem
-                        mnuItm.Text = plotStyle
-                        mnuItm.Tag = plotStyle
-                        PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Add(mnuItm)
-                        pstyleArray.Add(plotStyle)
-                    End If
-                Next
+                If Not pstyleArray.Contains(plotStyle) And plotStyle.ToUpper.Contains(".CTB") Then
+                    Dim mnuItm As New ToolStripMenuItem
+                    mnuItm.Text = plotStyle
+                    mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+                    'AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
+                    AddHandler mnuItm.Click, AddressOf ChangePlotStyle
+                    PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Add(mnuItm)
+                    pstyleArray.Add(plotStyle)
+                End If
+            Next
             End If
     End Sub
+
+    Public Function ChangePlotStyle(ByVal sender As Object, ByVal e As EventArgs)
+        Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltStyle.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        Dim sLayName As String = myCntrl.LayoutName
+        'MsgBox(mnuPltStyle.Text)
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                    For Each entry As DBDictionaryEntry In layDict
+                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                        If sLayName = lay.LayoutName Then
+                            Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
+                            'Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
+                            'ModifyLayout("verwijderen", myCntrl)
+                            'set stylesheet
+                            Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                            plotSetVal.RefreshLists(lay)
+                            plotSetVal.SetCurrentStyleSheet(lay, mnuPltStyle.Text)
+                            trx.Commit()
+                            myCntrl.PlotStyle = sPlotConfig
+                            myCntrl.updateItem()
+                            Exit For
+                        End If
+                    Next
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij wijzigen van de PlotStyle " & ex.Message)
+        End Try
+        Return True
+    End Function
 
     Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)
         Dim selectedItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
@@ -1785,14 +1827,5 @@ Public Class ucLayoutManager
         End If
     End Sub
 
-    Private Sub PlotstyleTableWijzigenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PlotstyleTableWijzigenToolStripMenuItem.Click
-        acDoc.Editor.WriteMessage(vbLf & "Plot styles: ")
-
-        acDoc.Editor.WriteMessage(vbLf & "Pstylemode: " & pstylemode)
-        For Each plotStyle As String In PlotSettingsValidator.Current.GetPlotStyleSheetList()
-            ' Output the names of the available plot styles
-            acDoc.Editor.WriteMessage(vbLf & "  " & plotStyle)
-        Next
-    End Sub
 
 End Class

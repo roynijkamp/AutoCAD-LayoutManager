@@ -53,6 +53,7 @@ Partial Class ucLayoutManager
         Me.cmdRefreshList = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.PlotSinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -68,10 +69,9 @@ Partial Class ucLayoutManager
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ContextMenuDWFoptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PlotSinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -426,7 +426,14 @@ Partial Class ucLayoutManager
         '
         Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlotSinglesheetDWFToolStripMenuItem, Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection, Me.ToolStripMenuItem4, Me.PlotstyleTableWijzigenToolStripMenuItem})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(195, 154)
+        Me.SubMenu.Size = New System.Drawing.Size(195, 132)
+        '
+        'PlotSinglesheetDWFToolStripMenuItem
+        '
+        Me.PlotSinglesheetDWFToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_DWF
+        Me.PlotSinglesheetDWFToolStripMenuItem.Name = "PlotSinglesheetDWFToolStripMenuItem"
+        Me.PlotSinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.PlotSinglesheetDWFToolStripMenuItem.Text = "Plot Singlesheet DWF"
         '
         'LayoutKopierenToolStripMenuItem
         '
@@ -518,6 +525,12 @@ Partial Class ucLayoutManager
         Me.ContextMenuDWFoptions.Name = "ContextMenuStrip1"
         Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 70)
         '
+        'SinglesheetDWFToolStripMenuItem
+        '
+        Me.SinglesheetDWFToolStripMenuItem.Name = "SinglesheetDWFToolStripMenuItem"
+        Me.SinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(256, 22)
+        Me.SinglesheetDWFToolStripMenuItem.Text = "Singlesheet DWF"
+        '
         'sPDFenMDWF
         '
         Me.sPDFenMDWF.Name = "sPDFenMDWF"
@@ -529,19 +542,6 @@ Partial Class ucLayoutManager
         Me.mPDFenMDWF.Name = "mPDFenMDWF"
         Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
         Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
-        '
-        'SinglesheetDWFToolStripMenuItem
-        '
-        Me.SinglesheetDWFToolStripMenuItem.Name = "SinglesheetDWFToolStripMenuItem"
-        Me.SinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(256, 22)
-        Me.SinglesheetDWFToolStripMenuItem.Text = "Singlesheet DWF"
-        '
-        'PlotSinglesheetDWFToolStripMenuItem
-        '
-        Me.PlotSinglesheetDWFToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_DWF
-        Me.PlotSinglesheetDWFToolStripMenuItem.Name = "PlotSinglesheetDWFToolStripMenuItem"
-        Me.PlotSinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.PlotSinglesheetDWFToolStripMenuItem.Text = "Plot Singlesheet DWF"
         '
         'ucLayoutManager
         '
