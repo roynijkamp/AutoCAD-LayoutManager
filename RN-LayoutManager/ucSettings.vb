@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Windows.Forms
+Imports System.Xml
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
 
@@ -8,6 +9,7 @@ Public Class ucSettings
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim sPlotPreferences As String = "PlotPresets.json"
+    Dim sPackageContents As String = "PackageContents2.xml"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
@@ -18,6 +20,7 @@ Public Class ucSettings
     Dim bTrashDSD As Boolean = True
     Dim dtPlotPresets As System.Data.DataTable
     Dim bIsLoading As Boolean = False
+    Dim bAutoLoad As Boolean = True
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
             txtUserSaveFolder.Enabled = True
@@ -100,6 +103,7 @@ Public Class ucSettings
             End Select
             sDefaultPlottingDevice = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
             loadPlotConfigs()
+            bAutoLoad = iniFile.GetBoolean("appsettings", "autoload", bAutoLoad)
         Else
             'eerst check of map wel bestaat
             If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
@@ -110,6 +114,7 @@ Public Class ucSettings
         End If
         lblVersion.Text = sCurrVersion
         bIsLoading = False
+        chkAutoLoad.Checked = bAutoLoad
     End Sub
 
     Private Sub radioPDFfolderAsk_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFfolderAsk.CheckedChanged
@@ -139,6 +144,24 @@ Public Class ucSettings
             cmbPlottingDevice.SelectedIndex = iSelectedIndex
         Else
         End If
+    End Sub
+
+    Public Sub updatePackageContents(ByVal bAutoLoad As Boolean)
+        'Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
+        'Dim myXML As New XmlDocument()
+        'myXML.Load(sSettingsFile)
+        'Dim myXMLnodeList As XmlNodeList = myXML.SelectNodes("/ApplicationPackage/Components")
+        'Dim sTemp As String
+        'For Each myXMLnode As XmlNode In myXMLnodeList
+        '    Dim myComponent As XmlNode = myXMLnode.SelectSingleNode("/ComponentEntry")
+        '    'myComponent.Attributes("LoadOnAppearance").Value = bAutoLoad.ToString
+
+        '    For Each att As XmlAttribute In myComponent.Attributes
+        '        sTemp = sTemp & att.Name & " - " & att.Value & vbCrLf
+        '    Next
+
+        'Next
+        'MsgBox(sTemp)
     End Sub
 
     Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
@@ -240,5 +263,11 @@ Public Class ucSettings
         If e.Button = MouseButtons.Right Then
             chkListboxTemplates.SelectedIndex = chkListboxTemplates.IndexFromPoint(e.X, e.Y)
         End If
+    End Sub
+
+    Private Sub chkAutoLoad_CheckedChanged(sender As Object, e As EventArgs) Handles chkAutoLoad.CheckedChanged
+        bAutoLoad = chkAutoLoad.Checked
+        iniFile.WriteBoolean("appsettings", "autoload", bAutoLoad)
+        'updatePackageContents(bAutoLoad)
     End Sub
 End Class

@@ -39,9 +39,10 @@ Partial Class ucSettings
         Me.cmdDebugOptions = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.chkListboxTemplates = New System.Windows.Forms.CheckedListBox()
+        Me.cmdBrowseLayoutTemplate = New System.Windows.Forms.Button()
         Me.editListTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.VerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmdBrowseLayoutTemplate = New System.Windows.Forms.Button()
+        Me.chkAutoLoad = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -224,6 +225,15 @@ Partial Class ucSettings
         Me.chkListboxTemplates.Size = New System.Drawing.Size(383, 139)
         Me.chkListboxTemplates.TabIndex = 3
         '
+        'cmdBrowseLayoutTemplate
+        '
+        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(18, 22)
+        Me.cmdBrowseLayoutTemplate.Name = "cmdBrowseLayoutTemplate"
+        Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(379, 20)
+        Me.cmdBrowseLayoutTemplate.TabIndex = 1
+        Me.cmdBrowseLayoutTemplate.Text = "Template File toevoegen"
+        Me.cmdBrowseLayoutTemplate.UseVisualStyleBackColor = True
+        '
         'editListTemplates
         '
         Me.editListTemplates.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.VerwijderenToolStripMenuItem})
@@ -236,19 +246,23 @@ Partial Class ucSettings
         Me.VerwijderenToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.VerwijderenToolStripMenuItem.Text = "Verwijderen"
         '
-        'cmdBrowseLayoutTemplate
+        'chkAutoLoad
         '
-        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(18, 22)
-        Me.cmdBrowseLayoutTemplate.Name = "cmdBrowseLayoutTemplate"
-        Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(379, 20)
-        Me.cmdBrowseLayoutTemplate.TabIndex = 1
-        Me.cmdBrowseLayoutTemplate.Text = "Template File toevoegen"
-        Me.cmdBrowseLayoutTemplate.UseVisualStyleBackColor = True
+        Me.chkAutoLoad.AutoSize = True
+        Me.chkAutoLoad.Checked = True
+        Me.chkAutoLoad.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkAutoLoad.Location = New System.Drawing.Point(8, 423)
+        Me.chkAutoLoad.Name = "chkAutoLoad"
+        Me.chkAutoLoad.Size = New System.Drawing.Size(198, 17)
+        Me.chkAutoLoad.TabIndex = 8
+        Me.chkAutoLoad.Text = "Layout Manager automatisch starten"
+        Me.chkAutoLoad.UseVisualStyleBackColor = True
         '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.chkAutoLoad)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.grpDebugOptions)
@@ -290,4 +304,5 @@ Partial Class ucSettings
     Friend WithEvents editListTemplates As Windows.Forms.ContextMenuStrip
     Friend WithEvents VerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents chkListboxTemplates As Windows.Forms.CheckedListBox
+    Friend WithEvents chkAutoLoad As Windows.Forms.CheckBox
 End Class

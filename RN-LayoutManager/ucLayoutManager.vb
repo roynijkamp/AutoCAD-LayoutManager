@@ -50,6 +50,7 @@ Public Class ucLayoutManager
     Dim dIncrementValue(0 To 99) As Double
     'plot vars
     Dim pstylemode As String
+    Dim aPstyleLayouts As List(Of String) = New List(Of String)
     'filter values
     Dim aFilters As List(Of String)
     'Active Drawing Tracking
@@ -856,6 +857,7 @@ Public Class ucLayoutManager
     End Sub
 
     Public Function itterateList(ByVal sAction As String)
+        aPstyleLayouts = New List(Of String)
         Dim CurrFound As Boolean = False
         Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem
         getCurrentLayout()
@@ -869,12 +871,15 @@ Public Class ucLayoutManager
                     If sAction = "invert" Then
                         myCntrl.SetCheckState(Not myCntrl.CheckState)
                     End If
+                    If sAction = "plotstyle" Then
+                        aPstyleLayouts.Add(myCntrl.LayoutName)
+                    End If
                 Else 'layout is unchecked
                     If sAction = "select" Or sAction = "invert" Then
                         myCntrl.SetCheckState(Not myCntrl.CheckState)
                     End If
                 End If
-
+                'current layout markeren
                 If sAction = "iscurrent" Then
                     'active layout markeren
                     If myCntrl.LayoutName = sCurrentLayout Then
@@ -886,6 +891,7 @@ Public Class ucLayoutManager
                     End If
                     myCntrl.isCurrentLayout()
                 End If
+
             End If
         Next
         If sAction = "iscurrent" Then
@@ -896,7 +902,7 @@ Public Class ucLayoutManager
                 loadLayouts()
             End If
         End If
-            Return True
+        Return True
     End Function
 
 
@@ -1060,38 +1066,78 @@ Public Class ucLayoutManager
             End If
     End Sub
 
+    ''' <summary>
+    ''' ChangePlotStyle
+    ''' </summary>
+    ''' <param name="sender">ToolStripMenuItem</param>
+    ''' <param name="e"></param>
+    ''' <returns></returns>
     Public Function ChangePlotStyle(ByVal sender As Object, ByVal e As EventArgs)
+        Dim bChangeBatch As Boolean = False
+        If iCheckCount > 1 Then
+            If MsgBox("Wilt u de wijziging toepassen op de geselecteerde layouts?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                bChangeBatch = True
+                itterateList("plotstyle")
+            End If
+        End If
+
         Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltStyle.Tag, RN_LayoutItems.RN_UCLayoutItem)
         Dim sLayName As String = myCntrl.LayoutName
-        'MsgBox(mnuPltStyle.Text)
-        Try
-            Using acLockDoc As DocumentLock = acDoc.LockDocument
-                Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
-                    Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
-                    For Each entry As DBDictionaryEntry In layDict
-                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
-                        If sLayName = lay.LayoutName Then
-                            Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
-                            'Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
-                            'ModifyLayout("verwijderen", myCntrl)
-                            'set stylesheet
-                            Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
-                            plotSetVal.RefreshLists(lay)
-                            plotSetVal.SetCurrentStyleSheet(lay, mnuPltStyle.Text)
-                            trx.Commit()
-                            myCntrl.PlotStyle = sPlotConfig
-                            myCntrl.updateItem()
-                            Exit For
-                        End If
-                    Next
+        If bChangeBatch = False Then
+            Try
+                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                    Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                        For Each entry As DBDictionaryEntry In layDict
+                            Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                            If sLayName = lay.LayoutName Then
+                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
+                                'set stylesheet
+                                Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                                plotSetVal.RefreshLists(lay)
+                                plotSetVal.SetCurrentStyleSheet(lay, mnuPltStyle.Text)
+                                trx.Commit()
+                                myCntrl.PlotStyle = sPlotConfig
+                                myCntrl.updateItem()
+                                Exit For
+                            End If
+                        Next
+                    End Using
                 End Using
-            End Using
-        Catch ex As Exception
-            MsgBox("Fout bij wijzigen van de PlotStyle " & ex.Message)
-        End Try
+            Catch ex As Exception
+                MsgBox("Fout bij wijzigen van de PlotStyle " & ex.Message)
+            End Try
+        Else
+            Try
+                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                    Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                        For Each entry As DBDictionaryEntry In layDict
+                            Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                            If aPstyleLayouts.Contains(lay.LayoutName) Then
+                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
+                                'set stylesheet
+                                Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                                plotSetVal.RefreshLists(lay)
+                                plotSetVal.SetCurrentStyleSheet(lay, mnuPltStyle.Text)
+                                myCntrl.PlotStyle = sPlotConfig
+                                myCntrl.updateItem()
+                            End If
+                        Next
+                        trx.Commit()
+                    End Using
+                End Using
+                loadLayouts()
+            Catch ex As Exception
+                MsgBox("Fout bij wijzigen van de PlotStyle " & ex.Message)
+            End Try
+        End If
         Return True
     End Function
+
+
+
 
     Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)
         Dim selectedItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
