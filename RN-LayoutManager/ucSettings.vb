@@ -9,7 +9,7 @@ Public Class ucSettings
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim sPlotPreferences As String = "PlotPresets.json"
-    Dim sPackageContents As String = "PackageContents2.xml"
+    Dim sPackageContents As String = "PackageContents.xml"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
@@ -59,62 +59,66 @@ Public Class ucSettings
     End Sub
     Public Sub loadSettings()
         bIsLoading = True
-        'check of ini bestand bestaat, zo ja: instellingen laden
-        If File.Exists(sIniDir & sIniFile) Then
-            'bestand bestaat, instelingen laden
-            iniFile = New clsINI(sIniDir & sIniFile)
-            'versie updaten
-            iniFile.WriteString("appsettings", "version", sCurrVersion)
-            sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
-            txtUserSaveFolder.Text = sPDFuserFolder
-            sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
-            'layout templates laden
-            Dim temp As String = iniFile.GetString("template", "layouts", "")
-            sLayoutTemplates = New List(Of String)(temp.Split(","c))
-            chkListboxTemplates.Items.Clear()
-            For Each sItem As String In sLayoutTemplates
-                If Not sItem = vbNullString Then
-                    Dim bChecked As Boolean = False
-                    If sItem = sLayoutTemplate Then
-                        bChecked = True
-                    End If
-                    chkListboxTemplates.Items.Add(sItem, bChecked)
-                End If
-            Next
-            If chkListboxTemplates.CheckedItems.Count = 0 Then
-                'niets geselecteerd, eerste item selecteren
-                If chkListboxTemplates.Items.Count > 0 Then
-                    sLayoutTemplate = chkListboxTemplates.Items(0).ToString
-                    iniFile.WriteString("template", "layout", sLayoutTemplate)
-                    chkListboxTemplates.SetSelected(0, True)
-                End If
-            End If
-
-            sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
-            Select Case sDefaultOutputLocation
-                Case "drawingfolder"
-                    radioPDFdrawingFolder.Checked = True
-                Case "userlocation"
-                    radioPDFuserFolder.Checked = True
-                Case "askonplot"
-                    radioPDFfolderAsk.Checked = True
-                Case Else
-                    radioPDFdrawingFolder.Checked = True
-            End Select
-            sDefaultPlottingDevice = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
-            loadPlotConfigs()
-            bAutoLoad = iniFile.GetBoolean("appsettings", "autoload", bAutoLoad)
-        Else
-            'eerst check of map wel bestaat
-            If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
-                My.Computer.FileSystem.CreateDirectory(sIniDir)
+        Try
+            'check of ini bestand bestaat, zo ja: instellingen laden
+            If File.Exists(sIniDir & sIniFile) Then
+                'bestand bestaat, instelingen laden
                 iniFile = New clsINI(sIniDir & sIniFile)
+                'versie updaten
                 iniFile.WriteString("appsettings", "version", sCurrVersion)
+                sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
+                txtUserSaveFolder.Text = sPDFuserFolder
+                sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
+                'layout templates laden
+                Dim temp As String = iniFile.GetString("template", "layouts", "")
+                sLayoutTemplates = New List(Of String)(temp.Split(","c))
+                chkListboxTemplates.Items.Clear()
+                For Each sItem As String In sLayoutTemplates
+                    If Not sItem = vbNullString Then
+                        Dim bChecked As Boolean = False
+                        If sItem = sLayoutTemplate Then
+                            bChecked = True
+                        End If
+                        chkListboxTemplates.Items.Add(sItem, bChecked)
+                    End If
+                Next
+                If chkListboxTemplates.CheckedItems.Count = 0 Then
+                    'niets geselecteerd, eerste item selecteren
+                    If chkListboxTemplates.Items.Count > 0 Then
+                        sLayoutTemplate = chkListboxTemplates.Items(0).ToString
+                        iniFile.WriteString("template", "layout", sLayoutTemplate)
+                        chkListboxTemplates.SetSelected(0, True)
+                    End If
+                End If
+
+                sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
+                Select Case sDefaultOutputLocation
+                    Case "drawingfolder"
+                        radioPDFdrawingFolder.Checked = True
+                    Case "userlocation"
+                        radioPDFuserFolder.Checked = True
+                    Case "askonplot"
+                        radioPDFfolderAsk.Checked = True
+                    Case Else
+                        radioPDFdrawingFolder.Checked = True
+                End Select
+                sDefaultPlottingDevice = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+                loadPlotConfigs()
+                bAutoLoad = iniFile.GetBoolean("appsettings", "autoload", bAutoLoad)
+            Else
+                'eerst check of map wel bestaat
+                If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
+                    My.Computer.FileSystem.CreateDirectory(sIniDir)
+                    iniFile = New clsINI(sIniDir & sIniFile)
+                    iniFile.WriteString("appsettings", "version", sCurrVersion)
+                End If
             End If
-        End If
-        lblVersion.Text = sCurrVersion
-        bIsLoading = False
-        chkAutoLoad.Checked = bAutoLoad
+            lblVersion.Text = sCurrVersion
+            bIsLoading = False
+            chkAutoLoad.Checked = bAutoLoad
+        Catch ex As Exception
+            MsgBox("Fout bij het laden van de instellingen " & vbCrLf & ex.Message)
+        End Try
     End Sub
 
     Private Sub radioPDFfolderAsk_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFfolderAsk.CheckedChanged
@@ -145,23 +149,42 @@ Public Class ucSettings
         Else
         End If
     End Sub
-
+    ''' <summary>
+    ''' Update PackageContents XML File
+    ''' </summary>
+    ''' <param name="bAutoLoad">Boolean</param>
     Public Sub updatePackageContents(ByVal bAutoLoad As Boolean)
-        'Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
-        'Dim myXML As New XmlDocument()
-        'myXML.Load(sSettingsFile)
-        'Dim myXMLnodeList As XmlNodeList = myXML.SelectNodes("/ApplicationPackage/Components")
-        'Dim sTemp As String
-        'For Each myXMLnode As XmlNode In myXMLnodeList
-        '    Dim myComponent As XmlNode = myXMLnode.SelectSingleNode("/ComponentEntry")
-        '    'myComponent.Attributes("LoadOnAppearance").Value = bAutoLoad.ToString
+        Try
+            Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
+            Dim myXML As New XmlDocument()
+            myXML.Load(sSettingsFile)
+            Dim myXMLnodeList As XmlNodeList = myXML.SelectNodes("/ApplicationPackage/Components")
+            'Dim sTemp As String
+            For Each myXMLnode As XmlNode In myXMLnodeList
+                'sTemp = sTemp & myXMLnode.ChildNodes.Count.ToString & vbCrLf
+                For Each myChildNode As XmlNode In myXMLnode.ChildNodes
+                    'sTemp = sTemp & myChildNode.Name & vbCrLf
+                    If myChildNode.Name = "ComponentEntry" Then
+                        'If myChildNode.Attributes.GetNamedItem("LoadOnAppearance") Then
+                        If myChildNode.Attributes.ItemOf("LoadOnAppearance") Is Nothing Then
+                            'attribute bestaat niet, toevoegen
+                            Dim myAtt As XmlAttribute = myXML.CreateAttribute("LoadOnAppearance")
+                            myAtt.Value = CStr(bAutoLoad)
+                            myChildNode.Attributes.Append(myAtt)
+                        Else
+                            'waarde opslaan
+                            Dim myAtt As XmlAttribute = myChildNode.Attributes.GetNamedItem("LoadOnAppearance")
+                            myAtt.Value = CStr(bAutoLoad)
+                        End If
 
-        '    For Each att As XmlAttribute In myComponent.Attributes
-        '        sTemp = sTemp & att.Name & " - " & att.Value & vbCrLf
-        '    Next
-
-        'Next
-        'MsgBox(sTemp)
+                    End If
+                Next
+            Next
+            myXML.Save(sSettingsFile)
+            'MsgBox(sTemp)
+        Catch ex As Exception
+            MsgBox("Fout bij het laden van de XML" & vbCrLf & ex.Message)
+        End Try
     End Sub
 
     Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
@@ -267,7 +290,10 @@ Public Class ucSettings
 
     Private Sub chkAutoLoad_CheckedChanged(sender As Object, e As EventArgs) Handles chkAutoLoad.CheckedChanged
         bAutoLoad = chkAutoLoad.Checked
+        iniFile = New clsINI(sIniDir & sIniFile)
         iniFile.WriteBoolean("appsettings", "autoload", bAutoLoad)
-        'updatePackageContents(bAutoLoad)
+        updatePackageContents(bAutoLoad)
     End Sub
+
+
 End Class

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RN Layout Manager"
-#define MyAppVersion "1.0.18109.737"
+#define MyAppVersion "1.0.18185.904"
 #define MyAppPublisher "Roy Nijkamp"
 #define MyAppURL "http://www.roynijkamp.nl"
 
@@ -47,6 +47,7 @@ Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-attribute-listitem.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutManager.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\DropDownContainer.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Code]
