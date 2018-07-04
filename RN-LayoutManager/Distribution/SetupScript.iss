@@ -35,19 +35,19 @@ Name: "dutch"; MessagesFile: "compiler:Languages\Dutch.isl"
 ;DLL laden om te checken of AutoCAD draait
 Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\psvince.dll"; Flags: dontcopy
 ;DLL opslaan om te kunnen gebruiken bij uninstall
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\psvince.dll"; Destdir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\psvince.dll"; Destdir: "{app}\Contents"; Flags: ignoreversion
 ;Libraries and settings
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\PlotPresets.json"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\PackageContents.xml"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\Handleiding.pdf"; DestDir: "{app}\Docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\PlotPresets.json"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\PackageContents.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\Handleiding.pdf"; DestDir: "{app}\Docs"; Flags: ignoreversion
 ;## CORE
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\logo.ico"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Microsoft.VisualBasic.PowerPacks.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutItems.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-attribute-listitem.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutManager.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\DropDownContainer.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\Distribution\logo.ico"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Microsoft.VisualBasic.PowerPacks.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutItems.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-attribute-listitem.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutManager.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
+Source: "K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\DropDownContainer.dll"; DestDir: "{app}\Contents"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Code]

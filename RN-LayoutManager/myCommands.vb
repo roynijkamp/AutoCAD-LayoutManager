@@ -8,15 +8,39 @@ Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Windows
 Imports Autodesk.AutoCAD.Windows.ToolPalette
+Imports System.IO
 
 ' This line is not mandatory, but improves loading performances
 <Assembly: CommandClass(GetType(RN_LayoutManager.MyCommands))>
 Namespace RN_LayoutManager
 
     Public Class MyCommands
+        'auto-enable toolpalette
+        Implements Autodesk.AutoCAD.Runtime.IExtensionApplication
         Friend Shared m_palette As Autodesk.AutoCAD.Windows.PaletteSet = Nothing
 
-        ' Application Session Command with localized name
+        Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
+        Dim sIniFile As String = "\layoutmanager.ini"
+        Dim iniFile As clsINI
+        Dim bAutoload As Boolean = True
+
+        Public Sub Initialize() Implements IExtensionApplication.Initialize
+            MsgBox("Init Layoutman")
+            If File.Exists(sIniDir & sIniFile) Then
+                'bestand bestaat, instelingen laden
+                iniFile = New clsINI(sIniDir & sIniFile)
+                bAutoload = iniFile.GetBoolean("appsettings", "autoload", bAutoload)
+            End If
+            If bAutoload = True Then
+                layoutman() 'start program
+            End If
+
+        End Sub
+
+        Public Sub Terminate() Implements IExtensionApplication.Terminate
+            'afsluiten
+        End Sub
+
         <CommandMethod("layoutman", CommandFlags.Modal + CommandFlags.Session)>
         Public Sub layoutman()
             If m_palette Is Nothing Then
@@ -34,6 +58,7 @@ Namespace RN_LayoutManager
             m_palette.Visible = True
             m_palette.Activate(0)
         End Sub
+
 
 
     End Class

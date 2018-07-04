@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Reflection
+Imports System.Security.AccessControl
 Imports System.Windows.Forms
 Imports System.Xml
 Imports Autodesk.AutoCAD.ApplicationServices
@@ -10,6 +11,7 @@ Public Class ucSettings
     Dim sIniFile As String = "\layoutmanager.ini"
     Dim sPlotPreferences As String = "PlotPresets.json"
     Dim sPackageContents As String = "PackageContents.xml"
+    Dim sPackageContentsNew As String = "PackageContentsNew.xml"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
@@ -114,8 +116,8 @@ Public Class ucSettings
                 End If
             End If
             lblVersion.Text = sCurrVersion
-            bIsLoading = False
             chkAutoLoad.Checked = bAutoLoad
+            bIsLoading = False
         Catch ex As Exception
             MsgBox("Fout bij het laden van de instellingen " & vbCrLf & ex.Message)
         End Try
@@ -154,8 +156,21 @@ Public Class ucSettings
     ''' </summary>
     ''' <param name="bAutoLoad">Boolean</param>
     Public Sub updatePackageContents(ByVal bAutoLoad As Boolean)
+        Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
+        Dim sSettingsFileNew As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContentsNew
         Try
-            Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
+            Dim UserAccount As String = "Everyone"
+            Dim FileInfo As IO.FileInfo = New IO.FileInfo(sSettingsFile)
+            Dim FileAcl As New FileSecurity
+            'FileAcl.AddAccessRule(New FileSystemAccessRule(UserAccount, FileSystemRights.Modify, AccessControlType.Allow))
+            FileAcl.AddAccessRule(New FileSystemAccessRule(System.Security.Principal.WellKnownSidType.WorldSid.ToString, FileSystemRights.Modify, AccessControlType.Allow))
+            'FolderAcl.SetAccessRuleProtection(True, False) 'uncomment to remove existing permissions
+            FileInfo.SetAccessControl(FileAcl)
+        Catch ex As Exception
+            MsgBox("Fout bij het aanpassen van de permissies [" & System.Security.Principal.WellKnownSidType.WorldSid.ToString & "]" & vbCrLf & ex.Message & vbCrLf & ex.Source)
+        End Try
+
+        Try
             Dim myXML As New XmlDocument()
             myXML.Load(sSettingsFile)
             Dim myXMLnodeList As XmlNodeList = myXML.SelectNodes("/ApplicationPackage/Components")
@@ -165,25 +180,25 @@ Public Class ucSettings
                 For Each myChildNode As XmlNode In myXMLnode.ChildNodes
                     'sTemp = sTemp & myChildNode.Name & vbCrLf
                     If myChildNode.Name = "ComponentEntry" Then
-                        'If myChildNode.Attributes.GetNamedItem("LoadOnAppearance") Then
-                        If myChildNode.Attributes.ItemOf("LoadOnAppearance") Is Nothing Then
-                            'attribute bestaat niet, toevoegen
-                            Dim myAtt As XmlAttribute = myXML.CreateAttribute("LoadOnAppearance")
-                            myAtt.Value = CStr(bAutoLoad)
-                            myChildNode.Attributes.Append(myAtt)
-                        Else
-                            'waarde opslaan
-                            Dim myAtt As XmlAttribute = myChildNode.Attributes.GetNamedItem("LoadOnAppearance")
-                            myAtt.Value = CStr(bAutoLoad)
-                        End If
+                        'If myChildNode.Attributes.ItemOf("LoadOnAppearance") Is Nothing Then
+                        '    'attribute bestaat niet, toevoegen
+                        '    Dim myAtt As XmlAttribute = myXML.CreateAttribute("LoadOnAppearance")
+                        '    myAtt.Value = CStr(bAutoLoad)
+                        '    myChildNode.Attributes.Append(myAtt)
+                        'Else
+                        '    'waarde opslaan
+                        '    Dim myAtt As XmlAttribute = myChildNode.Attributes.GetNamedItem("LoadOnAppearance")
+                        '    myAtt.Value = CStr(bAutoLoad)
+                        'End If
 
                     End If
                 Next
             Next
             myXML.Save(sSettingsFile)
+            myXML = Nothing
             'MsgBox(sTemp)
         Catch ex As Exception
-            MsgBox("Fout bij het laden van de XML" & vbCrLf & ex.Message)
+            MsgBox("Fout bij het laden van de XML " & vbCrLf & ex.Message)
         End Try
     End Sub
 
@@ -292,8 +307,13 @@ Public Class ucSettings
         bAutoLoad = chkAutoLoad.Checked
         iniFile = New clsINI(sIniDir & sIniFile)
         iniFile.WriteBoolean("appsettings", "autoload", bAutoLoad)
-        updatePackageContents(bAutoLoad)
+        If bIsLoading = False Then
+            'wijzigingen alleen opslaan bij user action
+            'updatePackageContents(bAutoLoad)
+        End If
     End Sub
 
-
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        updatePackageContents(bAutoLoad)
+    End Sub
 End Class
