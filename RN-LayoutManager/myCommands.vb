@@ -25,15 +25,7 @@ Namespace RN_LayoutManager
         Dim bAutoload As Boolean = True
 
         Public Sub Initialize() Implements IExtensionApplication.Initialize
-            MsgBox("Init Layoutman")
-            If File.Exists(sIniDir & sIniFile) Then
-                'bestand bestaat, instelingen laden
-                iniFile = New clsINI(sIniDir & sIniFile)
-                bAutoload = iniFile.GetBoolean("appsettings", "autoload", bAutoload)
-            End If
-            If bAutoload = True Then
-                layoutman() 'start program
-            End If
+
 
         End Sub
 
@@ -59,7 +51,18 @@ Namespace RN_LayoutManager
             m_palette.Activate(0)
         End Sub
 
-
+        <CommandMethod("autoloadLayoutMan")>
+        Public Sub autoloadLayoutMan()
+            'MsgBox("Init Layoutman")
+            If File.Exists(sIniDir & sIniFile) Then
+                'bestand bestaat, instelingen laden
+                iniFile = New clsINI(sIniDir & sIniFile)
+                bAutoload = iniFile.GetBoolean("appsettings", "autoload", bAutoload)
+            End If
+            If bAutoload = True Then
+                layoutman() 'start program
+            End If
+        End Sub
 
     End Class
 
