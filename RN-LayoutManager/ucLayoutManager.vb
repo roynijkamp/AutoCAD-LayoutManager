@@ -64,6 +64,7 @@ Public Class ucLayoutManager
     Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
         'tekening wordt geactiveerd
         Try
+            'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler activated DocumentManager_DocumentActivated")
             'remap vars to current document
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
@@ -72,7 +73,7 @@ Public Class ucLayoutManager
             loadLayouts()
             'Todo: implement load saved selection
             loadFilters()
-            AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            'AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             AddHandler acDoc.CommandEnded, New CommandEventHandler(AddressOf commandEnd)
             pstylemode = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("PSTYLEMODE").ToString
         Catch
@@ -82,12 +83,13 @@ Public Class ucLayoutManager
     Private Sub DocumentManager_DocumentToBeDeactivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
         'switch naar een andere tekening
         Try
+            'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler activated DocumentManager_DocumentToBeDeactivated")
             'Todo: implement save selection
             'remap vars to current document
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
             acEd = acDoc.Editor
-            RemoveHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+            'RemoveHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
             RemoveHandler acDoc.CommandEnded, AddressOf commandEnd
             resetList()
             resetFilter()
@@ -98,12 +100,14 @@ Public Class ucLayoutManager
 
     Private Sub DocumentManger_DocumentLayoutSwitched()
         'sub layout switched
+        'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler activated DocumentManger_DocumentLayoutSwitched")
         getCurrentLayout()
         itterateList("iscurrent")
     End Sub
 
     Private Sub DocumentManager_DocumentLayoutsModified()
-        getCurrentLayout()
+        'getCurrentLayout()
+        'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler activated DocumentManager_DocumentLayoutsModified")
         loadLayouts()
     End Sub
 
@@ -116,6 +120,7 @@ Public Class ucLayoutManager
         'MsgBox(e.GlobalCommandName)
         Select Case e.GlobalCommandName
             Case "LAYOUT_CONTROL"
+                'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler CommandEnd LAYOUT_CONTROL")
                 loadLayouts()
                 'Todo: implement load saved selection
                 loadFilters()
@@ -161,12 +166,12 @@ Public Class ucLayoutManager
 
     Private Sub LayoutManager_Load(sender As Object, e As EventArgs) Handles Me.Load
         '### Active Drawing Tracking
-        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDeactivated, AddressOf Me.DocumentManager_DocumentToBeDeactivated
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentToBeDestroyed, AddressOf Me.DocumentManager_DocumentToBeDeactivated
+        AddHandler Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.DocumentActivated, AddressOf Me.DocumentManager_DocumentActivated
         'set current layoutmanager
-        _lm = LayoutManager.Current
-        AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
+        '_lm = LayoutManager.Current
+        'AddHandler Me._lm.LayoutSwitched, AddressOf Me.DocumentManger_DocumentLayoutSwitched
 
 
         'tool toevoegen aan trusted path
@@ -218,6 +223,7 @@ Public Class ucLayoutManager
     ''' </summary>
     Public Sub loadLayouts(Optional ByVal bLoadFromList As Boolean = False)
         'reset and clear list
+        'clsFunctions.makeLog(sIniDir & "\log.txt", "Load Layouts")
         'reset check count
         iCheckCount = 0
         updateCheckLabel()
