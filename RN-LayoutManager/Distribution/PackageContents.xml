@@ -2,7 +2,7 @@
 <ApplicationPackage 
    SchemaVersion="1.0"
    Name="RN Layout Manager"
-   AppVersion="1.0.18019.912"
+   AppVersion="1.0.18187.857"
    ProductCode="{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"
    Author="R. Nijkamp"
    Icon="./Contents/logo.ico"
@@ -23,11 +23,12 @@
       SeriesMax="R23.0" />
 
     <ComponentEntry
-      AppName="layoutman"
+      AppName="layoutmanager"
       ModuleName="./Contents/RN-LayoutManager.dll"
-      AppDescription="layoutman"
+      AppDescription="layoutmanager"
       LoadOnAppearance="True">
-      <Commands GroupName="layoutman">
+      <Commands GroupName="layoutmanager">
+        <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
       </Commands>
     </ComponentEntry>
@@ -40,12 +41,13 @@
       SeriesMax="R23.0" />
 
     <ComponentEntry
-      AppName="layoutman"
+      AppName="layoutmanager"
       ModuleName="./Contents/RN-LayoutManager.dll"
-      AppDescription="layoutman"
+      AppDescription="layoutmanager"
       LoadOnAppearance="True">
-      <Commands GroupName="layoutman">
-        <Command Local="layoutman" Global="layoutman" StartupCommand="True" />
+      <Commands GroupName="layoutmanager">
+        <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
+        <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
       </Commands>
     </ComponentEntry>
 	</Components>

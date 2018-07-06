@@ -151,56 +151,7 @@ Public Class ucSettings
         Else
         End If
     End Sub
-    ''' <summary>
-    ''' Update PackageContents XML File
-    ''' </summary>
-    ''' <param name="bAutoLoad">Boolean</param>
-    Public Sub updatePackageContents(ByVal bAutoLoad As Boolean)
-        Dim sSettingsFile As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContents
-        Dim sSettingsFileNew As String = clsFunctions.getCoreDir().Replace("Contents", "") & sPackageContentsNew
-        Try
-            Dim UserAccount As String = "Everyone"
-            Dim FileInfo As IO.FileInfo = New IO.FileInfo(sSettingsFile)
-            Dim FileAcl As New FileSecurity
-            'FileAcl.AddAccessRule(New FileSystemAccessRule(UserAccount, FileSystemRights.Modify, AccessControlType.Allow))
-            FileAcl.AddAccessRule(New FileSystemAccessRule(System.Security.Principal.WellKnownSidType.WorldSid.ToString, FileSystemRights.Modify, AccessControlType.Allow))
-            'FolderAcl.SetAccessRuleProtection(True, False) 'uncomment to remove existing permissions
-            FileInfo.SetAccessControl(FileAcl)
-        Catch ex As Exception
-            MsgBox("Fout bij het aanpassen van de permissies [" & System.Security.Principal.WellKnownSidType.WorldSid.ToString & "]" & vbCrLf & ex.Message & vbCrLf & ex.Source)
-        End Try
 
-        Try
-            Dim myXML As New XmlDocument()
-            myXML.Load(sSettingsFile)
-            Dim myXMLnodeList As XmlNodeList = myXML.SelectNodes("/ApplicationPackage/Components")
-            'Dim sTemp As String
-            For Each myXMLnode As XmlNode In myXMLnodeList
-                'sTemp = sTemp & myXMLnode.ChildNodes.Count.ToString & vbCrLf
-                For Each myChildNode As XmlNode In myXMLnode.ChildNodes
-                    'sTemp = sTemp & myChildNode.Name & vbCrLf
-                    If myChildNode.Name = "ComponentEntry" Then
-                        'If myChildNode.Attributes.ItemOf("LoadOnAppearance") Is Nothing Then
-                        '    'attribute bestaat niet, toevoegen
-                        '    Dim myAtt As XmlAttribute = myXML.CreateAttribute("LoadOnAppearance")
-                        '    myAtt.Value = CStr(bAutoLoad)
-                        '    myChildNode.Attributes.Append(myAtt)
-                        'Else
-                        '    'waarde opslaan
-                        '    Dim myAtt As XmlAttribute = myChildNode.Attributes.GetNamedItem("LoadOnAppearance")
-                        '    myAtt.Value = CStr(bAutoLoad)
-                        'End If
-
-                    End If
-                Next
-            Next
-            myXML.Save(sSettingsFile)
-            myXML = Nothing
-            'MsgBox(sTemp)
-        Catch ex As Exception
-            MsgBox("Fout bij het laden van de XML " & vbCrLf & ex.Message)
-        End Try
-    End Sub
 
     Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
         iniFile = New clsINI(sIniDir & sIniFile)
@@ -313,7 +264,5 @@ Public Class ucSettings
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        updatePackageContents(bAutoLoad)
-    End Sub
+
 End Class

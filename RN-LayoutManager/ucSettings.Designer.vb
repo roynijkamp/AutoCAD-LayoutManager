@@ -43,7 +43,6 @@ Partial Class ucSettings
         Me.editListTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.VerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.chkAutoLoad = New System.Windows.Forms.CheckBox()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -259,20 +258,10 @@ Partial Class ucSettings
         Me.chkAutoLoad.Text = "Layout Manager automatisch starten"
         Me.chkAutoLoad.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(212, 423)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 9
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.chkAutoLoad)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.cmdDebugOptions)
@@ -316,5 +305,4 @@ Partial Class ucSettings
     Friend WithEvents VerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents chkListboxTemplates As Windows.Forms.CheckedListBox
     Friend WithEvents chkAutoLoad As Windows.Forms.CheckBox
-    Friend WithEvents Button1 As Windows.Forms.Button
 End Class
