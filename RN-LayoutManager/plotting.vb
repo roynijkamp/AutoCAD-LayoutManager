@@ -20,12 +20,13 @@ Public Class plotting
         Private layouts As IEnumerable(Of Layout)
         Private pdfSheetType As SheetType = SheetType.MultiPdf
         Private pdfOutputDIR As String
+        Private sPlottingDeviceOverride As String = ""
 
         Private bSuppressMessage As Boolean
 
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, bSuppressMessage As Boolean)
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, bSuppressMessage As Boolean, Optional sPlottingDeviceOverride As String = "")
             'get settings from INI
             iniFile = New clsINI(sIniDir & sIniFile)
             bTrashDSD = iniFile.GetBoolean("debugoptions", "trashdsd", bTrashDSD)
@@ -40,6 +41,7 @@ Public Class plotting
             Me.layouts = layouts
             Me.pdfSheetType = pdfSheetType
             Me.bSuppressMessage = bSuppressMessage
+            Me.sPlottingDeviceOverride = sPlottingDeviceOverride 'plotter override 
         End Sub
 
         Public Sub Publish()
@@ -156,7 +158,13 @@ Public Class plotting
 
             'selected plot preset in options
             iniFile = New clsINI(sIniDir & sIniFile)
-            Dim sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            Dim sSelectedPreset As String
+            'kijken of er een temporarily override is voor de plotter
+            If sPlottingDeviceOverride.Length = 0 Then
+                sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
+            Else
+                sSelectedPreset = sPlottingDeviceOverride
+            End If
             'define settings
             Dim sPdfType As String = "5" 'default single sheet PDF
             If Me.pdfSheetType = SheetType.MultiPdf Then

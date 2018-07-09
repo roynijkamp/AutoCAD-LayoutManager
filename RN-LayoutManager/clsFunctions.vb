@@ -12,7 +12,14 @@ Public Class clsFunctions
         getCoreDir = strAssemblyPath.Replace(strTmpPath(arrUbound), "")
     End Function
 
-
+    ''' <summary>
+    ''' Get plot presets
+    ''' </summary>
+    ''' <param name="sPresetFile"></param>
+    ''' <param name="dtPlotPresets"></param>
+    ''' <param name="iSelectedIndex"></param>
+    ''' <param name="sCurrentPreset"></param>
+    ''' <returns></returns>
     Public Shared Function loadPlotPresets(ByVal sPresetFile As String, ByRef dtPlotPresets As System.Data.DataTable, ByRef iSelectedIndex As Integer, ByVal sCurrentPreset As String)
         'bestaand bestand inladen
         dtPlotPresets.Columns.Add("id")
@@ -37,6 +44,27 @@ Public Class clsFunctions
             Return False
         End If
     End Function
+
+    Public Shared Function loadPlotPresets(ByVal sPresetFile As String) As List(Of String)
+        'bestaand bestand inladen
+        Dim sPlotDevices As List(Of String) = New List(Of String)
+
+        If File.Exists(sPresetFile) Then
+            Dim sJson As String = File.ReadAllText(sPresetFile)
+            Dim myJsonObject As JObject = JObject.Parse(sJson)
+            Dim aPresets As JArray = myJsonObject("presets")
+            For i = 0 To aPresets.Count - 1
+                Dim sPreset As String = aPresets(i).SelectToken("preset").ToString
+                If Not sPreset.ToLower = "dwf" Then
+                    sPlotDevices.Add(sPreset)
+                End If
+            Next
+            loadPlotPresets = sPlotDevices
+        Else
+            loadPlotPresets = sPlotDevices
+        End If
+    End Function
+
 
     ''' <summary>
     ''' Get Current plotstyle

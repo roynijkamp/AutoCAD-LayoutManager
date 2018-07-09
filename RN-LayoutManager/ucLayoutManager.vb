@@ -28,6 +28,7 @@ Public Class ucLayoutManager
     '/auto scroll during drag and drop
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
+    Dim sPlotPreferences As String = "PlotPresets.json"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String
     Dim sDefaultOutputLocation As String = ""
@@ -418,10 +419,12 @@ Public Class ucLayoutManager
         lblCheckCount.Text = "# " & iCheckCount.ToString ' & " selected"
     End Sub
 
-    Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs, Optional sDWF As Boolean = False, Optional myTmpCntrl As RN_LayoutItems.RN_UCLayoutItem = Nothing)
+    Public Function PlotLayout(ByVal sender As Object, ByVal e As System.EventArgs, Optional sDWF As Boolean = False, Optional myTmpCntrl As RN_LayoutItems.RN_UCLayoutItem = Nothing, Optional sOverrideDevice As String = "")
         Dim sOutputLocation As String = PDFoutputLocation()
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem
         If sDWF = True Then
+            myCntrl = myTmpCntrl
+        ElseIf Not sOverrideDevice = "" Then
             myCntrl = myTmpCntrl
         Else
             myCntrl = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
@@ -439,7 +442,7 @@ Public Class ucLayoutManager
 
                     acTrans.Commit()
                     If sDWF = False Then
-                        plotLayouts(SheetType.SinglePdf, layouts)
+                        plotLayouts(SheetType.SinglePdf, layouts, False, "pdf", sOverrideDevice)
                     Else
                         plotLayouts(SheetType.SingleDwf, layouts, False, "dwf")
                     End If
@@ -738,7 +741,7 @@ Public Class ucLayoutManager
     ''' </summary>
     ''' <param name="pdfSheetType"></param>
     ''' <returns></returns>
-    Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout), Optional bSuppressMessage As Boolean = False, Optional sFileExt As String = "pdf")
+    Public Function plotLayouts(ByVal pdfSheetType As SheetType, ByVal layouts As List(Of Layout), Optional bSuppressMessage As Boolean = False, Optional sFileExt As String = "pdf", Optional sOverridePlotDevice As String = "")
         Dim sOutputLocation As String = PDFoutputLocation()
 
         Dim db As Database = HostApplicationServices.WorkingDatabase
@@ -757,7 +760,7 @@ Public Class ucLayoutManager
             End If
 
 
-            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, bSuppressMessage)
+            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, bSuppressMessage, sOverridePlotDevice)
             plotter.Publish()
 
         Catch e As System.Exception
@@ -1063,14 +1066,38 @@ Public Class ucLayoutManager
                     Dim mnuItm As New ToolStripMenuItem
                     mnuItm.Text = plotStyle
                     mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
-                    'AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
                     AddHandler mnuItm.Click, AddressOf ChangePlotStyle
                     PlotstyleTableWijzigenToolStripMenuItem.DropDownItems.Add(mnuItm)
                     pstyleArray.Add(plotStyle)
                 End If
             Next
-            End If
+        End If
+        'add plot override enkel wanneer dit nog niet is toegevoegd
+        If Not PlotterOverrideToolStripMenuItem.HasDropDownItems = True Then
+            Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+            'PlotterOverrideToolStripMenuItem
+            For Each sPlotDevice As String In clsFunctions.loadPlotPresets(sSettingsFile)
+                Dim mnuItm As New ToolStripMenuItem
+                mnuItm.Text = sPlotDevice
+                mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+                AddHandler mnuItm.Click, AddressOf OverridePlotDevice
+                PlotterOverrideToolStripMenuItem.DropDownItems.Add(mnuItm)
+            Next
+        End If
     End Sub
+
+    Public Function OverridePlotDevice(ByVal sender As Object, ByVal e As EventArgs)
+        ''plot to DWF Singlesheet
+        'Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
+        'Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        ''send to plotter
+        'PlotLayout(sender, e, True, myCntrl)
+        Dim mnuPltOverride As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim sOverrideDeviceName As String = mnuPltOverride.Text
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltOverride.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        PlotLayout(sender, e, False, myCntrl, sOverrideDeviceName)
+        Return True
+    End Function
 
     ''' <summary>
     ''' ChangePlotStyle

@@ -72,6 +72,7 @@ Partial Class ucLayoutManager
         Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PlotterOverrideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -424,9 +425,9 @@ Partial Class ucLayoutManager
         '
         'SubMenu
         '
-        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlotSinglesheetDWFToolStripMenuItem, Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection, Me.ToolStripMenuItem4, Me.PlotstyleTableWijzigenToolStripMenuItem})
+        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlotSinglesheetDWFToolStripMenuItem, Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection, Me.ToolStripMenuItem4, Me.PlotstyleTableWijzigenToolStripMenuItem, Me.PlotterOverrideToolStripMenuItem})
         Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(195, 132)
+        Me.SubMenu.Size = New System.Drawing.Size(195, 176)
         '
         'PlotSinglesheetDWFToolStripMenuItem
         '
@@ -543,6 +544,12 @@ Partial Class ucLayoutManager
         Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
         Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
         '
+        'PlotterOverrideToolStripMenuItem
+        '
+        Me.PlotterOverrideToolStripMenuItem.Name = "PlotterOverrideToolStripMenuItem"
+        Me.PlotterOverrideToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.PlotterOverrideToolStripMenuItem.Text = "Plotter Override"
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -613,4 +620,5 @@ Partial Class ucLayoutManager
     Friend WithEvents PlotstyleTableWijzigenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents SinglesheetDWFToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents PlotSinglesheetDWFToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PlotterOverrideToolStripMenuItem As Windows.Forms.ToolStripMenuItem
 End Class
