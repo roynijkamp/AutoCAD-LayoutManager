@@ -61,6 +61,7 @@ Partial Class ucLayoutManager
         Me.mnuItmRenameSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripSeparator()
         Me.PlotstyleTableWijzigenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PlotterOverrideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
         Me.ContextMenuFilters = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.GeselecteerdeItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -72,7 +73,6 @@ Partial Class ucLayoutManager
         Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PlotterOverrideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -479,6 +479,13 @@ Partial Class ucLayoutManager
         Me.PlotstyleTableWijzigenToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.PlotstyleTableWijzigenToolStripMenuItem.Text = "Plotstyle table wijzigen"
         '
+        'PlotterOverrideToolStripMenuItem
+        '
+        Me.PlotterOverrideToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_print
+        Me.PlotterOverrideToolStripMenuItem.Name = "PlotterOverrideToolStripMenuItem"
+        Me.PlotterOverrideToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.PlotterOverrideToolStripMenuItem.Text = "Plotter Override"
+        '
         'tmrAutoScroll
         '
         Me.tmrAutoScroll.Interval = 200
@@ -543,12 +550,6 @@ Partial Class ucLayoutManager
         Me.mPDFenMDWF.Name = "mPDFenMDWF"
         Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
         Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
-        '
-        'PlotterOverrideToolStripMenuItem
-        '
-        Me.PlotterOverrideToolStripMenuItem.Name = "PlotterOverrideToolStripMenuItem"
-        Me.PlotterOverrideToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.PlotterOverrideToolStripMenuItem.Text = "Plotter Override"
         '
         'ucLayoutManager
         '
