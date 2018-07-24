@@ -264,5 +264,26 @@ Public Class ucSettings
         End If
     End Sub
 
+    Private Sub cmdGPStest_Click(sender As Object, e As EventArgs) Handles cmdGPStest.Click
+        Dim testCoords As Double()
+        Dim dLat As Double
+        Dim dLon As Double
+        dLat = CDbl(txtLat.Text)
+        dLon = CDbl(txtLon.Text)
+        'Try
+        '    testCoords = clsGPSConverter.WGS84LatLonToUTM(dLat, dLon)
 
+        'Catch ex As Exception
+        '    MsgBox("fout 1" & vbCrLf & ex.Message)
+        'End Try
+        'txtConversion.Text = ""
+        'txtConversion.Text = "Itms: " & testCoords.Length.ToString & " = "
+        'Try
+        '    For Each dItem As Double In testCoords
+        '        txtConversion.AppendText(" | " & dItem.ToString)
+        '    Next
+        'Catch ex As Exception
+        '    MsgBox("fout 2" & vbCrLf & ex.Message)
+        'End Try
+    End Sub
 End Class

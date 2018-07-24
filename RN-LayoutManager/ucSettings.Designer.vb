@@ -43,6 +43,12 @@ Partial Class ucSettings
         Me.editListTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.VerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.chkAutoLoad = New System.Windows.Forms.CheckBox()
+        Me.cmdGPStest = New System.Windows.Forms.Button()
+        Me.txtLat = New System.Windows.Forms.TextBox()
+        Me.txtLon = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.txtConversion = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -258,10 +264,64 @@ Partial Class ucSettings
         Me.chkAutoLoad.Text = "Layout Manager automatisch starten"
         Me.chkAutoLoad.UseVisualStyleBackColor = True
         '
+        'cmdGPStest
+        '
+        Me.cmdGPStest.Location = New System.Drawing.Point(196, 478)
+        Me.cmdGPStest.Name = "cmdGPStest"
+        Me.cmdGPStest.Size = New System.Drawing.Size(139, 36)
+        Me.cmdGPStest.TabIndex = 9
+        Me.cmdGPStest.Text = "Button1"
+        Me.cmdGPStest.UseVisualStyleBackColor = True
+        '
+        'txtLat
+        '
+        Me.txtLat.Location = New System.Drawing.Point(198, 536)
+        Me.txtLat.Name = "txtLat"
+        Me.txtLat.Size = New System.Drawing.Size(100, 20)
+        Me.txtLat.TabIndex = 10
+        '
+        'txtLon
+        '
+        Me.txtLon.Location = New System.Drawing.Point(198, 566)
+        Me.txtLon.Name = "txtLon"
+        Me.txtLon.Size = New System.Drawing.Size(100, 20)
+        Me.txtLon.TabIndex = 11
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(140, 536)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(22, 13)
+        Me.Label2.TabIndex = 12
+        Me.Label2.Text = "Lat"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(140, 566)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(25, 13)
+        Me.Label3.TabIndex = 12
+        Me.Label3.Text = "Lon"
+        '
+        'txtConversion
+        '
+        Me.txtConversion.Location = New System.Drawing.Point(124, 598)
+        Me.txtConversion.Name = "txtConversion"
+        Me.txtConversion.Size = New System.Drawing.Size(249, 20)
+        Me.txtConversion.TabIndex = 13
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.txtConversion)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.txtLon)
+        Me.Controls.Add(Me.txtLat)
+        Me.Controls.Add(Me.cmdGPStest)
         Me.Controls.Add(Me.chkAutoLoad)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.cmdDebugOptions)
@@ -305,4 +365,10 @@ Partial Class ucSettings
     Friend WithEvents VerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents chkListboxTemplates As Windows.Forms.CheckedListBox
     Friend WithEvents chkAutoLoad As Windows.Forms.CheckBox
+    Friend WithEvents cmdGPStest As Windows.Forms.Button
+    Friend WithEvents txtLat As Windows.Forms.TextBox
+    Friend WithEvents txtLon As Windows.Forms.TextBox
+    Friend WithEvents Label2 As Windows.Forms.Label
+    Friend WithEvents Label3 As Windows.Forms.Label
+    Friend WithEvents txtConversion As Windows.Forms.TextBox
 End Class

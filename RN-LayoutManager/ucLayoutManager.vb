@@ -1073,25 +1073,120 @@ Public Class ucLayoutManager
             Next
         End If
         'add plot override enkel wanneer dit nog niet is toegevoegd
-        If Not PlotterOverrideToolStripMenuItem.HasDropDownItems = True Then
-            Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
-            'PlotterOverrideToolStripMenuItem
-            For Each sPlotDevice As String In clsFunctions.loadPlotPresets(sSettingsFile)
-                Dim mnuItm As New ToolStripMenuItem
-                mnuItm.Text = sPlotDevice
-                mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
-                AddHandler mnuItm.Click, AddressOf OverridePlotDevice
-                PlotterOverrideToolStripMenuItem.DropDownItems.Add(mnuItm)
-            Next
+        If PlotterOverrideToolStripMenuItem.HasDropDownItems = True Then
+            PlotterOverrideToolStripMenuItem.DropDownItems.Clear()
         End If
+        Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+        'PlotterOverrideToolStripMenuItem
+        For Each sPlotDevice As String In clsFunctions.loadPlotPresets(sSettingsFile)
+            Dim mnuItm As New ToolStripMenuItem
+            mnuItm.Text = sPlotDevice
+            mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+            AddHandler mnuItm.Click, AddressOf OverridePlotDevice
+            PlotterOverrideToolStripMenuItem.DropDownItems.Add(mnuItm)
+        Next
+        'add plotdevice list to submenu enkel wanneer dit nog niet is toegevoegd
+        If PlotdeviceWijzigenToolStripMenuItem.HasDropDownItems = True Then
+            PlotdeviceWijzigenToolStripMenuItem.DropDownItems.Clear()
+        End If
+        For Each plotDevice As String In PlotSettingsValidator.Current.GetPlotDeviceList()
+            'skip certain devices
+            If Not plotDevice.ToLower = "none" And Not plotDevice.ToLower = "fax" And Not plotDevice.ToLower.Contains("onenote") And Not plotDevice.ToLower.Contains("publishtoweb") Then
+                Dim mnuItem As New ToolStripMenuItem
+                mnuItem.Text = plotDevice
+                mnuItem.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+                AddHandler mnuItem.Click, AddressOf ChangePlotDevice
+                PlotdeviceWijzigenToolStripMenuItem.DropDownItems.Add(mnuItem)
+            End If
+        Next
+
     End Sub
 
+    Public Function ChangePlotDevice(ByVal sender As Object, ByVal e As EventArgs)
+        Dim bChangeBatch As Boolean = False
+        If iCheckCount > 1 Then
+            If MsgBox("Wilt u de wijziging toepassen op de geselecteerde layouts?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                bChangeBatch = True
+                itterateList("plotstyle")
+            End If
+        End If
+
+
+        Dim mnuPltDevice As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim sOverrideDeviceName As String = mnuPltDevice.Text
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltDevice.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        Dim sLayName As String = myCntrl.LayoutName
+
+        If bChangeBatch = False Then
+            Try
+                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                    Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                        For Each entry As DBDictionaryEntry In layDict
+                            Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                            If sLayName = lay.LayoutName Then
+                                Dim ps As PlotSettings = New PlotSettings(lay.ModelType)
+                                ps.CopyFrom(lay)
+
+                                Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
+                                'change plot device
+                                Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                                Dim plotDev = plotSetVal.GetPlotDeviceList()
+
+                                If plotDev.Contains(sOverrideDeviceName) Then
+                                    plotSetVal.RefreshLists(lay)
+                                    plotSetVal.SetPlotConfigurationName(lay, sOverrideDeviceName, lay.CanonicalMediaName())
+                                    trx.Commit()
+                                    myCntrl.PlotStyle = sPlotConfig
+                                    myCntrl.updateItem()
+                                End If
+                                Exit For
+                            End If
+                        Next
+                    End Using
+                End Using
+            Catch ex As Exception
+                MsgBox("Fout bij wijzigen van de PlotDevice " & vbCrLf & ex.Message & vbCrLf & ex.Source)
+            End Try
+        Else
+            Try
+                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                    Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                        For Each entry As DBDictionaryEntry In layDict
+                            Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                            If aPstyleLayouts.Contains(lay.LayoutName) Then
+                                Dim ps As PlotSettings = New PlotSettings(lay.ModelType)
+                                ps.CopyFrom(lay)
+
+                                Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
+                                'change plot device
+                                Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                                Dim plotDev = plotSetVal.GetPlotDeviceList()
+
+                                If plotDev.Contains(sOverrideDeviceName) Then
+                                    plotSetVal.RefreshLists(lay)
+                                    plotSetVal.SetPlotConfigurationName(lay, sOverrideDeviceName, lay.CanonicalMediaName())
+                                    myCntrl.PlotStyle = sPlotConfig
+                                    myCntrl.updateItem()
+                                End If
+                            End If
+                        Next
+                        trx.Commit()
+                    End Using
+                End Using
+                loadLayouts()
+            Catch ex As Exception
+                MsgBox("Fout bij wijzigen van de PlotDevice " & ex.Message)
+            End Try
+        End If
+        Return True
+
+
+    End Function
+
+
     Public Function OverridePlotDevice(ByVal sender As Object, ByVal e As EventArgs)
-        ''plot to DWF Singlesheet
-        'Dim mySubMenu As ContextMenuStrip = CType(sender, ToolStripMenuItem).Owner
-        'Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mySubMenu.Tag, RN_LayoutItems.RN_UCLayoutItem)
-        ''send to plotter
-        'PlotLayout(sender, e, True, myCntrl)
         Dim mnuPltOverride As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
         Dim sOverrideDeviceName As String = mnuPltOverride.Text
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltOverride.Tag, RN_LayoutItems.RN_UCLayoutItem)
