@@ -253,6 +253,7 @@ Public Class ucLayoutManager
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layAndTabOID As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotStyle As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Dim layPlotTransparency As SortedDictionary(Of Integer, Boolean) = New SortedDictionary(Of Integer, Boolean)
         Try
             Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
@@ -263,6 +264,7 @@ Public Class ucLayoutManager
                     'layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
                     layAndTabOID.Add(lay.TabOrder, lay.Handle.ToString)
                     layPlotStyle.Add(lay.TabOrder, sPlotStyleTmp)
+                    layPlotTransparency.Add(lay.TabOrder, lay.PlotTransparency)
                 Next
                 trx.Commit()
             End Using
@@ -271,6 +273,7 @@ Public Class ucLayoutManager
         End Try
         Dim iTabIndex As Integer = 1 'model = 0
         Dim sPlotStyle As String = "PlotStyle.ctb"
+        Dim bPlotTransparency As Boolean = False
         Try
             For Each sLayoutName In layAndTab.Values
                 'add name to list except Model
@@ -285,8 +288,10 @@ Public Class ucLayoutManager
                         'myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
                         myCntrl.LayoutHandle = layAndTabOID.Item(iTabIndex)
                         sPlotStyle = layPlotStyle.Item(iTabIndex)
+                        bPlotTransparency = layPlotTransparency.Item(iTabIndex)
                     End If
                     myCntrl.PlotStyle = sPlotStyle
+                    myCntrl.PlotTransparency = bPlotTransparency
                     myCntrl.updateItem()
                     'add handlers to register functions for items
                     AddHandler myCntrl.View_Click, AddressOf ItemViewClick
@@ -295,6 +300,7 @@ Public Class ucLayoutManager
                     AddHandler myCntrl.Plot_CheckedChanged, AddressOf PlotCheck
                     AddHandler myCntrl.MouseMove, AddressOf item_MouseMove
                     AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
+                    AddHandler myCntrl.plotTransparency_Click, AddressOf ChangePlotTransparency
                     myCntrl.ContextMenuStrip = SubMenu
                     'check if this is the current layout
                     'active layout makeren
@@ -1264,7 +1270,35 @@ Public Class ucLayoutManager
         Return True
     End Function
 
-
+    Public Function ChangePlotTransparency(ByVal sender As Object, ByVal e As EventArgs)
+        'Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        Dim sLayName As String = myCntrl.LayoutName
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                    For Each entry As DBDictionaryEntry In layDict
+                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                        If sLayName = lay.LayoutName Then
+                            'Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                            'plotSetVal.RefreshLists(lay)
+                            Dim bPlotTransp As Boolean = Not myCntrl.PlotTransparency
+                            lay.PlotTransparency = bPlotTransp
+                            trx.Commit()
+                            myCntrl.PlotTransparency = bPlotTransp
+                            myCntrl.updateItem()
+                            Exit For
+                        End If
+                    Next
+                End Using
+            End Using
+            Return True
+        Catch ex As Exception
+            MsgBox("Fout bij wijzigen van de PlotTransparency " & ex.Message)
+            Return False
+        End Try
+    End Function
 
 
     Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)

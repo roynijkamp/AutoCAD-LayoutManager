@@ -139,10 +139,9 @@ Partial Class ucSettings
         'lblVersion
         '
         Me.lblVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblVersion.AutoSize = True
         Me.lblVersion.Location = New System.Drawing.Point(6, 795)
         Me.lblVersion.Name = "lblVersion"
-        Me.lblVersion.Size = New System.Drawing.Size(36, 13)
+        Me.lblVersion.Size = New System.Drawing.Size(280, 13)
         Me.lblVersion.TabIndex = 4
         Me.lblVersion.Text = "Versie"
         '
