@@ -241,6 +241,7 @@ Public Class ucLayoutManager
         Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         myCntrl.LayoutName = "Model"
         myCntrl.PlotStyle = "" 'model has no plotstyle
+        myCntrl.PlotDevice = "" 'model as no plotdevice
         myCntrl.IsModel = True
         drag_drop_scroll_amount = myCntrl.Height + 40
         'hide button print and checkbox
@@ -253,17 +254,20 @@ Public Class ucLayoutManager
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layAndTabOID As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotStyle As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+        Dim layPlotDevice As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotTransparency As SortedDictionary(Of Integer, Boolean) = New SortedDictionary(Of Integer, Boolean)
         Try
             Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
                 For Each entry As DBDictionaryEntry In layDict
                     Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForRead), Layout)
-                    Dim sPlotStyleTmp As String = lay.CurrentStyleSheet & " | " & lay.PlotConfigurationName
+                    'Dim sPlotStyleTmp As String = lay.CurrentStyleSheet & " | " & lay.PlotConfigurationName
+                    Dim sPlotStyleTmp As String = lay.CurrentStyleSheet & " | "
+                    Dim sPlotDeviceTmp As String = lay.PlotConfigurationName
                     layAndTab.Add(lay.TabOrder, lay.LayoutName)
-                    'layAndTabOID.Add(lay.TabOrder, lay.ObjectId)
                     layAndTabOID.Add(lay.TabOrder, lay.Handle.ToString)
                     layPlotStyle.Add(lay.TabOrder, sPlotStyleTmp)
+                    layPlotDevice.Add(lay.TabOrder, sPlotDeviceTmp)
                     layPlotTransparency.Add(lay.TabOrder, lay.PlotTransparency)
                 Next
                 trx.Commit()
@@ -273,6 +277,7 @@ Public Class ucLayoutManager
         End Try
         Dim iTabIndex As Integer = 1 'model = 0
         Dim sPlotStyle As String = "PlotStyle.ctb"
+        Dim sPlotDevice As String = ""
         Dim bPlotTransparency As Boolean = False
         Try
             For Each sLayoutName In layAndTab.Values
@@ -288,9 +293,11 @@ Public Class ucLayoutManager
                         'myCntrl.LayoutID = layAndTabOID.Item(iTabIndex)
                         myCntrl.LayoutHandle = layAndTabOID.Item(iTabIndex)
                         sPlotStyle = layPlotStyle.Item(iTabIndex)
+                        sPlotDevice = layPlotDevice.Item(iTabIndex)
                         bPlotTransparency = layPlotTransparency.Item(iTabIndex)
                     End If
                     myCntrl.PlotStyle = sPlotStyle
+                    myCntrl.PlotDevice = sPlotDevice
                     myCntrl.PlotTransparency = bPlotTransparency
                     myCntrl.updateItem()
                     'add handlers to register functions for items
@@ -1134,7 +1141,8 @@ Public Class ucLayoutManager
                                 Dim ps As PlotSettings = New PlotSettings(lay.ModelType)
                                 ps.CopyFrom(lay)
 
-                                Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
+                                'Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
+                                'Dim sPlotDeviceTmp As String = mnuPltDevice.Text
                                 'change plot device
                                 Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
                                 Dim plotDev = plotSetVal.GetPlotDeviceList()
@@ -1143,7 +1151,8 @@ Public Class ucLayoutManager
                                     plotSetVal.RefreshLists(lay)
                                     plotSetVal.SetPlotConfigurationName(lay, sOverrideDeviceName, lay.CanonicalMediaName())
                                     trx.Commit()
-                                    myCntrl.PlotStyle = sPlotConfig
+                                    'myCntrl.PlotStyle = sPlotConfig
+                                    myCntrl.PlotDevice = sOverrideDeviceName
                                     myCntrl.updateItem()
                                 End If
                                 Exit For
@@ -1165,7 +1174,7 @@ Public Class ucLayoutManager
                                 Dim ps As PlotSettings = New PlotSettings(lay.ModelType)
                                 ps.CopyFrom(lay)
 
-                                Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
+                                'Dim sPlotConfig As String = lay.CurrentStyleSheet & " | " & mnuPltDevice.Text
                                 'change plot device
                                 Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
                                 Dim plotDev = plotSetVal.GetPlotDeviceList()
@@ -1173,7 +1182,8 @@ Public Class ucLayoutManager
                                 If plotDev.Contains(sOverrideDeviceName) Then
                                     plotSetVal.RefreshLists(lay)
                                     plotSetVal.SetPlotConfigurationName(lay, sOverrideDeviceName, lay.CanonicalMediaName())
-                                    myCntrl.PlotStyle = sPlotConfig
+                                    'myCntrl.PlotStyle = sPlotConfig
+                                    myCntrl.PlotDevice = sOverrideDeviceName
                                     myCntrl.updateItem()
                                 End If
                             End If
@@ -1226,7 +1236,7 @@ Public Class ucLayoutManager
                         For Each entry As DBDictionaryEntry In layDict
                             Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                             If sLayName = lay.LayoutName Then
-                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
+                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " '& lay.PlotConfigurationName
                                 'set stylesheet
                                 Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
                                 plotSetVal.RefreshLists(lay)
@@ -1250,7 +1260,7 @@ Public Class ucLayoutManager
                         For Each entry As DBDictionaryEntry In layDict
                             Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                             If aPstyleLayouts.Contains(lay.LayoutName) Then
-                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " & lay.PlotConfigurationName
+                                Dim sPlotConfig As String = mnuPltStyle.Text & " | " '& lay.PlotConfigurationName
                                 'set stylesheet
                                 Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
                                 plotSetVal.RefreshLists(lay)
@@ -1281,8 +1291,6 @@ Public Class ucLayoutManager
                     For Each entry As DBDictionaryEntry In layDict
                         Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                         If sLayName = lay.LayoutName Then
-                            'Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
-                            'plotSetVal.RefreshLists(lay)
                             Dim bPlotTransp As Boolean = Not myCntrl.PlotTransparency
                             lay.PlotTransparency = bPlotTransp
                             trx.Commit()
