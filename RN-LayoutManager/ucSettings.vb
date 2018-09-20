@@ -286,4 +286,33 @@ Public Class ucSettings
         '    MsgBox("fout 2" & vbCrLf & ex.Message)
         'End Try
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) 
+        'Dim msgBox As New frmCustomAlert
+        'msgBox.WindowTitle = "Test Alerting"
+        'msgBox.LabelTekst = "Test Label"
+
+        'Dim dlgRes As DialogResult = msgBox.ShowDialog()
+
+        'If dlgRes = DialogResult.Yes Then
+        '    TextBox1.AppendText("YES Clicked" & vbCrLf)
+        '    If msgBox.applytoall = True Then
+        '        TextBox1.AppendText("APPLY TO ALL" & vbCrLf)
+        '    End If
+        'ElseIf dlgRes = DialogResult.No Then
+        '    TextBox1.AppendText("NO Clicked" & vbCrLf)
+        '    If msgBox.applytoall = True Then
+        '        TextBox1.AppendText("APPLY TO ALL" & vbCrLf)
+        '    End If
+        'ElseIf dlgRes = DialogResult.Cancel Then
+        '    TextBox1.AppendText("CANCEL Clicked" & vbCrLf)
+        'End If
+        'Dim RNmsgBox As RN_CustomAlerts.frmAlert = New RN_CustomAlerts.frmAlert
+        'RNmsgBox.WindowTitle = "Wijzigingen opslaan?"
+        'RNmsgBox.LabelTekst = "Wilt u de niet opgeslagen wijzigingen opslaan?"
+        'Dim dlgRes As DialogResult = RNmsgBox.ShowDialog()
+
+        'MsgBox(dlgRes.ToString & " -- Applyt to all" & RNmsgBox.applytoall.ToString)
+
+    End Sub
 End Class

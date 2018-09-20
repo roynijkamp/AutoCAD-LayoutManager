@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.0917.1455</AssemblyVersion>
+    <AssemblyVersion>1.0.0920.1400</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -152,8 +152,8 @@
     <!--ACA Refences End-->
     <!--AME Referebces Begin-->
     <!--AME Reference End-->
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RN-attribute-listitem">
@@ -391,6 +391,10 @@
     <ProjectReference Include="..\DropDownContainer\DropDownContainer.vbproj">
       <Project>{E0FF137C-8F24-4EBA-ADBB-8CC68775E260}</Project>
       <Name>DropDownContainer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RN-CustomAlerts\RN-CustomAlerts.vbproj">
+      <Project>{3a0f00e2-7abc-4d4c-9103-efab1b2fca24}</Project>
+      <Name>RN-CustomAlerts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

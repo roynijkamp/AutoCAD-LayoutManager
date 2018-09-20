@@ -30,6 +30,7 @@
       <Commands GroupName="layoutmanager">
         <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
+		<Command Local="closeallopen" Global="closeallopen" StartupCommand="False" />
       </Commands>
     </ComponentEntry>
 	</Components>
@@ -48,6 +49,7 @@
       <Commands GroupName="layoutmanager">
         <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
+		<Command Local="closeallopen" Global="closeallopen" StartupCommand="False" />
       </Commands>
     </ComponentEntry>
 	</Components>
