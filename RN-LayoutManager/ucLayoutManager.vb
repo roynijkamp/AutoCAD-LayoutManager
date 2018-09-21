@@ -312,6 +312,7 @@ Public Class ucLayoutManager
                     AddHandler myCntrl.DragEnter, AddressOf item_DragEnter
                     AddHandler myCntrl.plotTransparency_Click, AddressOf ChangePlotTransparency
                     AddHandler myCntrl.Collapse_Click, AddressOf getPageSetup
+                    AddHandler myCntrl.ChangePageSetup, AddressOf setPageSetup
                     myCntrl.ContextMenuStrip = SubMenu
                     'check if this is the current layout
                     'active layout makeren
@@ -1313,6 +1314,14 @@ Public Class ucLayoutManager
         End Try
     End Function
 
+    Public Enum PlotRotation
+        ' Fields
+        Degrees000 = 0
+        Degrees090 = 1
+        Degrees180 = 2
+        Degrees270 = 3
+    End Enum
+
     Public Function getPageSetup(ByVal sender As Object, ByVal e As EventArgs)
         'Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
@@ -1325,27 +1334,23 @@ Public Class ucLayoutManager
                         Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                         If sLayName = lay.LayoutName Then
                             Dim laOrientation As PlotRotation = lay.PlotRotation
-                            'Degrees000 = Portrait
-                            'Degrees090 = Landscape
-                            'Degrees180 = Portrait - Upside doown checked
-                            'Degrees270 = Landscape - Upside doown checked
                             Select Case laOrientation
                                 Case 0
                                     'portrait
-                                    myCntrl.PlotOrientation = "portrait"
+                                    myCntrl.PlotOrientation = "landscape"
                                 Case 1
                                     'landscape 
-                                    myCntrl.PlotOrientation = "landscape"
+                                    myCntrl.PlotOrientation = "portrait"
                                 Case 2
                                     'portrait
-                                    myCntrl.PlotOrientation = "portrait"
+                                    myCntrl.PlotOrientation = "landscape"
                                 Case 3
                                     'landscape
-                                    myCntrl.PlotOrientation = "landscape"
+                                    myCntrl.PlotOrientation = "portrait"
                             End Select
-
-
+                            myCntrl.DisplayPlotStyle = lay.ShowPlotStyles
                             myCntrl.updateItem()
+                            trx.Commit()
                             Exit For
                         End If
                     Next
@@ -1354,6 +1359,36 @@ Public Class ucLayoutManager
             Return True
         Catch ex As Exception
             MsgBox("Fout bij laden van de pagesetup " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    Public Function setPageSetup(ByVal sender As Object, ByVal e As EventArgs)
+        'Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        Dim sLayName As String = myCntrl.LayoutName
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                    For Each entry As DBDictionaryEntry In layDict
+                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                        If sLayName = lay.LayoutName Then
+                            Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                            plotSetVal.RefreshLists(lay)
+                            Select Case myCntrl.PlotOrientation
+                                Case "portrait"
+                                    plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees090)
+                                Case "landscape"
+                                    plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees000)
+                            End Select
+                        End If
+                    Next
+                End Using
+            End Using
+            Return True
+        Catch ex As Exception
+            MsgBox("Fout bij opslaan van de pagesetup " & ex.Message)
             Return False
         End Try
     End Function
