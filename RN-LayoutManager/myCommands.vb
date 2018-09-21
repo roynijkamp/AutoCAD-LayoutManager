@@ -72,6 +72,7 @@ Namespace RN_LayoutManager
             Dim RNmsgBox As RN_CustomAlerts.frmAlert = New RN_CustomAlerts.frmAlert
             RNmsgBox.WindowTitle = "Wijzigingen opslaan?"
             RNmsgBox.LabelTekst = "Wilt u de niet opgeslagen wijzigingen opslaan?"
+            RNmsgBox.applytoall = True
             Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
             Dim bApplyToAll As Boolean = RNmsgBox.applytoall
             'bij cancel result exit sub

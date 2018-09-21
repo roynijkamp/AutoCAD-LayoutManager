@@ -53,6 +53,6 @@
     Private Sub frmAlert_Load(sender As Object, e As EventArgs) Handles Me.Load
         lblTekst.Text = sLabelTekst
         Me.Text = sWindowTitle
-        chk_aplytoall.Checked = False
+        chk_aplytoall.Checked = bApplytoall
     End Sub
 End Class
