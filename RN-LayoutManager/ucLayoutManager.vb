@@ -313,6 +313,7 @@ Public Class ucLayoutManager
                     AddHandler myCntrl.plotTransparency_Click, AddressOf ChangePlotTransparency
                     AddHandler myCntrl.Collapse_Click, AddressOf getPageSetup
                     AddHandler myCntrl.ChangePageSetup, AddressOf setPageSetup
+                    AddHandler myCntrl.setPlotMediaSize, AddressOf setPlotMediaSize
                     myCntrl.ContextMenuStrip = SubMenu
                     'check if this is the current layout
                     'active layout makeren
@@ -1326,6 +1327,9 @@ Public Class ucLayoutManager
         'Dim mnuPltStyle As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
         Dim sLayName As String = myCntrl.LayoutName
+        Dim dtPlotMedia As System.Data.DataTable = New System.Data.DataTable
+        dtPlotMedia.Columns.Add("id")
+        dtPlotMedia.Columns.Add("media")
         Try
             Using acLockDoc As DocumentLock = acDoc.LockDocument
                 Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
@@ -1334,21 +1338,44 @@ Public Class ucLayoutManager
                         Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                         If sLayName = lay.LayoutName Then
                             Dim laOrientation As PlotRotation = lay.PlotRotation
+                            myCntrl.ReadSettings = True 'prevent update
                             Select Case laOrientation
                                 Case 0
                                     'portrait
-                                    myCntrl.PlotOrientation = "landscape"
+                                    myCntrl.PlotOrientation = "portrait"
                                 Case 1
                                     'landscape 
-                                    myCntrl.PlotOrientation = "portrait"
+                                    myCntrl.PlotOrientation = "landscape"
                                 Case 2
                                     'portrait
-                                    myCntrl.PlotOrientation = "landscape"
+                                    myCntrl.PlotOrientation = "portrait"
                                 Case 3
                                     'landscape
-                                    myCntrl.PlotOrientation = "portrait"
+                                    myCntrl.PlotOrientation = "landscape"
                             End Select
                             myCntrl.DisplayPlotStyle = lay.ShowPlotStyles
+                            'load media
+                            Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                            plotSetVal.RefreshLists(lay)
+                            Dim plotSet As PlotSettings = New PlotSettings(lay.ModelType)
+                            'current media
+                            Dim sCurrMedName As String = lay.CanonicalMediaName
+
+                            Dim canMedNames As Specialized.StringCollection = plotSetVal.GetCanonicalMediaNameList(plotSet)
+                            Dim i As Integer = 0
+                            For Each canMedName As String In canMedNames
+                                Dim dtRow As System.Data.DataRow = dtPlotMedia.NewRow()
+                                dtRow.Item(0) = canMedName
+                                dtRow.Item(1) = plotSetVal.GetLocaleMediaName(plotSet, i)
+                                dtPlotMedia.Rows.Add(dtRow)
+                                If canMedName = sCurrMedName Then
+                                    'set selected index
+                                    myCntrl.ChoosenMediaSizeCurrent = i
+                                End If
+                                i = i + 1
+                            Next
+                            myCntrl.PlotMediaList = dtPlotMedia
+                            'update control
                             myCntrl.updateItem()
                             trx.Commit()
                             Exit For
@@ -1369,6 +1396,7 @@ Public Class ucLayoutManager
         Dim sLayName As String = myCntrl.LayoutName
         Try
             Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Dim acEd As Editor = acDoc.Editor
                 Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                     Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
                     For Each entry As DBDictionaryEntry In layDict
@@ -1378,10 +1406,14 @@ Public Class ucLayoutManager
                             plotSetVal.RefreshLists(lay)
                             Select Case myCntrl.PlotOrientation
                                 Case "portrait"
-                                    plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees090)
-                                Case "landscape"
                                     plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees000)
+                                Case "landscape"
+                                    plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees090)
                             End Select
+                            lay.ShowPlotStyles = myCntrl.DisplayPlotStyle
+                            trx.Commit()
+                            acEd.Regen()
+                            Exit For
                         End If
                     Next
                 End Using
@@ -1392,6 +1424,38 @@ Public Class ucLayoutManager
             Return False
         End Try
     End Function
+
+    Public Function setPlotMediaSize(ByVal sender As Object, ByVal e As EventArgs)
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+        Dim sLayName As String = myCntrl.LayoutName
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Dim acEd As Editor = acDoc.Editor
+                Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
+                    Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForWrite)
+                    For Each entry As DBDictionaryEntry In layDict
+                        Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
+                        If sLayName = lay.LayoutName Then
+                            Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
+                            plotSetVal.RefreshLists(lay)
+                            ' Dim plotSet As PlotSettings = New PlotSettings(lay.ModelType)
+                            Dim sChoosenMediaSize As String = myCntrl.ChoosenMediaSize
+                            'plotSetVal.SetPlotConfigurationName(plotSet, myCntrl.PlotDevice, sChoosenMediaSize)
+                            plotSetVal.SetCanonicalMediaName(lay, sChoosenMediaSize)
+                            trx.Commit()
+                            acEd.Regen()
+                            Exit For
+                        End If
+                    Next
+                End Using
+            End Using
+            Return True
+        Catch ex As Exception
+            MsgBox("Fout bij wijzigen van de Media Size " & ex.Message)
+            Return False
+        End Try
+    End Function
+
 
     Public Function selectExternalTemplate(ByVal sender As Object, ByVal e As EventArgs)
         Dim selectedItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
