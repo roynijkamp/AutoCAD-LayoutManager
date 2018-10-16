@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.1016.1124</AssemblyVersion>
+    <AssemblyVersion>1.0.1016.1452</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -215,10 +215,18 @@
     <Compile Include="clsMyDocData.vb" />
     <Compile Include="clsNOD.vb" />
     <Compile Include="clsRDNAPTRANS.vb" />
+    <Compile Include="clsRegister.vb" />
+    <Compile Include="clsTripleDES.vb" />
     <Compile Include="frmFilter.Designer.vb">
       <DependentUpon>frmFilter.vb</DependentUpon>
     </Compile>
     <Compile Include="frmFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegister.Designer.vb">
+      <DependentUpon>frmRegister.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRegister.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmRenameLayouts.Designer.vb">
@@ -266,6 +274,9 @@
   <ItemGroup>
     <EmbeddedResource Include="frmFilter.resx">
       <DependentUpon>frmFilter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegister.resx">
+      <DependentUpon>frmRegister.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRenameLayouts.resx">
       <DependentUpon>frmRenameLayouts.vb</DependentUpon>
@@ -408,6 +419,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon_plotter_override.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\Clouds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_success.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\icon_warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

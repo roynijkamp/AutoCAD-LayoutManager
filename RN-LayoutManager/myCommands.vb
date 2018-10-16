@@ -11,6 +11,7 @@ Imports Autodesk.AutoCAD.Windows.ToolPalette
 Imports System.IO
 Imports Autodesk.AutoCAD.Interop
 Imports CodeTech.Control
+Imports System.Windows.Forms
 
 ' This line is not mandatory, but improves loading performances
 <Assembly: CommandClass(GetType(RN_LayoutManager.MyCommands))>
@@ -37,6 +38,32 @@ Namespace RN_LayoutManager
 
         <CommandMethod("layoutman", CommandFlags.Modal + CommandFlags.Session)>
         Public Sub layoutman()
+            'hier controle licentie
+            Dim sCoreDir As String = clsFunctions.getCoreDir()
+            Dim bLicenseCheck As Boolean = False
+            If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
+                'licentie file gevonden, controle
+                bLicenseCheck = clsRegister.CheckLicense(sCoreDir & "\RNLAYMAN.LCF")
+            End If
+            If bLicenseCheck = False Then
+                '- geen licentie -> registratie form
+                Dim frmRegistration As New frmRegister
+                frmRegistration.cmdCancel.DialogResult = DialogResult.Cancel
+                frmRegistration.cmdRegister.DialogResult = DialogResult.OK
+                Dim myDialogResult As DialogResult = frmRegistration.ShowDialog
+                If myDialogResult = DialogResult.OK Then
+                    'Registratie was succesvol
+                    MsgBox("Registratie succesvol")
+                ElseIf myDialogResult = DialogResult.Abort Then
+                    'registratie was niet succesvol
+                    MsgBox("fout bij de registratie")
+                    Exit Sub
+                Else
+                    'geannuleerd
+                    Exit Sub
+                End If
+            End If
+
             If m_palette Is Nothing Then
                 'palette nog niet geopend
                 m_palette = New Autodesk.AutoCAD.Windows.PaletteSet("RN-LayoutManager", New Guid("{fad7b1e9-625e-4c10-9ba4-c94681a982cf}"))
@@ -80,7 +107,7 @@ Namespace RN_LayoutManager
                 Exit Sub
             End If
 
-            Dim docs As DocumentCollection = Application.DocumentManager
+            Dim docs As DocumentCollection = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager
 
 
 
@@ -99,7 +126,7 @@ Namespace RN_LayoutManager
                     If Not docs.MdiActiveDocument = doc Then
                         docs.MdiActiveDocument = doc
                     End If
-                    Dim iIsModified As Integer = System.Convert.ToInt32(Application.GetSystemVariable("DBMOD"))
+                    Dim iIsModified As Integer = System.Convert.ToInt32(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("DBMOD"))
                     If iIsModified = 0 Then
                         'niet gewijzigd, dus sluiten
                         doc.CloseAndDiscard()

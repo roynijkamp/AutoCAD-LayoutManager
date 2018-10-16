@@ -5,6 +5,7 @@ Imports System.Windows.Forms
 Imports System.Xml
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
+Imports Newtonsoft.Json.Linq
 
 Public Class ucSettings
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
@@ -23,6 +24,17 @@ Public Class ucSettings
     Dim dtPlotPresets As System.Data.DataTable
     Dim bIsLoading As Boolean = False
     Dim bAutoLoad As Boolean = True
+    'license vars
+    Dim sUserName As String
+    Dim sUserEmail As String
+    Dim sRegDate As String
+    Dim sUserID As String
+    Dim sURL As String
+    Dim sAppName As String
+    Shared sComputerName As String = My.Computer.Name
+    Dim sCoreDir As String = clsFunctions.getCoreDir()
+    Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
+
     Private Sub radioPDFuserFolder_CheckedChanged(sender As Object, e As EventArgs) Handles radioPDFuserFolder.CheckedChanged
         If radioPDFuserFolder.Checked Then
             txtUserSaveFolder.Enabled = True
@@ -117,6 +129,27 @@ Public Class ucSettings
             End If
             lblVersion.Text = sCurrVersion
             chkAutoLoad.Checked = bAutoLoad
+
+            'load license details
+            If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
+                Dim sLic As String = My.Computer.FileSystem.ReadAllText(sCoreDir & "\RNLAYMAN.LCF")
+                Try
+                    Dim sLicenseDecrypt As String = tdes.Decrypt(sLic)
+                    Dim myObject As JObject = JObject.Parse(sLicenseDecrypt)
+                    Dim aUserDet As JArray = myObject("details")
+                    Dim sComputername As String = "Computername: " & aUserDet(0).SelectToken("computername").ToString
+                    sUserName = aUserDet(0).SelectToken("name").ToString
+                    lblUserName.Text = sUserName & " [" & sComputername & "]"
+                    sUserEmail = aUserDet(0).SelectToken("email").ToString
+                    lblUserEmail.Text = sUserEmail
+                    sRegDate = aUserDet(0).SelectToken("regdate").ToString
+                    lblRegDate.Text = sRegDate
+                    sUserID = aUserDet(0).SelectToken("userid").ToString
+                Catch ex As System.Exception
+                    MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
+                End Try
+            End If
+
             bIsLoading = False
         Catch ex As Exception
             MsgBox("Fout bij het laden van de instellingen " & vbCrLf & ex.Message)
@@ -288,7 +321,7 @@ Public Class ucSettings
         'End Try
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) 
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         'Dim msgBox As New frmCustomAlert
         'msgBox.WindowTitle = "Test Alerting"
         'msgBox.LabelTekst = "Test Label"

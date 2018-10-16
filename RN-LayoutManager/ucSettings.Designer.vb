@@ -49,11 +49,20 @@ Partial Class ucSettings
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtConversion = New System.Windows.Forms.TextBox()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.lblRegDate = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.lblUserEmail = New System.Windows.Forms.Label()
+        Me.lblUserName = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.editListTemplates.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitel
@@ -183,10 +192,11 @@ Partial Class ucSettings
         Me.grpDebugOptions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grpDebugOptions.Controls.Add(Me.chkTrashDSD)
+        Me.grpDebugOptions.Controls.Add(Me.cmdDebugOptions)
         Me.grpDebugOptions.Enabled = False
-        Me.grpDebugOptions.Location = New System.Drawing.Point(3, 692)
+        Me.grpDebugOptions.Location = New System.Drawing.Point(3, 751)
         Me.grpDebugOptions.Name = "grpDebugOptions"
-        Me.grpDebugOptions.Size = New System.Drawing.Size(415, 100)
+        Me.grpDebugOptions.Size = New System.Drawing.Size(415, 41)
         Me.grpDebugOptions.TabIndex = 6
         Me.grpDebugOptions.TabStop = False
         '
@@ -204,7 +214,7 @@ Partial Class ucSettings
         '
         Me.cmdDebugOptions.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdDebugOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdDebugOptions.Location = New System.Drawing.Point(9, 686)
+        Me.cmdDebugOptions.Location = New System.Drawing.Point(3, -3)
         Me.cmdDebugOptions.Name = "cmdDebugOptions"
         Me.cmdDebugOptions.Size = New System.Drawing.Size(122, 19)
         Me.cmdDebugOptions.TabIndex = 1
@@ -311,10 +321,93 @@ Partial Class ucSettings
         Me.txtConversion.Size = New System.Drawing.Size(249, 20)
         Me.txtConversion.TabIndex = 13
         '
+        'GroupBox4
+        '
+        Me.GroupBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox4.Controls.Add(Me.cmdUpdate)
+        Me.GroupBox4.Controls.Add(Me.lblRegDate)
+        Me.GroupBox4.Controls.Add(Me.Label4)
+        Me.GroupBox4.Controls.Add(Me.lblUserEmail)
+        Me.GroupBox4.Controls.Add(Me.lblUserName)
+        Me.GroupBox4.Controls.Add(Me.Label5)
+        Me.GroupBox4.Controls.Add(Me.Label6)
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 652)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(415, 90)
+        Me.GroupBox4.TabIndex = 14
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Licentie Details:"
+        '
+        'lblRegDate
+        '
+        Me.lblRegDate.AutoSize = True
+        Me.lblRegDate.Location = New System.Drawing.Point(104, 63)
+        Me.lblRegDate.Name = "lblRegDate"
+        Me.lblRegDate.Size = New System.Drawing.Size(29, 13)
+        Me.lblRegDate.TabIndex = 5
+        Me.lblRegDate.Text = "NaN"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(6, 63)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(92, 13)
+        Me.Label4.TabIndex = 4
+        Me.Label4.Text = "Registratie datum:"
+        '
+        'lblUserEmail
+        '
+        Me.lblUserEmail.AutoSize = True
+        Me.lblUserEmail.Location = New System.Drawing.Point(104, 44)
+        Me.lblUserEmail.Name = "lblUserEmail"
+        Me.lblUserEmail.Size = New System.Drawing.Size(29, 13)
+        Me.lblUserEmail.TabIndex = 3
+        Me.lblUserEmail.Text = "NaN"
+        '
+        'lblUserName
+        '
+        Me.lblUserName.AutoSize = True
+        Me.lblUserName.Location = New System.Drawing.Point(104, 25)
+        Me.lblUserName.Name = "lblUserName"
+        Me.lblUserName.Size = New System.Drawing.Size(29, 13)
+        Me.lblUserName.TabIndex = 2
+        Me.lblUserName.Text = "NaN"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(6, 44)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(35, 13)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = "Email:"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(6, 25)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(56, 13)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Gebruiker:"
+        '
+        'cmdUpdate
+        '
+        Me.cmdUpdate.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.cmdUpdate.Location = New System.Drawing.Point(331, 63)
+        Me.cmdUpdate.Name = "cmdUpdate"
+        Me.cmdUpdate.Size = New System.Drawing.Size(74, 26)
+        Me.cmdUpdate.TabIndex = 6
+        Me.cmdUpdate.Text = "Update"
+        Me.cmdUpdate.UseVisualStyleBackColor = False
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.txtConversion)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
@@ -323,7 +416,6 @@ Partial Class ucSettings
         Me.Controls.Add(Me.cmdGPStest)
         Me.Controls.Add(Me.chkAutoLoad)
         Me.Controls.Add(Me.GroupBox3)
-        Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.grpDebugOptions)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.lblVersion)
@@ -339,6 +431,8 @@ Partial Class ucSettings
         Me.grpDebugOptions.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.editListTemplates.ResumeLayout(False)
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -370,4 +464,12 @@ Partial Class ucSettings
     Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents Label3 As Windows.Forms.Label
     Friend WithEvents txtConversion As Windows.Forms.TextBox
+    Friend WithEvents GroupBox4 As Windows.Forms.GroupBox
+    Friend WithEvents lblRegDate As Windows.Forms.Label
+    Friend WithEvents Label4 As Windows.Forms.Label
+    Friend WithEvents lblUserEmail As Windows.Forms.Label
+    Friend WithEvents lblUserName As Windows.Forms.Label
+    Friend WithEvents Label5 As Windows.Forms.Label
+    Friend WithEvents Label6 As Windows.Forms.Label
+    Friend WithEvents cmdUpdate As Windows.Forms.Button
 End Class
