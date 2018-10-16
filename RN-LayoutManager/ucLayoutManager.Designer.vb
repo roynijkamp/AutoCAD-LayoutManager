@@ -27,29 +27,9 @@ Partial Class ucLayoutManager
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.flowLayouts = New System.Windows.Forms.FlowLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.txtFilter = New System.Windows.Forms.TextBox()
-        Me.cmdCancel = New System.Windows.Forms.Button()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
-        Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
-        Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
-        Me.lblCheckCount = New System.Windows.Forms.Label()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
-        Me.ContextMenuFilters = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ContextMenuDWFoptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdPrintDWF = New System.Windows.Forms.Button()
         Me.pcbIconFilter = New System.Windows.Forms.PictureBox()
+        Me.txtFilter = New System.Windows.Forms.TextBox()
         Me.cmdBatchAttributes = New System.Windows.Forms.Button()
         Me.cmdTrash = New System.Windows.Forms.Button()
         Me.cmdInvertSelection = New System.Windows.Forms.Button()
@@ -61,26 +41,47 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet = New System.Windows.Forms.Button()
         Me.cmdSortDESC = New System.Windows.Forms.Button()
         Me.cmdSortASC = New System.Windows.Forms.Button()
+        Me.cmdCancel = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
+        Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
+        Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.pgbVoortgang = New System.Windows.Forms.ProgressBar()
         Me.cmdSaveOrder = New System.Windows.Forms.Button()
+        Me.lblCheckCount = New System.Windows.Forms.Label()
         Me.cmdRefreshList = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SubMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.PlotSinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LayoutKopierenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LayoutVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.mnuItmRenameSelection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripSeparator()
         Me.PlotstyleTableWijzigenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PlotdeviceWijzigenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PlotterOverrideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tmrAutoScroll = New System.Windows.Forms.Timer(Me.components)
+        Me.ContextMenuFilters = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.GeselecteerdeItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FilterVanZichtbareItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuFilterList = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ContextMenuDWFoptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SinglesheetDWFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OverridePlotterLayoutSelection = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
         Me.SubMenu.SuspendLayout()
         Me.ContextMenuFilters.SuspendLayout()
         Me.ContextMenuDWFoptions.SuspendLayout()
-        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -155,161 +156,6 @@ Partial Class ucLayoutManager
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
-        'txtFilter
-        '
-        Me.txtFilter.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.txtFilter.Location = New System.Drawing.Point(65, 5)
-        Me.txtFilter.Name = "txtFilter"
-        Me.txtFilter.ReadOnly = True
-        Me.txtFilter.Size = New System.Drawing.Size(203, 20)
-        Me.txtFilter.TabIndex = 17
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Location = New System.Drawing.Point(3, 30)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(230, 28)
-        Me.cmdCancel.TabIndex = 16
-        Me.cmdCancel.Text = "Annuleren"
-        Me.cmdCancel.UseVisualStyleBackColor = True
-        Me.cmdCancel.Visible = False
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.cmdReplaceAttrib)
-        Me.GroupBox2.Controls.Add(Me.cmdAddLayout)
-        Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
-        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
-        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
-        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
-        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
-        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
-        Me.GroupBox2.TabIndex = 4
-        Me.GroupBox2.TabStop = False
-        '
-        'cmdReplaceAttrib
-        '
-        Me.cmdReplaceAttrib.Location = New System.Drawing.Point(227, 19)
-        Me.cmdReplaceAttrib.Name = "cmdReplaceAttrib"
-        Me.cmdReplaceAttrib.Size = New System.Drawing.Size(41, 24)
-        Me.cmdReplaceAttrib.TabIndex = 10
-        Me.cmdReplaceAttrib.Text = "Geselecteerde attributes vervangen"
-        Me.cmdReplaceAttrib.UseVisualStyleBackColor = True
-        Me.cmdReplaceAttrib.Visible = False
-        '
-        'cmbNewLayout
-        '
-        Me.cmbNewLayout.ContextMenuStrip = Me.ContextMenuTemplates
-        Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbNewLayout.FormattingEnabled = True
-        Me.cmbNewLayout.Location = New System.Drawing.Point(38, 21)
-        Me.cmbNewLayout.Name = "cmbNewLayout"
-        Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
-        Me.cmbNewLayout.TabIndex = 8
-        '
-        'ContextMenuTemplates
-        '
-        Me.ContextMenuTemplates.Name = "ContextMenuTemplates"
-        Me.ContextMenuTemplates.Size = New System.Drawing.Size(61, 4)
-        '
-        'pgbVoortgang
-        '
-        Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.pgbVoortgang.Location = New System.Drawing.Point(381, 11)
-        Me.pgbVoortgang.Name = "pgbVoortgang"
-        Me.pgbVoortgang.Size = New System.Drawing.Size(36, 18)
-        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.pgbVoortgang.TabIndex = 5
-        Me.pgbVoortgang.Visible = False
-        '
-        'lblCheckCount
-        '
-        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCheckCount.AutoSize = True
-        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.lblCheckCount.Location = New System.Drawing.Point(389, 32)
-        Me.lblCheckCount.Name = "lblCheckCount"
-        Me.lblCheckCount.Size = New System.Drawing.Size(26, 13)
-        Me.lblCheckCount.TabIndex = 4
-        Me.lblCheckCount.Text = "# 0"
-        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.IsBalloon = True
-        '
-        'SubMenu
-        '
-        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlotSinglesheetDWFToolStripMenuItem, Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection, Me.ToolStripMenuItem4, Me.PlotstyleTableWijzigenToolStripMenuItem, Me.PlotdeviceWijzigenToolStripMenuItem, Me.PlotterOverrideToolStripMenuItem})
-        Me.SubMenu.Name = "SubMenu"
-        Me.SubMenu.Size = New System.Drawing.Size(195, 176)
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(191, 6)
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(191, 6)
-        '
-        'ToolStripMenuItem4
-        '
-        Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(191, 6)
-        '
-        'tmrAutoScroll
-        '
-        Me.tmrAutoScroll.Interval = 200
-        '
-        'ContextMenuFilters
-        '
-        Me.ContextMenuFilters.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GeselecteerdeItemsToolStripMenuItem, Me.FilterVanZichtbareItemsToolStripMenuItem, Me.ToolStripMenuItem3, Me.GeselecteerdFilterVerwijderenToolStripMenuItem})
-        Me.ContextMenuFilters.Name = "ContextMenuStrip1"
-        Me.ContextMenuFilters.Size = New System.Drawing.Size(233, 76)
-        '
-        'ToolStripMenuItem3
-        '
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(229, 6)
-        '
-        'ContextMenuFilterList
-        '
-        Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
-        Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
-        '
-        'ContextMenuDWFoptions
-        '
-        Me.ContextMenuDWFoptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SinglesheetDWFToolStripMenuItem, Me.sPDFenMDWF, Me.mPDFenMDWF})
-        Me.ContextMenuDWFoptions.Name = "ContextMenuStrip1"
-        Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 70)
-        '
-        'SinglesheetDWFToolStripMenuItem
-        '
-        Me.SinglesheetDWFToolStripMenuItem.Name = "SinglesheetDWFToolStripMenuItem"
-        Me.SinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(256, 22)
-        Me.SinglesheetDWFToolStripMenuItem.Text = "Singlesheet DWF"
-        '
-        'sPDFenMDWF
-        '
-        Me.sPDFenMDWF.Name = "sPDFenMDWF"
-        Me.sPDFenMDWF.Size = New System.Drawing.Size(256, 22)
-        Me.sPDFenMDWF.Text = "Singlesheet PDF + Multisheet DWF"
-        '
-        'mPDFenMDWF
-        '
-        Me.mPDFenMDWF.Name = "mPDFenMDWF"
-        Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
-        Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
-        '
         'cmdPrintDWF
         '
         Me.cmdPrintDWF.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -330,6 +176,15 @@ Partial Class ucLayoutManager
         Me.pcbIconFilter.Size = New System.Drawing.Size(22, 20)
         Me.pcbIconFilter.TabIndex = 18
         Me.pcbIconFilter.TabStop = False
+        '
+        'txtFilter
+        '
+        Me.txtFilter.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.txtFilter.Location = New System.Drawing.Point(65, 5)
+        Me.txtFilter.Name = "txtFilter"
+        Me.txtFilter.ReadOnly = True
+        Me.txtFilter.Size = New System.Drawing.Size(203, 20)
+        Me.txtFilter.TabIndex = 17
         '
         'cmdBatchAttributes
         '
@@ -454,6 +309,44 @@ Partial Class ucLayoutManager
         Me.ToolTip1.SetToolTip(Me.cmdSortASC, "Sorteren van A-Z")
         Me.cmdSortASC.UseVisualStyleBackColor = True
         '
+        'cmdCancel
+        '
+        Me.cmdCancel.Location = New System.Drawing.Point(3, 30)
+        Me.cmdCancel.Name = "cmdCancel"
+        Me.cmdCancel.Size = New System.Drawing.Size(230, 28)
+        Me.cmdCancel.TabIndex = 16
+        Me.cmdCancel.Text = "Annuleren"
+        Me.cmdCancel.UseVisualStyleBackColor = True
+        Me.cmdCancel.Visible = False
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.cmdReplaceAttrib)
+        Me.GroupBox2.Controls.Add(Me.cmdAddLayout)
+        Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
+        Me.GroupBox2.Controls.Add(Me.pgbVoortgang)
+        Me.GroupBox2.Controls.Add(Me.cmdSaveOrder)
+        Me.GroupBox2.Controls.Add(Me.lblCheckCount)
+        Me.GroupBox2.Controls.Add(Me.cmdRefreshList)
+        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 532)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(0)
+        Me.GroupBox2.Size = New System.Drawing.Size(420, 50)
+        Me.GroupBox2.TabIndex = 4
+        Me.GroupBox2.TabStop = False
+        '
+        'cmdReplaceAttrib
+        '
+        Me.cmdReplaceAttrib.Location = New System.Drawing.Point(227, 19)
+        Me.cmdReplaceAttrib.Name = "cmdReplaceAttrib"
+        Me.cmdReplaceAttrib.Size = New System.Drawing.Size(41, 24)
+        Me.cmdReplaceAttrib.TabIndex = 10
+        Me.cmdReplaceAttrib.Text = "Geselecteerde attributes vervangen"
+        Me.cmdReplaceAttrib.UseVisualStyleBackColor = True
+        Me.cmdReplaceAttrib.Visible = False
+        '
         'cmdAddLayout
         '
         Me.cmdAddLayout.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_add
@@ -464,6 +357,32 @@ Partial Class ucLayoutManager
         Me.cmdAddLayout.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.cmdAddLayout, "Geselecteerde Layout toevoegen")
         Me.cmdAddLayout.UseVisualStyleBackColor = True
+        '
+        'cmbNewLayout
+        '
+        Me.cmbNewLayout.ContextMenuStrip = Me.ContextMenuTemplates
+        Me.cmbNewLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbNewLayout.FormattingEnabled = True
+        Me.cmbNewLayout.Location = New System.Drawing.Point(38, 21)
+        Me.cmbNewLayout.Name = "cmbNewLayout"
+        Me.cmbNewLayout.Size = New System.Drawing.Size(107, 21)
+        Me.cmbNewLayout.TabIndex = 8
+        '
+        'ContextMenuTemplates
+        '
+        Me.ContextMenuTemplates.Name = "ContextMenuTemplates"
+        Me.ContextMenuTemplates.Size = New System.Drawing.Size(61, 4)
+        '
+        'pgbVoortgang
+        '
+        Me.pgbVoortgang.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pgbVoortgang.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.pgbVoortgang.Location = New System.Drawing.Point(381, 11)
+        Me.pgbVoortgang.Name = "pgbVoortgang"
+        Me.pgbVoortgang.Size = New System.Drawing.Size(36, 18)
+        Me.pgbVoortgang.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+        Me.pgbVoortgang.TabIndex = 5
+        Me.pgbVoortgang.Visible = False
         '
         'cmdSaveOrder
         '
@@ -478,6 +397,19 @@ Partial Class ucLayoutManager
         Me.cmdSaveOrder.UseVisualStyleBackColor = True
         Me.cmdSaveOrder.Visible = False
         '
+        'lblCheckCount
+        '
+        Me.lblCheckCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblCheckCount.AutoSize = True
+        Me.lblCheckCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCheckCount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblCheckCount.Location = New System.Drawing.Point(389, 32)
+        Me.lblCheckCount.Name = "lblCheckCount"
+        Me.lblCheckCount.Size = New System.Drawing.Size(26, 13)
+        Me.lblCheckCount.TabIndex = 4
+        Me.lblCheckCount.Text = "# 0"
+        Me.lblCheckCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'cmdRefreshList
         '
         Me.cmdRefreshList.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.icon_refresh
@@ -488,6 +420,16 @@ Partial Class ucLayoutManager
         Me.cmdRefreshList.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cmdRefreshList, "Herlaad layout lijst")
         Me.cmdRefreshList.UseVisualStyleBackColor = True
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.IsBalloon = True
+        '
+        'SubMenu
+        '
+        Me.SubMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlotSinglesheetDWFToolStripMenuItem, Me.LayoutKopierenToolStripMenuItem, Me.ToolStripMenuItem1, Me.LayoutVerwijderenToolStripMenuItem, Me.ToolStripMenuItem2, Me.mnuItmRenameSelection, Me.ToolStripMenuItem4, Me.PlotstyleTableWijzigenToolStripMenuItem, Me.PlotdeviceWijzigenToolStripMenuItem, Me.PlotterOverrideToolStripMenuItem})
+        Me.SubMenu.Name = "SubMenu"
+        Me.SubMenu.Size = New System.Drawing.Size(195, 176)
         '
         'PlotSinglesheetDWFToolStripMenuItem
         '
@@ -503,6 +445,11 @@ Partial Class ucLayoutManager
         Me.LayoutKopierenToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.LayoutKopierenToolStripMenuItem.Text = "Layout kopieren"
         '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(191, 6)
+        '
         'LayoutVerwijderenToolStripMenuItem
         '
         Me.LayoutVerwijderenToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
@@ -510,12 +457,22 @@ Partial Class ucLayoutManager
         Me.LayoutVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.LayoutVerwijderenToolStripMenuItem.Text = "Layout verwijderen"
         '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(191, 6)
+        '
         'mnuItmRenameSelection
         '
         Me.mnuItmRenameSelection.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_attrib_eddit
         Me.mnuItmRenameSelection.Name = "mnuItmRenameSelection"
         Me.mnuItmRenameSelection.Size = New System.Drawing.Size(194, 22)
         Me.mnuItmRenameSelection.Text = "Selectie Hernoemen"
+        '
+        'ToolStripMenuItem4
+        '
+        Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(191, 6)
         '
         'PlotstyleTableWijzigenToolStripMenuItem
         '
@@ -538,6 +495,16 @@ Partial Class ucLayoutManager
         Me.PlotterOverrideToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.PlotterOverrideToolStripMenuItem.Text = "Plotter Override"
         '
+        'tmrAutoScroll
+        '
+        Me.tmrAutoScroll.Interval = 200
+        '
+        'ContextMenuFilters
+        '
+        Me.ContextMenuFilters.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GeselecteerdeItemsToolStripMenuItem, Me.FilterVanZichtbareItemsToolStripMenuItem, Me.ToolStripMenuItem3, Me.GeselecteerdFilterVerwijderenToolStripMenuItem})
+        Me.ContextMenuFilters.Name = "ContextMenuStrip1"
+        Me.ContextMenuFilters.Size = New System.Drawing.Size(233, 76)
+        '
         'GeselecteerdeItemsToolStripMenuItem
         '
         Me.GeselecteerdeItemsToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_check
@@ -552,12 +519,52 @@ Partial Class ucLayoutManager
         Me.FilterVanZichtbareItemsToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.FilterVanZichtbareItemsToolStripMenuItem.Text = "Filter van Zichtbare items"
         '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(229, 6)
+        '
         'GeselecteerdFilterVerwijderenToolStripMenuItem
         '
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Image = Global.RN_LayoutManager.My.Resources.Resources.icon_trash
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Name = "GeselecteerdFilterVerwijderenToolStripMenuItem"
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.GeselecteerdFilterVerwijderenToolStripMenuItem.Text = "Geselecteerd filter verwijderen"
+        '
+        'ContextMenuFilterList
+        '
+        Me.ContextMenuFilterList.Name = "ContextMenuFilterList"
+        Me.ContextMenuFilterList.Size = New System.Drawing.Size(61, 4)
+        '
+        'ContextMenuDWFoptions
+        '
+        Me.ContextMenuDWFoptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SinglesheetDWFToolStripMenuItem, Me.sPDFenMDWF, Me.mPDFenMDWF, Me.OverridePlotterLayoutSelection})
+        Me.ContextMenuDWFoptions.Name = "ContextMenuStrip1"
+        Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 114)
+        '
+        'SinglesheetDWFToolStripMenuItem
+        '
+        Me.SinglesheetDWFToolStripMenuItem.Name = "SinglesheetDWFToolStripMenuItem"
+        Me.SinglesheetDWFToolStripMenuItem.Size = New System.Drawing.Size(256, 22)
+        Me.SinglesheetDWFToolStripMenuItem.Text = "Singlesheet DWF"
+        '
+        'sPDFenMDWF
+        '
+        Me.sPDFenMDWF.Name = "sPDFenMDWF"
+        Me.sPDFenMDWF.Size = New System.Drawing.Size(256, 22)
+        Me.sPDFenMDWF.Text = "Singlesheet PDF + Multisheet DWF"
+        '
+        'mPDFenMDWF
+        '
+        Me.mPDFenMDWF.Name = "mPDFenMDWF"
+        Me.mPDFenMDWF.Size = New System.Drawing.Size(256, 22)
+        Me.mPDFenMDWF.Text = "Multisheet PDF + Multisheet DWF"
+        '
+        'OverridePlotterLayoutSelection
+        '
+        Me.OverridePlotterLayoutSelection.Name = "OverridePlotterLayoutSelection"
+        Me.OverridePlotterLayoutSelection.Size = New System.Drawing.Size(256, 22)
+        Me.OverridePlotterLayoutSelection.Text = "Override Plotter"
         '
         'ucLayoutManager
         '
@@ -570,12 +577,12 @@ Partial Class ucLayoutManager
         Me.TableLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.SubMenu.ResumeLayout(False)
         Me.ContextMenuFilters.ResumeLayout(False)
         Me.ContextMenuDWFoptions.ResumeLayout(False)
-        CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -631,4 +638,5 @@ Partial Class ucLayoutManager
     Friend WithEvents PlotSinglesheetDWFToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents PlotterOverrideToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents PlotdeviceWijzigenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OverridePlotterLayoutSelection As Windows.Forms.ToolStripMenuItem
 End Class

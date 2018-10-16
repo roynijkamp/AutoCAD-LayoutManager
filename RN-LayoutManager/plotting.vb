@@ -145,6 +145,8 @@ Public Class plotting
                             newStr = "PromptForDwfName=FALSE"
                         ElseIf str.Contains("LogFilePath") Then
                             newStr = "LogFilePath=" + Path.Combine(Me.outputDir, LOG)
+                        ElseIf str.Contains("PWD") Then
+                            newStr = str & vbCrLf & "[PdfOptions]" 'locatie voor invoegen pdf options aanmaken
                         Else
                             newStr = str
                         End If

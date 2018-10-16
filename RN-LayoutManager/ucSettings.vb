@@ -251,6 +251,7 @@ Public Class ucSettings
     Private Sub chkListboxTemplates_MouseDown(sender As Object, e As MouseEventArgs) Handles chkListboxTemplates.MouseDown
         If e.Button = MouseButtons.Right Then
             chkListboxTemplates.SelectedIndex = chkListboxTemplates.IndexFromPoint(e.X, e.Y)
+            editListTemplates.Show(chkListboxTemplates, e.Location)
         End If
     End Sub
 

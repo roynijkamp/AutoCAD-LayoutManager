@@ -445,9 +445,12 @@ Public Class ucLayoutManager
         If sDWF = True Then
             myCntrl = myTmpCntrl
         ElseIf Not sOverrideDevice = "" Then
+            'plotter override choosen
             myCntrl = myTmpCntrl
         Else
+            'default plot
             myCntrl = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
+            'use plotter from settings
         End If
 
         Dim layouts As New List(Of Layout)()
@@ -462,8 +465,10 @@ Public Class ucLayoutManager
 
                     acTrans.Commit()
                     If sDWF = False Then
+                        'plot PDF
                         plotLayouts(SheetType.SinglePdf, layouts, False, "pdf", sOverrideDevice)
                     Else
+                        'plot DWF
                         plotLayouts(SheetType.SingleDwf, layouts, False, "dwf")
                     End If
                 End Using
@@ -474,6 +479,8 @@ Public Class ucLayoutManager
         End Try
         Return True
     End Function
+
+
 
     ''' <summary>
     ''' 'Set active layout
@@ -1214,6 +1221,20 @@ Public Class ucLayoutManager
         Dim sOverrideDeviceName As String = mnuPltOverride.Text
         Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltOverride.Tag, RN_LayoutItems.RN_UCLayoutItem)
         PlotLayout(sender, e, False, myCntrl, sOverrideDeviceName)
+        Return True
+    End Function
+
+    Public Function OverridePlotDeviceLayoutSelection(ByVal sender As Object, ByVal e As EventArgs)
+        Dim mnuPltOverride As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim sOverrideDeviceName As String = mnuPltOverride.Text
+        'Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(mnuPltOverride.Tag, RN_LayoutItems.RN_UCLayoutItem)
+        'PlotLayout(sender, e, False, myCntrl, sOverrideDeviceName)
+        Dim layouts As New List(Of Layout)()
+        layouts = checkedLayouts()
+        If layouts.Count > 1 Then
+            regenDrawing()
+            plotLayouts(SheetType.SinglePdf, checkedLayouts(), False, "pdf", sOverrideDeviceName)
+        End If
         Return True
     End Function
 
@@ -2191,5 +2212,20 @@ Public Class ucLayoutManager
         End If
     End Sub
 
-
+    Private Sub ContextMenuDWFoptions_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuDWFoptions.Opening
+        'OverridePlotterLayoutSelection
+        'add plot override enkel wanneer dit nog niet is toegevoegd
+        If OverridePlotterLayoutSelection.HasDropDownItems = True Then
+            OverridePlotterLayoutSelection.DropDownItems.Clear()
+        End If
+        Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+        'PlotterOverrideToolStripMenuItem
+        For Each sPlotDevice As String In clsFunctions.loadPlotPresets(sSettingsFile)
+            Dim mnuItm As New ToolStripMenuItem
+            mnuItm.Text = sPlotDevice
+            'mnuItm.Tag = CType(Me.SubMenu.SourceControl, RN_LayoutItems.RN_UCLayoutItem)
+            AddHandler mnuItm.Click, AddressOf OverridePlotDeviceLayoutSelection
+            OverridePlotterLayoutSelection.DropDownItems.Add(mnuItm)
+        Next
+    End Sub
 End Class
