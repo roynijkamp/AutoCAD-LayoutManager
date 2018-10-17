@@ -178,6 +178,19 @@ Public Class ucLayoutManager
         'tool toevoegen aan trusted path
         getTrustedPaths(clsFunctions.getCoreDir())
         'load settings
+        loadSettingsFromINI()
+        'selectie filters laden
+        loadFilters()
+        loadLayouts()
+        'set active layout
+        DocumentManger_DocumentLayoutSwitched()
+        If clsFunctions.isDebugMode() Then
+            'debug modus = true
+            lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
+        End If
+    End Sub
+
+    Public Sub loadSettingsFromINI()
         If File.Exists(sIniDir & sIniFile) Then
             'bestand bestaat, instelingen laden
             iniFile = New clsINI(sIniDir & sIniFile)
@@ -199,15 +212,6 @@ Public Class ucLayoutManager
                     ContextMenuTemplates.Items.Add(mItem)
                 End If
             Next
-        End If
-        'selectie filters laden
-        loadFilters()
-        loadLayouts()
-        'set active layout
-        DocumentManger_DocumentLayoutSwitched()
-        If clsFunctions.isDebugMode() Then
-            'debug modus = true
-            lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
         End If
     End Sub
 
@@ -2227,5 +2231,10 @@ Public Class ucLayoutManager
             AddHandler mnuItm.Click, AddressOf OverridePlotDeviceLayoutSelection
             OverridePlotterLayoutSelection.DropDownItems.Add(mnuItm)
         Next
+    End Sub
+
+    Private Sub ContextMenuTemplates_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuTemplates.Opening
+        'recente instellingen laden
+        loadSettingsFromINI()
     End Sub
 End Class

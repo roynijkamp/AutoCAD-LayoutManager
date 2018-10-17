@@ -50,13 +50,13 @@ Partial Class ucSettings
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtConversion = New System.Windows.Forms.TextBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.lblRegDate = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblUserEmail = New System.Windows.Forms.Label()
         Me.lblUserName = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.cmdUpdate = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -192,7 +192,6 @@ Partial Class ucSettings
         Me.grpDebugOptions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grpDebugOptions.Controls.Add(Me.chkTrashDSD)
-        Me.grpDebugOptions.Controls.Add(Me.cmdDebugOptions)
         Me.grpDebugOptions.Enabled = False
         Me.grpDebugOptions.Location = New System.Drawing.Point(3, 751)
         Me.grpDebugOptions.Name = "grpDebugOptions"
@@ -214,7 +213,7 @@ Partial Class ucSettings
         '
         Me.cmdDebugOptions.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdDebugOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdDebugOptions.Location = New System.Drawing.Point(3, -3)
+        Me.cmdDebugOptions.Location = New System.Drawing.Point(3, 747)
         Me.cmdDebugOptions.Name = "cmdDebugOptions"
         Me.cmdDebugOptions.Size = New System.Drawing.Size(122, 19)
         Me.cmdDebugOptions.TabIndex = 1
@@ -332,12 +331,22 @@ Partial Class ucSettings
         Me.GroupBox4.Controls.Add(Me.lblUserName)
         Me.GroupBox4.Controls.Add(Me.Label5)
         Me.GroupBox4.Controls.Add(Me.Label6)
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 652)
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 649)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(415, 90)
         Me.GroupBox4.TabIndex = 14
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Licentie Details:"
+        '
+        'cmdUpdate
+        '
+        Me.cmdUpdate.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.cmdUpdate.Location = New System.Drawing.Point(331, 63)
+        Me.cmdUpdate.Name = "cmdUpdate"
+        Me.cmdUpdate.Size = New System.Drawing.Size(74, 26)
+        Me.cmdUpdate.TabIndex = 6
+        Me.cmdUpdate.Text = "Update"
+        Me.cmdUpdate.UseVisualStyleBackColor = False
         '
         'lblRegDate
         '
@@ -393,21 +402,11 @@ Partial Class ucSettings
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Gebruiker:"
         '
-        'cmdUpdate
-        '
-        Me.cmdUpdate.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.cmdUpdate.Location = New System.Drawing.Point(331, 63)
-        Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Size = New System.Drawing.Size(74, 26)
-        Me.cmdUpdate.TabIndex = 6
-        Me.cmdUpdate.Text = "Update"
-        Me.cmdUpdate.UseVisualStyleBackColor = False
-        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.GroupBox4)
+        Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.txtConversion)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
@@ -421,6 +420,7 @@ Partial Class ucSettings
         Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.lblTitel)
+        Me.Controls.Add(Me.GroupBox4)
         Me.Name = "ucSettings"
         Me.Size = New System.Drawing.Size(421, 818)
         Me.GroupBox1.ResumeLayout(False)

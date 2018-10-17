@@ -12,6 +12,7 @@ Imports System.IO
 Imports Autodesk.AutoCAD.Interop
 Imports CodeTech.Control
 Imports System.Windows.Forms
+Imports Newtonsoft.Json.Linq
 
 ' This line is not mandatory, but improves loading performances
 <Assembly: CommandClass(GetType(RN_LayoutManager.MyCommands))>
@@ -162,6 +163,86 @@ Namespace RN_LayoutManager
                     End If
                 End If
             Next
+        End Sub
+
+        Public Sub checkForUpdate()
+            Dim sUserName As String = ""
+            Dim sUserEmail As String = ""
+            Dim sRegDate As String = ""
+            Dim sUserID As String = ""
+            Dim sURL As String = ""
+            Dim sAppName As String = ""
+            Dim sComputerName As String = ""
+            Dim sCoreDir As String = clsFunctions.getCoreDir()
+            Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
+
+            'load license details
+            If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
+                Dim sLic As String = My.Computer.FileSystem.ReadAllText(sCoreDir & "\RNLAYMAN.LCF")
+                Try
+                    Dim sLicenseDecrypt As String = tdes.Decrypt(sLic)
+                    Dim myObject As JObject = JObject.Parse(sLicenseDecrypt)
+                    Dim aUserDet As JArray = myObject("details")
+                    sComputerName = "Computername: " & aUserDet(0).SelectToken("computername").ToString
+                    sUserName = aUserDet(0).SelectToken("name").ToString
+                    'lblUserName.Text = sUserName & " [" & sComputername & "]"
+                    sUserEmail = aUserDet(0).SelectToken("email").ToString
+                    'lblUserEmail.Text = sUserEmail
+                    sRegDate = aUserDet(0).SelectToken("regdate").ToString
+                    'lblRegDate.Text = sRegDate
+                    sUserID = aUserDet(0).SelectToken("userid").ToString
+                Catch ex As System.Exception
+                    MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
+                    Exit Sub
+                End Try
+            End If
+
+
+            Dim updCrypt As String = clsRegister.checkUpdates(sUserEmail, "versioncheck", sUserID)
+            If updCrypt.Contains("error:") Then
+                'pcbUpdate.BackgroundImage = My.Resources.icon_stop
+                'lblUpdate.Text = updCrypt
+            End If
+            Try
+                Dim sUpdateDecrypt As String = tdes.Decrypt(updCrypt)
+                'JSON doorlopen
+                Dim bUpdate As Boolean = False
+                Dim myObject As JObject = JObject.Parse(sUpdateDecrypt)
+                Dim aUserDet As JArray = myObject("details")
+                Dim sComputernameResp As String = aUserDet(0).SelectToken("computername").ToString
+                If sComputerName = sComputernameResp Then
+                    'response is geldig voor deze pc
+                    bUpdate = CBool(aUserDet(0).SelectToken("updateready").ToString)
+                    If bUpdate Then
+                        'update beschikbaar, melden
+
+                        'pcbUpdate.BackgroundImage = My.Resources.icon_warning
+                        Dim sNewVersion As String = aUserDet(0).SelectToken("version").ToString
+                        sAppName = "RNODM-" & sNewVersion & ".exe"
+                        sURL = aUserDet(0).SelectToken("update_url").ToString
+                        'lblUpdate.Text = "Software update V: " & sNewVersion & " beschikbaar"
+                        Dim sReleaseNotes As String = aUserDet(0).SelectToken("releasenotes").ToString
+                        'webReleasenotes.DocumentText = sReleaseNotes
+                        'webReleasenotes.Visible = True
+                        'cmdUpdateNow.Visible = True
+                        Dim RNmsgBox As RN_CustomAlerts.frmUpdate = New RN_CustomAlerts.frmUpdate
+                        RNmsgBox.UserEmail = sUserEmail
+                        RNmsgBox.UserName = sUserName
+                        RNmsgBox.RegDate = sRegDate
+                        RNmsgBox.UpdateOmschrijving = "Software update V: " & sNewVersion & " beschikbaar"
+                        RNmsgBox.ReleaseNotes = sReleaseNotes
+                        Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                        'bij cancel result exit sub
+                        If dlgRes = Windows.Forms.DialogResult.Cancel Then
+                            Exit Sub
+                        Else
+                            'update hier
+                        End If
+                    End If
+                End If
+            Catch ex As System.Exception
+                MsgBox("Fout bij het weergeven van de update!" & vbCrLf & ex.Message)
+            End Try
         End Sub
 
     End Class

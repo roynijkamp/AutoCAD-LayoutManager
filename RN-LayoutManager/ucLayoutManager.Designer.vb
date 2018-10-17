@@ -540,7 +540,7 @@ Partial Class ucLayoutManager
         '
         Me.ContextMenuDWFoptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SinglesheetDWFToolStripMenuItem, Me.sPDFenMDWF, Me.mPDFenMDWF, Me.OverridePlotterLayoutSelection})
         Me.ContextMenuDWFoptions.Name = "ContextMenuStrip1"
-        Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 114)
+        Me.ContextMenuDWFoptions.Size = New System.Drawing.Size(257, 92)
         '
         'SinglesheetDWFToolStripMenuItem
         '
