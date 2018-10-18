@@ -341,11 +341,11 @@ Partial Class ucSettings
         'cmdUpdate
         '
         Me.cmdUpdate.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.cmdUpdate.Location = New System.Drawing.Point(331, 63)
+        Me.cmdUpdate.Location = New System.Drawing.Point(288, 63)
         Me.cmdUpdate.Name = "cmdUpdate"
-        Me.cmdUpdate.Size = New System.Drawing.Size(74, 26)
+        Me.cmdUpdate.Size = New System.Drawing.Size(117, 26)
         Me.cmdUpdate.TabIndex = 6
-        Me.cmdUpdate.Text = "Update"
+        Me.cmdUpdate.Text = "Check op Update"
         Me.cmdUpdate.UseVisualStyleBackColor = False
         '
         'lblRegDate

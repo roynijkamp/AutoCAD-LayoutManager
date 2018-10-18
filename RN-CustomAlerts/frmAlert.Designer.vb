@@ -45,7 +45,7 @@ Partial Class frmAlert
         '
         Me.chk_aplytoall.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chk_aplytoall.AutoSize = True
-        Me.chk_aplytoall.Location = New System.Drawing.Point(181, 88)
+        Me.chk_aplytoall.Location = New System.Drawing.Point(178, 45)
         Me.chk_aplytoall.Name = "chk_aplytoall"
         Me.chk_aplytoall.Size = New System.Drawing.Size(225, 17)
         Me.chk_aplytoall.TabIndex = 7
@@ -62,7 +62,7 @@ Partial Class frmAlert
         Me.TableLayoutPanel1.Controls.Add(Me.Yes_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.No_Button, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 2, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(181, 111)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(178, 68)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -101,7 +101,7 @@ Partial Class frmAlert
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(475, 152)
+        Me.ClientSize = New System.Drawing.Size(472, 109)
         Me.Controls.Add(Me.lblTekst)
         Me.Controls.Add(Me.chk_aplytoall)
         Me.Controls.Add(Me.TableLayoutPanel1)

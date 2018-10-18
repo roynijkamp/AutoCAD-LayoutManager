@@ -321,32 +321,102 @@ Public Class ucSettings
         'End Try
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        'Dim msgBox As New frmCustomAlert
-        'msgBox.WindowTitle = "Test Alerting"
-        'msgBox.LabelTekst = "Test Label"
 
-        'Dim dlgRes As DialogResult = msgBox.ShowDialog()
 
-        'If dlgRes = DialogResult.Yes Then
-        '    TextBox1.AppendText("YES Clicked" & vbCrLf)
-        '    If msgBox.applytoall = True Then
-        '        TextBox1.AppendText("APPLY TO ALL" & vbCrLf)
-        '    End If
-        'ElseIf dlgRes = DialogResult.No Then
-        '    TextBox1.AppendText("NO Clicked" & vbCrLf)
-        '    If msgBox.applytoall = True Then
-        '        TextBox1.AppendText("APPLY TO ALL" & vbCrLf)
-        '    End If
-        'ElseIf dlgRes = DialogResult.Cancel Then
-        '    TextBox1.AppendText("CANCEL Clicked" & vbCrLf)
-        'End If
-        'Dim RNmsgBox As RN_CustomAlerts.frmAlert = New RN_CustomAlerts.frmAlert
-        'RNmsgBox.WindowTitle = "Wijzigingen opslaan?"
-        'RNmsgBox.LabelTekst = "Wilt u de niet opgeslagen wijzigingen opslaan?"
-        'Dim dlgRes As DialogResult = RNmsgBox.ShowDialog()
-
-        'MsgBox(dlgRes.ToString & " -- Applyt to all" & RNmsgBox.applytoall.ToString)
-
+    Private Sub cmdUpdate_Click(sender As Object, e As EventArgs) Handles cmdUpdate.Click
+        checkForUpdate()
     End Sub
+    Public Function checkForUpdate()
+        'Dim sUserName As String = ""
+        'Dim sUserEmail As String = ""
+        'Dim sRegDate As String = ""
+        'Dim sUserID As String = ""
+        'Dim sURL As String = ""
+        'Dim sAppName As String = ""
+        'Dim sComputerName As String = ""
+        'Dim sCoreDir As String = clsFunctions.getCoreDir()
+        'Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
+
+        ''load license details
+        'If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
+        '    Dim sLic As String = My.Computer.FileSystem.ReadAllText(sCoreDir & "\RNLAYMAN.LCF")
+        '    Try
+        '        Dim sLicenseDecrypt As String = tdes.Decrypt(sLic)
+        '        Dim myObject As JObject = JObject.Parse(sLicenseDecrypt)
+        '        Dim aUserDet As JArray = myObject("details")
+        '        sComputerName = "Computername: " & aUserDet(0).SelectToken("computername").ToString
+        '        sUserName = aUserDet(0).SelectToken("name").ToString
+        '        'lblUserName.Text = sUserName & " [" & sComputername & "]"
+        '        sUserEmail = aUserDet(0).SelectToken("email").ToString
+        '        'lblUserEmail.Text = sUserEmail
+        '        sRegDate = aUserDet(0).SelectToken("regdate").ToString
+        '        'lblRegDate.Text = sRegDate
+        '        sUserID = aUserDet(0).SelectToken("userid").ToString
+        '    Catch ex As System.Exception
+        '        MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
+        '        Return False
+        '    End Try
+        'Else
+        '    MsgBox("Licentie bestand niet gevonden!")
+        'End If
+
+        MsgBox("update check")
+        Dim updCrypt As String = clsRegister.checkUpdates(sUserEmail, "versioncheck", sUserID)
+        If updCrypt.Contains("error:") Then
+            'pcbUpdate.BackgroundImage = My.Resources.icon_stop
+            'lblUpdate.Text = updCrypt
+            MsgBox("Fout bij het uitvoeren van de Versie Check!" & vbCrLf & updCrypt)
+            Return False
+        End If
+        MsgBox("upcate check voltooid")
+        Try
+            Dim sUpdateDecrypt As String = tdes.Decrypt(updCrypt)
+            'JSON doorlopen
+            Dim bUpdate As Boolean = False
+            Dim myObject As JObject = JObject.Parse(sUpdateDecrypt)
+            Dim aUserDet As JArray = myObject("details")
+            Dim sComputernameResp As String = aUserDet(0).SelectToken("computername").ToString
+            If sComputerName = sComputernameResp Then
+                'response is geldig voor deze pc
+                bUpdate = CBool(aUserDet(0).SelectToken("updateready").ToString)
+                If bUpdate Then
+                    'update beschikbaar, melden
+
+                    'pcbUpdate.BackgroundImage = My.Resources.icon_warning
+                    Dim sNewVersion As String = aUserDet(0).SelectToken("version").ToString
+                    sAppName = "RNLayoutManager-" & sNewVersion & ".exe"
+                    sURL = aUserDet(0).SelectToken("update_url").ToString
+                    'lblUpdate.Text = "Software update V: " & sNewVersion & " beschikbaar"
+                    Dim sReleaseNotes As String = aUserDet(0).SelectToken("releasenotes").ToString
+                    'webReleasenotes.DocumentText = sReleaseNotes
+                    'webReleasenotes.Visible = True
+                    'cmdUpdateNow.Visible = True
+                    Dim RNmsgBox As RN_CustomAlerts.frmUpdate = New RN_CustomAlerts.frmUpdate
+                    RNmsgBox.UserEmail = sUserEmail
+                    RNmsgBox.UserName = sUserName
+                    RNmsgBox.RegDate = sRegDate
+                    RNmsgBox.UpdateOmschrijving = "Software update V: " & sNewVersion & " beschikbaar"
+                    RNmsgBox.ReleaseNotes = sReleaseNotes
+                    Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                    'bij cancel result exit sub
+                    If dlgRes = Windows.Forms.DialogResult.Cancel Then
+                        'update geannuleerd, wel programma starten
+                        Return True
+                    ElseIf dlgRes = Windows.Forms.DialogResult.Yes Then
+                        'update hier
+                        If clsRegister.createUpdateFile(sUserEmail, "update", sUserID) Then
+                            'meesturen update url, appname en core dir
+                            clsRegister.startUpdate(sURL, sAppName, sCoreDir)
+                        End If
+                    End If
+                End If
+            Else
+                MsgBox("computer name komt niet overeen!" & vbCrLf & sComputerName & " --- " & sComputernameResp)
+            End If
+        Catch ex As System.Exception
+            MsgBox("Fout bij het weergeven van de update!" & vbCrLf & ex.Message)
+            Return True
+        End Try
+        Return True
+    End Function
 End Class

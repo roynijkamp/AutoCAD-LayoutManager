@@ -24,8 +24,8 @@ Partial Class frmUpdate
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmUpdate))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.webReleasenotes = New System.Windows.Forms.WebBrowser()
         Me.lblUpdate = New System.Windows.Forms.Label()
+        Me.webReleasenotes = New System.Windows.Forms.WebBrowser()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.lblRegDate = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -41,21 +41,15 @@ Partial Class frmUpdate
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.lblUpdate)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 101)
+        Me.GroupBox1.Location = New System.Drawing.Point(9, 220)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(445, 56)
+        Me.GroupBox1.Size = New System.Drawing.Size(379, 56)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Update Info"
-        '
-        'webReleasenotes
-        '
-        Me.webReleasenotes.Location = New System.Drawing.Point(12, 163)
-        Me.webReleasenotes.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.webReleasenotes.Name = "webReleasenotes"
-        Me.webReleasenotes.Size = New System.Drawing.Size(445, 239)
-        Me.webReleasenotes.TabIndex = 6
         '
         'lblUpdate
         '
@@ -66,17 +60,29 @@ Partial Class frmUpdate
         Me.lblUpdate.TabIndex = 7
         Me.lblUpdate.Text = "NaN"
         '
+        'webReleasenotes
+        '
+        Me.webReleasenotes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.webReleasenotes.Location = New System.Drawing.Point(9, 282)
+        Me.webReleasenotes.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.webReleasenotes.Name = "webReleasenotes"
+        Me.webReleasenotes.Size = New System.Drawing.Size(379, 239)
+        Me.webReleasenotes.TabIndex = 6
+        '
         'GroupBox2
         '
+        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.lblRegDate)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.lblUserEmail)
         Me.GroupBox2.Controls.Add(Me.lblUserName)
         Me.GroupBox2.Controls.Add(Me.Label2)
         Me.GroupBox2.Controls.Add(Me.Label1)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 5)
+        Me.GroupBox2.Location = New System.Drawing.Point(9, 124)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(445, 90)
+        Me.GroupBox2.Size = New System.Drawing.Size(379, 90)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Licentie Details:"
@@ -140,7 +146,7 @@ Partial Class frmUpdate
         Me.cmdUpdateNow.BackColor = System.Drawing.SystemColors.HotTrack
         Me.cmdUpdateNow.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdUpdateNow.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cmdUpdateNow.Location = New System.Drawing.Point(12, 413)
+        Me.cmdUpdateNow.Location = New System.Drawing.Point(9, 532)
         Me.cmdUpdateNow.Name = "cmdUpdateNow"
         Me.cmdUpdateNow.Size = New System.Drawing.Size(155, 29)
         Me.cmdUpdateNow.TabIndex = 9
@@ -149,7 +155,7 @@ Partial Class frmUpdate
         '
         'cmdCancel
         '
-        Me.cmdCancel.Location = New System.Drawing.Point(302, 413)
+        Me.cmdCancel.Location = New System.Drawing.Point(233, 532)
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.Size = New System.Drawing.Size(155, 29)
         Me.cmdCancel.TabIndex = 8
@@ -160,12 +166,15 @@ Partial Class frmUpdate
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(466, 454)
+        Me.BackgroundImage = Global.RN_CustomAlerts.My.Resources.Resources.Tool_Head
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.ClientSize = New System.Drawing.Size(400, 578)
         Me.Controls.Add(Me.cmdUpdateNow)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.webReleasenotes)
         Me.Controls.Add(Me.GroupBox1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

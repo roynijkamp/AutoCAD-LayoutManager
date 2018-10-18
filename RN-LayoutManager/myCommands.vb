@@ -64,6 +64,11 @@ Namespace RN_LayoutManager
                     Exit Sub
                 End If
             End If
+            'check for update
+            'Dim sCurrDateTime As String = Date.Today()
+            'If checkForUpdate() = False Then
+            '    Exit Sub
+            'End If
 
             If m_palette Is Nothing Then
                 'palette nog niet geopend
@@ -73,7 +78,6 @@ Namespace RN_LayoutManager
                 m_palette.Add("LayoutManager", palette_overlayman)
                 Dim palette_settings As ucSettings = New ucSettings()
                 m_palette.Add("Instellingen", palette_settings)
-
             End If
             'm_palette.Icon = GetEmbeddedIcon("aitoolsicon.ico")
             'palette aanzetten
@@ -165,7 +169,7 @@ Namespace RN_LayoutManager
             Next
         End Sub
 
-        Public Sub checkForUpdate()
+        Public Function checkForUpdate()
             Dim sUserName As String = ""
             Dim sUserEmail As String = ""
             Dim sRegDate As String = ""
@@ -193,7 +197,7 @@ Namespace RN_LayoutManager
                     sUserID = aUserDet(0).SelectToken("userid").ToString
                 Catch ex As System.Exception
                     MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
-                    Exit Sub
+                    Return False
                 End Try
             End If
 
@@ -202,6 +206,8 @@ Namespace RN_LayoutManager
             If updCrypt.Contains("error:") Then
                 'pcbUpdate.BackgroundImage = My.Resources.icon_stop
                 'lblUpdate.Text = updCrypt
+                MsgBox("Fout bij het uitvoeren van de Versie Check!" & vbCrLf & updCrypt)
+                Return False
             End If
             Try
                 Dim sUpdateDecrypt As String = tdes.Decrypt(updCrypt)
@@ -218,7 +224,7 @@ Namespace RN_LayoutManager
 
                         'pcbUpdate.BackgroundImage = My.Resources.icon_warning
                         Dim sNewVersion As String = aUserDet(0).SelectToken("version").ToString
-                        sAppName = "RNODM-" & sNewVersion & ".exe"
+                        sAppName = "RNLayoutManager-" & sNewVersion & ".exe"
                         sURL = aUserDet(0).SelectToken("update_url").ToString
                         'lblUpdate.Text = "Software update V: " & sNewVersion & " beschikbaar"
                         Dim sReleaseNotes As String = aUserDet(0).SelectToken("releasenotes").ToString
@@ -234,16 +240,23 @@ Namespace RN_LayoutManager
                         Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
                         'bij cancel result exit sub
                         If dlgRes = Windows.Forms.DialogResult.Cancel Then
-                            Exit Sub
-                        Else
+                            'update geannuleerd, wel programma starten
+                            Return True
+                        ElseIf dlgRes = Windows.Forms.DialogResult.Yes Then
                             'update hier
+                            If clsRegister.createUpdateFile(sUserEmail, "update", sUserID) Then
+                                'meesturen update url, appname en core dir
+                                clsRegister.startUpdate(sURL, sAppName, sCoreDir)
+                            End If
                         End If
                     End If
                 End If
             Catch ex As System.Exception
                 MsgBox("Fout bij het weergeven van de update!" & vbCrLf & ex.Message)
+                Return True
             End Try
-        End Sub
+            Return True
+        End Function
 
     End Class
 

@@ -25,4 +25,5 @@
       <protection id="anti tamper" />
     </rule>
   </module>
+  <module path="RN-CustomAlerts.dll" />
 </project>

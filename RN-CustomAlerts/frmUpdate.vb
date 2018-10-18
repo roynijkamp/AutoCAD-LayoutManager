@@ -5,6 +5,7 @@
     Shared sRegDate As String
     Shared sUpdateOmschrijving As String
     Shared sReleaseNotes As String
+    Shared sAppName As String
 
     Public Property UserEmail As String
         Get
@@ -59,6 +60,8 @@
             sReleaseNotes = value
         End Set
     End Property
+
+
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel

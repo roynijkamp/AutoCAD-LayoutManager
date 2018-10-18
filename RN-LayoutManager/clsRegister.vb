@@ -8,7 +8,7 @@ Public Class clsRegister
     Shared sComputerName As String = My.Computer.Name
     Shared sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Shared sLicName As String = "RNLAYMAN.LCF"
-    Shared sUpdateFile As String = "RNLAYMAN.LCU"
+    Shared sUpdateFile As String = "RNUPD.LCU"
 
     Public Shared Function PHP(ByVal url As String, ByVal method As String, ByVal data As String)
         Try
