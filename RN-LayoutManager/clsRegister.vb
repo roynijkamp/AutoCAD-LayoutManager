@@ -87,9 +87,8 @@ Public Class clsRegister
                                     & sCurrVersion & "</curr_version><appname>RNLAYOUTMANAGER</appname></user></xml>"
         Dim strXML As String = tdes.Encrypt(strXMLbase)
         Dim sCoreDir As String = clsFunctions.getCoreDir()
-        If IO.File.Exists(sCoreDir & "\" & sLicName) Then
-            'licentie file gevonden, controle
-            'CheckLicense(sCoreDir & "\RNODM.LCF")
+        If IO.File.Exists(sCoreDir & "\" & sUpdateFile) Then
+
             My.Computer.FileSystem.DeleteFile(sCoreDir & "\" & sUpdateFile, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
         End If
         Dim strmWriter As StreamWriter
@@ -111,7 +110,6 @@ Public Class clsRegister
         '// $user->computername
         '// $user->curr_version
         '// $user->appname
-
 
         Dim strXMLbase As String = "<xml><user><requestsoort>" & sRequestType & "</requestsoort><email>" _
                                     & sUserEmail & "</email><userid>" _

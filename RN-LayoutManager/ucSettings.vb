@@ -272,13 +272,7 @@ Public Class ucSettings
                 End If
             Next i
         End If
-        'If chkListboxTemplates.CheckedItems.Count = 0 Then
-        '    If chkListboxTemplates.Items.Count > 0 Then
-        '        'geen item geselecteerd, 1e item selecteren
-        '        chkListboxTemplates.SetItemChecked(0, True)
-        '        sLayoutTemplate = chkListboxTemplates.Items(0)
-        '    End If
-        'End If
+
     End Sub
 
     Private Sub chkListboxTemplates_MouseDown(sender As Object, e As MouseEventArgs) Handles chkListboxTemplates.MouseDown
@@ -327,40 +321,6 @@ Public Class ucSettings
         checkForUpdate()
     End Sub
     Public Function checkForUpdate()
-        'Dim sUserName As String = ""
-        'Dim sUserEmail As String = ""
-        'Dim sRegDate As String = ""
-        'Dim sUserID As String = ""
-        'Dim sURL As String = ""
-        'Dim sAppName As String = ""
-        'Dim sComputerName As String = ""
-        'Dim sCoreDir As String = clsFunctions.getCoreDir()
-        'Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
-
-        ''load license details
-        'If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
-        '    Dim sLic As String = My.Computer.FileSystem.ReadAllText(sCoreDir & "\RNLAYMAN.LCF")
-        '    Try
-        '        Dim sLicenseDecrypt As String = tdes.Decrypt(sLic)
-        '        Dim myObject As JObject = JObject.Parse(sLicenseDecrypt)
-        '        Dim aUserDet As JArray = myObject("details")
-        '        sComputerName = "Computername: " & aUserDet(0).SelectToken("computername").ToString
-        '        sUserName = aUserDet(0).SelectToken("name").ToString
-        '        'lblUserName.Text = sUserName & " [" & sComputername & "]"
-        '        sUserEmail = aUserDet(0).SelectToken("email").ToString
-        '        'lblUserEmail.Text = sUserEmail
-        '        sRegDate = aUserDet(0).SelectToken("regdate").ToString
-        '        'lblRegDate.Text = sRegDate
-        '        sUserID = aUserDet(0).SelectToken("userid").ToString
-        '    Catch ex As System.Exception
-        '        MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
-        '        Return False
-        '    End Try
-        'Else
-        '    MsgBox("Licentie bestand niet gevonden!")
-        'End If
-
-        MsgBox("update check")
         Dim updCrypt As String = clsRegister.checkUpdates(sUserEmail, "versioncheck", sUserID)
         If updCrypt.Contains("error:") Then
             'pcbUpdate.BackgroundImage = My.Resources.icon_stop
@@ -368,7 +328,6 @@ Public Class ucSettings
             MsgBox("Fout bij het uitvoeren van de Versie Check!" & vbCrLf & updCrypt)
             Return False
         End If
-        MsgBox("upcate check voltooid")
         Try
             Dim sUpdateDecrypt As String = tdes.Decrypt(updCrypt)
             'JSON doorlopen
@@ -411,7 +370,7 @@ Public Class ucSettings
                     End If
                 End If
             Else
-                MsgBox("computer name komt niet overeen!" & vbCrLf & sComputerName & " --- " & sComputernameResp)
+                MsgBox("computer name komt niet overeen!")
             End If
         Catch ex As System.Exception
             MsgBox("Fout bij het weergeven van de update!" & vbCrLf & ex.Message)
