@@ -12,6 +12,7 @@ Imports Autodesk.AutoCAD.PlottingServices
 Imports System.Reflection
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
+Imports System.Drawing
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -49,6 +50,9 @@ Public Class ucLayoutManager
     Dim dStartValue(0 To 99) As Double
     Dim dCurrValue(0 To 99) As Double
     Dim dIncrementValue(0 To 99) As Double
+    'list item height based on DPI
+    Dim dItemHeightMin As Double
+    Dim dItemHeightMax As Double
     'plot vars
     Dim pstylemode As String
     Dim aPstyleLayouts As List(Of String) = New List(Of String)
@@ -187,7 +191,17 @@ Public Class ucLayoutManager
         If clsFunctions.isDebugMode() Then
             'debug modus = true
             lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
+            Using myGraphics As Graphics = Me.CreateGraphics()
+                Windows.MessageBox.Show(String.Format("Resolution X: {0} dpi, Resolution Y: {1} dpi", myGraphics.DpiX, myGraphics.DpiY),
+                            "Windows Resolution")
+            End Using
         End If
+        Using myGraphics As Graphics = Me.CreateGraphics()
+            'Windows.MessageBox.Show(String.Format("Resolution X: {0} dpi, Resolution Y: {1} dpi", myGraphics.DpiX, myGraphics.DpiY), "Windows Resolution")
+            dItemHeightMin = myGraphics.DpiY / 2.5
+            dItemHeightMax = dItemHeightMin + 100
+        End Using
+
     End Sub
 
     Public Sub loadSettingsFromINI()
@@ -304,8 +318,8 @@ Public Class ucLayoutManager
                     myCntrl.PlotDevice = sPlotDevice
                     myCntrl.PlotTransparency = bPlotTransparency
                     myCntrl.ControlWidth = flowLayouts.Width
-                    myCntrl.MinHeight = 40 'minheight for collapse
-                    myCntrl.MaxHeight = 100 'max height
+                    myCntrl.MinHeight = dItemHeightMin  '40 'minheight for collapse
+                    myCntrl.MaxHeight = dItemHeightMax  '100 'max height
                     myCntrl.updateItem()
                     'add handlers to register functions for items
                     AddHandler myCntrl.View_Click, AddressOf ItemViewClick
