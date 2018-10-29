@@ -146,7 +146,7 @@ Public Class ucSettings
                     lblRegDate.Text = sRegDate
                     sUserID = aUserDet(0).SelectToken("userid").ToString
                 Catch ex As System.Exception
-                    MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & ex.Message)
+                    MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & "Coredir: " & sCoreDir & vbCrLf & ex.Message)
                 End Try
             End If
 

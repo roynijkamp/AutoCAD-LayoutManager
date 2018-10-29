@@ -58,10 +58,10 @@ Namespace RN_LayoutManager
                 ElseIf myDialogResult = DialogResult.Abort Then
                     'registratie was niet succesvol
                     MsgBox("fout bij de registratie")
-                    Exit Sub
+                    'Exit Sub
                 Else
                     'geannuleerd
-                    Exit Sub
+                    'Exit Sub
                 End If
             End If
             'check for update

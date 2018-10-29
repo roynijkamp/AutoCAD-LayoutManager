@@ -274,51 +274,57 @@ Partial Class ucSettings
         '
         'cmdGPStest
         '
-        Me.cmdGPStest.Location = New System.Drawing.Point(196, 478)
+        Me.cmdGPStest.Location = New System.Drawing.Point(3, 456)
         Me.cmdGPStest.Name = "cmdGPStest"
         Me.cmdGPStest.Size = New System.Drawing.Size(139, 36)
         Me.cmdGPStest.TabIndex = 9
         Me.cmdGPStest.Text = "Button1"
         Me.cmdGPStest.UseVisualStyleBackColor = True
+        Me.cmdGPStest.Visible = False
         '
         'txtLat
         '
-        Me.txtLat.Location = New System.Drawing.Point(198, 536)
+        Me.txtLat.Location = New System.Drawing.Point(234, 456)
         Me.txtLat.Name = "txtLat"
         Me.txtLat.Size = New System.Drawing.Size(100, 20)
         Me.txtLat.TabIndex = 10
+        Me.txtLat.Visible = False
         '
         'txtLon
         '
-        Me.txtLon.Location = New System.Drawing.Point(198, 566)
+        Me.txtLon.Location = New System.Drawing.Point(234, 486)
         Me.txtLon.Name = "txtLon"
         Me.txtLon.Size = New System.Drawing.Size(100, 20)
         Me.txtLon.TabIndex = 11
+        Me.txtLon.Visible = False
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(140, 536)
+        Me.Label2.Location = New System.Drawing.Point(176, 456)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(22, 13)
         Me.Label2.TabIndex = 12
         Me.Label2.Text = "Lat"
+        Me.Label2.Visible = False
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(140, 566)
+        Me.Label3.Location = New System.Drawing.Point(176, 486)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(25, 13)
         Me.Label3.TabIndex = 12
         Me.Label3.Text = "Lon"
+        Me.Label3.Visible = False
         '
         'txtConversion
         '
-        Me.txtConversion.Location = New System.Drawing.Point(124, 598)
+        Me.txtConversion.Location = New System.Drawing.Point(160, 518)
         Me.txtConversion.Name = "txtConversion"
         Me.txtConversion.Size = New System.Drawing.Size(249, 20)
         Me.txtConversion.TabIndex = 13
+        Me.txtConversion.Visible = False
         '
         'GroupBox4
         '
@@ -406,6 +412,8 @@ Partial Class ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.AutoScroll = True
+        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.txtConversion)
         Me.Controls.Add(Me.Label3)
