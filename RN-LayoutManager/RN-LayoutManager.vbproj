@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.18292.1246</AssemblyVersion>
+    <AssemblyVersion>1.0.18302.0946</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

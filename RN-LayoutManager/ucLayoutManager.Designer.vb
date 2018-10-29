@@ -568,8 +568,8 @@ Partial Class ucLayoutManager
         '
         'ucLayoutManager
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "ucLayoutManager"
         Me.Size = New System.Drawing.Size(420, 582)
