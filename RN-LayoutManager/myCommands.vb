@@ -14,6 +14,7 @@ Imports CodeTech.Control
 Imports System.Windows.Forms
 Imports Newtonsoft.Json.Linq
 
+
 ' This line is not mandatory, but improves loading performances
 <Assembly: CommandClass(GetType(RN_LayoutManager.MyCommands))>
 Namespace RN_LayoutManager
@@ -87,6 +88,8 @@ Namespace RN_LayoutManager
 
         <CommandMethod("autoloadLayoutMan")>
         Public Sub autoloadLayoutMan()
+            'check op units
+            PrefsSetUnits()
             'MsgBox("Init Layoutman")
             If File.Exists(sIniDir & sIniFile) Then
                 'bestand bestaat, instelingen laden
@@ -98,6 +101,20 @@ Namespace RN_LayoutManager
             End If
         End Sub
 
+
+
+        <CommandMethod("PrefsSetUnits")>
+        Public Sub PrefsSetUnits()
+            '' Set insertion units to meters
+
+            '' Access the Preferences object
+            Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+
+            '' Disable the scroll bars
+            'acPrefComObj.Display.DisplayScrollBars = False
+            acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
+            acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+        End Sub
 
         <CommandMethod("closeallopen", CommandFlags.Modal + CommandFlags.Session)>
         Public Sub closeallopen()

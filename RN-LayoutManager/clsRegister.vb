@@ -27,12 +27,13 @@ Public Class clsRegister
         Catch ex As System.Exception
             Dim error1 As String = ErrorToString()
             If error1 = "Invalid URI: The format of the URI could not be determined." Then
-                'MsgBox("ERROR! Must have HTTP:// before the URL.")
+                Return "ERROR! Must have HTTP:// before the URL."
             Else
                 'MsgBox(error1)
+                Return error1
             End If
             'Return ("ERROR")
-            Return ""
+            Return "PHP error"
         End Try
     End Function
 
@@ -103,6 +104,7 @@ Public Class clsRegister
     Public Shared Function createLicense(sUserEmail As String, sRequestType As String, sUserID As String)
         Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
         Dim strUpdateURL As String = "https://www.roynijkamp.nl/software/register/"
+        Dim sCoreDir As String = clsFunctions.getCoreDir()
         '// vewachte paramters in XML
         '// $user->requestsoort
         '// $user->id
@@ -117,36 +119,25 @@ Public Class clsRegister
                                     & sComputerName & "</computername><curr_version>" _
                                     & sCurrVersion & "</curr_version><appname>RNLAYOUTMANAGER</appname></user></xml>"
         Dim strXML As String = tdes.Encrypt(strXMLbase)
-        'MsgBox(strXMLbase)
-        'InputBox(strXML, "test", strXML)
+        clsFunctions.makeLog(sCoreDir & "\" & sLicName & ".log", "Send XML " & strXMLbase)
+        clsFunctions.makeLog(sCoreDir & "\" & sLicName & ".log", "Encrypt XML " & strXML)
+
         Dim resp As String = PHP(strUpdateURL & "index.php", "POST", strXML)
-        'MsgBox(resp)
+        clsFunctions.makeLog(sCoreDir & "\" & sLicName & ".log", "Server Response " & resp)
         If resp.Contains("error") Then
             MsgBox("Het was niet mogelijk om een KEY aan te maken" & vbCrLf & resp)
             Return False
         Else
-            'license file creeeren
-            ''AnaconToolSet.lic
-            'If sVersionNew = "licentiecheck" Then
-            '    'licentie verwijderen zodat deze opnieuw aangemaakt kan worden
-            '    Try
-            '        My.Computer.FileSystem.DeleteFile(sPath & "AnaconToolSet.lic", FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
-            '    Catch
-            '        MsgBox("Fout bij het verwijderen van de licentie")
-            '        Return False
-            '        Exit Function
-            '    End Try
-            'End If
-            Dim sCoreDir As String = clsFunctions.getCoreDir()
             If IO.File.Exists(sCoreDir & "\" & sLicName) Then
-                'licentie file gevonden, controle
-                'CheckLicense(sCoreDir & "\RNODM.LCF")
                 My.Computer.FileSystem.DeleteFile(sCoreDir & "\" & sLicName, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
             End If
+
+            clsFunctions.makeLog(sCoreDir & "\" & sLicName & ".log", "Write License - Filename: " & sCoreDir & "\" & sLicName)
             Dim strmWriter As StreamWriter
 
             strmWriter = File.CreateText(sCoreDir & "\" & sLicName)
             strmWriter.WriteLine(resp)
+            clsFunctions.makeLog(sCoreDir & "\" & sLicName & ".log", "Contents " & resp)
             strmWriter.Flush()
             strmWriter.Close()
             Return True
@@ -156,10 +147,14 @@ Public Class clsRegister
     Public Shared Function CheckLicense(ByVal sLicFile As String)
         Dim tdes As New clsTripleDES("royNijkamp@My3Dkey")
         Dim sCoreDir As String = clsFunctions.getCoreDir()
+        clsFunctions.makeLog(sLicFile & ".log", "Check License " & sLicFile)
         If IO.File.Exists(sCoreDir & "\" & sLicName) Then
             Try
                 Dim sLic As String = My.Computer.FileSystem.ReadAllText(sCoreDir & "\" & sLicName)
+                clsFunctions.makeLog(sLicFile & ".log", "Lic loaded into String " & sLic)
                 Dim sLicenseDecrypt As String = tdes.Decrypt(sLic)
+                clsFunctions.makeLog(sLicFile & ".log", "Lic Decrypted ")
+                clsFunctions.makeLog(sLicFile & ".log", sLicenseDecrypt)
                 Dim myObject As JObject = JObject.Parse(sLicenseDecrypt)
                 Dim aUserDet As JArray = myObject("details")
                 Dim sComputernameLic As String = aUserDet(0).SelectToken("computername").ToString
@@ -169,11 +164,17 @@ Public Class clsRegister
 
                 Dim sRegDate As String = aUserDet(0).SelectToken("regdate").ToString
 
+                clsFunctions.makeLog(sLicFile & ".log", "computername " & sComputernameLic)
+                clsFunctions.makeLog(sLicFile & ".log", "UserName " & sUserName)
+                clsFunctions.makeLog(sLicFile & ".log", "UserEmail " & sUserEmail)
+                clsFunctions.makeLog(sLicFile & ".log", "RegDate " & sRegDate)
+
                 If sComputerName = sComputernameLic Then
                     Return True
                 Else
                     My.Computer.FileSystem.DeleteFile(sCoreDir & "\" & sLicName, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
                     MsgBox("Licentiebestand is niet geldig voor deze computer!" & vbCrLf & "Registreert u opnieuw!")
+                    clsFunctions.makeLog(sLicFile & ".log", "Lic niet geldig voor deze pc " & sComputerName & " != " & sComputernameLic)
                     Return False
                 End If
             Catch ex As System.Exception

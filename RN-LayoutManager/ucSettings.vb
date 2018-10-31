@@ -174,7 +174,7 @@ Public Class ucSettings
         cmbPlottingDevice.DataSource = Nothing
         dtPlotPresets = New System.Data.DataTable
         Dim iSelectedIndex As Integer = 0
-        Dim sSettingsFile As String = clsFunctions.getCoreDir() & sPlotPreferences
+        Dim sSettingsFile As String = clsFunctions.getCoreDir() & "\" & sPlotPreferences
         clsFunctions.loadPlotPresets(sSettingsFile, dtPlotPresets, iSelectedIndex, sDefaultPlottingDevice)
         If Not dtPlotPresets.Rows.Count = 0 Then
             cmbPlottingDevice.DataSource = dtPlotPresets

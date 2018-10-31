@@ -192,12 +192,11 @@ Public Class ucLayoutManager
             'debug modus = true
             lblTitel.Text = lblTitel.Text & " [DEBUG Version]"
             Using myGraphics As Graphics = Me.CreateGraphics()
-                Windows.MessageBox.Show(String.Format("Resolution X: {0} dpi, Resolution Y: {1} dpi", myGraphics.DpiX, myGraphics.DpiY),
-                            "Windows Resolution")
+                'Windows.MessageBox.Show(String.Format("Resolution X: {0} dpi, Resolution Y: {1} dpi", myGraphics.DpiX, myGraphics.DpiY), "Windows Resolution")
+                lblTitel.Text = lblTitel.Text & " DPI x: " & myGraphics.DpiX.ToString & " y: " & myGraphics.DpiY.ToString
             End Using
         End If
         Using myGraphics As Graphics = Me.CreateGraphics()
-            'Windows.MessageBox.Show(String.Format("Resolution X: {0} dpi, Resolution Y: {1} dpi", myGraphics.DpiX, myGraphics.DpiY), "Windows Resolution")
             dItemHeightMin = myGraphics.DpiY / 2.5
             dItemHeightMax = dItemHeightMin + 100
         End Using

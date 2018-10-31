@@ -9,7 +9,7 @@ Public Class clsFunctions
         Dim strAssemblyPath As String = Assembly.GetExecutingAssembly.Location
         Dim strTmpPath() As String = strAssemblyPath.Split("\")
         Dim arrUbound As Integer = UBound(strTmpPath)
-        getCoreDir = strAssemblyPath.Replace(strTmpPath(arrUbound), "")
+        getCoreDir = strAssemblyPath.Replace(strTmpPath(arrUbound), "").TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
     End Function
 
     ''' <summary>
