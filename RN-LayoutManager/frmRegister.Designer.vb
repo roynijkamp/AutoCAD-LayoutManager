@@ -35,7 +35,7 @@ Partial Class frmRegister
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label1.Location = New System.Drawing.Point(12, 73)
+        Me.Label1.Location = New System.Drawing.Point(20, 27)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(136, 25)
         Me.Label1.TabIndex = 0
@@ -44,14 +44,14 @@ Partial Class frmRegister
         'txtEmailadres
         '
         Me.txtEmailadres.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEmailadres.Location = New System.Drawing.Point(154, 70)
+        Me.txtEmailadres.Location = New System.Drawing.Point(162, 24)
         Me.txtEmailadres.Name = "txtEmailadres"
-        Me.txtEmailadres.Size = New System.Drawing.Size(367, 31)
+        Me.txtEmailadres.Size = New System.Drawing.Size(321, 31)
         Me.txtEmailadres.TabIndex = 1
         '
         'cmdRegister
         '
-        Me.cmdRegister.Location = New System.Drawing.Point(418, 349)
+        Me.cmdRegister.Location = New System.Drawing.Point(270, 153)
         Me.cmdRegister.Name = "cmdRegister"
         Me.cmdRegister.Size = New System.Drawing.Size(111, 31)
         Me.cmdRegister.TabIndex = 2
@@ -60,7 +60,7 @@ Partial Class frmRegister
         '
         'cmdCancel
         '
-        Me.cmdCancel.Location = New System.Drawing.Point(305, 349)
+        Me.cmdCancel.Location = New System.Drawing.Point(157, 153)
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.Size = New System.Drawing.Size(111, 31)
         Me.cmdCancel.TabIndex = 3
@@ -73,7 +73,7 @@ Partial Class frmRegister
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.RN_LayoutManager.My.Resources.Resources.Clouds
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(660, 384)
+        Me.ClientSize = New System.Drawing.Size(495, 196)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.cmdRegister)
         Me.Controls.Add(Me.txtEmailadres)
@@ -83,7 +83,7 @@ Partial Class frmRegister
         Me.MinimizeBox = False
         Me.Name = "frmRegister"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "RN Open Data Manager - ©Roy Nijkamp "
+        Me.Text = "RN Layout Manager - ©Roy Nijkamp "
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
