@@ -272,7 +272,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotSingleSheet.Name = "cmdPlotSingleSheet"
         Me.cmdPlotSingleSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotSingleSheet.TabIndex = 8
-        Me.ToolTip1.SetToolTip(Me.cmdPlotSingleSheet, "Geslecteerde layouts afdrukken naar Singlesheet PDF")
+        Me.ToolTip1.SetToolTip(Me.cmdPlotSingleSheet, "Geselecteerde layouts afdrukken naar Singlesheet PDF")
         Me.cmdPlotSingleSheet.UseVisualStyleBackColor = True
         '
         'cmdPlotMulitSheet
@@ -284,7 +284,7 @@ Partial Class ucLayoutManager
         Me.cmdPlotMulitSheet.Name = "cmdPlotMulitSheet"
         Me.cmdPlotMulitSheet.Size = New System.Drawing.Size(28, 28)
         Me.cmdPlotMulitSheet.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.cmdPlotMulitSheet, "Geslecteerde layouts afdrukken naar Multisheet PDF")
+        Me.ToolTip1.SetToolTip(Me.cmdPlotMulitSheet, "Geselecteerde layouts afdrukken naar Multisheet PDF")
         Me.cmdPlotMulitSheet.UseVisualStyleBackColor = True
         '
         'cmdSortDESC

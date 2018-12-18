@@ -2,6 +2,8 @@
 Imports System.Reflection
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
+Imports Autodesk.AutoCAD.EditorInput
+Imports Autodesk.AutoCAD.Interop
 Imports Newtonsoft.Json.Linq
 
 Public Class clsFunctions
@@ -11,6 +13,50 @@ Public Class clsFunctions
         Dim arrUbound As Integer = UBound(strTmpPath)
         getCoreDir = strAssemblyPath.Replace(strTmpPath(arrUbound), "").TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
     End Function
+
+    Public Shared Function ParseDigits(ByVal strRawValue As String) As String
+        Dim strDigits As String = ""
+        If strRawValue = Nothing Then Return strDigits
+
+
+        For Each c As Char In strRawValue.ToCharArray()
+            If IsNumeric(c) Then
+                strDigits &= c
+            ElseIf c = "." Then
+                strDigits &= c
+            End If
+        Next c
+
+
+        ' return the number string, or "" if no numbers were in the string.
+        Return strDigits
+    End Function
+    ''' <summary>
+    ''' 'Set insertion units
+    ''' </summary>
+    Public Shared Sub PrefsSetUnits()
+        '' Set insertion units to meters
+
+        '' Access the Preferences object
+        Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+
+        '' Disable the scroll bars
+        'acPrefComObj.Display.DisplayScrollBars = False
+        acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
+        acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+    End Sub
+
+
+    Public Shared Sub switchToModalspace()
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+
+        Using acLockDoc As DocumentLock = acDoc.LockDocument
+            Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+            acLayoutMgr.CurrentLayout = "Model"
+            'acDoc.Editor.Regen()
+        End Using
+
+    End Sub
 
     ''' <summary>
     ''' Get plot presets

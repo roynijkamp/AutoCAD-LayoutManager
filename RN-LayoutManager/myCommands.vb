@@ -59,10 +59,10 @@ Namespace RN_LayoutManager
                 ElseIf myDialogResult = DialogResult.Abort Then
                     'registratie was niet succesvol
                     MsgBox("fout bij de registratie")
-                    'Exit Sub
+                    Exit Sub
                 Else
                     'geannuleerd
-                    'Exit Sub
+                    Exit Sub
                 End If
             End If
             'check for update
@@ -101,19 +101,23 @@ Namespace RN_LayoutManager
             End If
         End Sub
 
-
+        <CommandMethod("ms")>
+        Public Sub swtichToModalSpace()
+            clsFunctions.switchToModalspace()
+        End Sub
 
         <CommandMethod("PrefsSetUnits")>
         Public Sub PrefsSetUnits()
-            '' Set insertion units to meters
+            ''' Set insertion units to meters
 
-            '' Access the Preferences object
-            Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+            ''' Access the Preferences object
+            'Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
 
-            '' Disable the scroll bars
-            'acPrefComObj.Display.DisplayScrollBars = False
-            acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
-            acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+            ''' Disable the scroll bars
+            ''acPrefComObj.Display.DisplayScrollBars = False
+            'acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
+            'acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+            clsFunctions.PrefsSetUnits()
         End Sub
 
         <CommandMethod("closeallopen", CommandFlags.Modal + CommandFlags.Session)>

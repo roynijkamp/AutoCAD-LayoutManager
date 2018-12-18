@@ -145,6 +145,15 @@ Public Class ucSettings
                     sRegDate = aUserDet(0).SelectToken("regdate").ToString
                     lblRegDate.Text = sRegDate
                     sUserID = aUserDet(0).SelectToken("userid").ToString
+                    'licentie succesvol ingeladen, check voor update 1x per dag
+                    'check for update tenzij het een debug versie is
+                    If clsFunctions.isDebugMode() = False Then
+                        checkForUpdate()
+                    End If
+                    'Dim sCurrDateTime As String = Date.Today()
+                    'If checkForUpdate() = False Then
+                    '    Exit Sub
+                    'End If
                 Catch ex As System.Exception
                     MsgBox("Fout bij het lezen van de licentie!" & vbCrLf & "Coredir: " & sCoreDir & vbCrLf & ex.Message)
                 End Try
@@ -222,12 +231,10 @@ Public Class ucSettings
                 If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
                     My.Computer.FileSystem.CreateDirectory(sIniDir)
                 End If
-                'sLayoutTemplate = fldrDia.FileName
                 If Not sLayoutTemplates.Contains(fldrDia.FileName) Then
                     sLayoutTemplates.Add(fldrDia.FileName)
                     chkListboxTemplates.Items.Add(fldrDia.FileName, False)
                 End If
-
                 'bestand aanmaken
                 'settings schrijven
                 iniFile = New clsINI(sIniDir & sIniFile)
@@ -323,8 +330,6 @@ Public Class ucSettings
     Public Function checkForUpdate()
         Dim updCrypt As String = clsRegister.checkUpdates(sUserEmail, "versioncheck", sUserID)
         If updCrypt.Contains("error:") Then
-            'pcbUpdate.BackgroundImage = My.Resources.icon_stop
-            'lblUpdate.Text = updCrypt
             MsgBox("Fout bij het uitvoeren van de Versie Check!" & vbCrLf & updCrypt)
             Return False
         End If
@@ -341,15 +346,10 @@ Public Class ucSettings
                 If bUpdate Then
                     'update beschikbaar, melden
 
-                    'pcbUpdate.BackgroundImage = My.Resources.icon_warning
                     Dim sNewVersion As String = aUserDet(0).SelectToken("version").ToString
                     sAppName = "RNLayoutManager-" & sNewVersion & ".exe"
                     sURL = aUserDet(0).SelectToken("update_url").ToString
-                    'lblUpdate.Text = "Software update V: " & sNewVersion & " beschikbaar"
                     Dim sReleaseNotes As String = aUserDet(0).SelectToken("releasenotes").ToString
-                    'webReleasenotes.DocumentText = sReleaseNotes
-                    'webReleasenotes.Visible = True
-                    'cmdUpdateNow.Visible = True
                     Dim RNmsgBox As RN_CustomAlerts.frmUpdate = New RN_CustomAlerts.frmUpdate
                     RNmsgBox.UserEmail = sUserEmail
                     RNmsgBox.UserName = sUserName

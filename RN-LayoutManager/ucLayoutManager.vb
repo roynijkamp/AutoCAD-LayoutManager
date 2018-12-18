@@ -13,6 +13,7 @@ Imports System.Reflection
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Imports System.Drawing
+Imports Autodesk.AutoCAD.Interop
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -69,7 +70,17 @@ Public Class ucLayoutManager
     Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
         'tekening wordt geactiveerd
         Try
-            'clsFunctions.makeLog(sIniDir & "\log.txt", "Handler activated DocumentManager_DocumentActivated")
+            '' Set insertion units to meters
+
+            ''' Access the Preferences object
+            'Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+
+            ''' Disable the scroll bars
+            ''acPrefComObj.Display.DisplayScrollBars = False
+            'acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
+            'acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+            clsFunctions.PrefsSetUnits()
+
             'remap vars to current document
             acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
             acCurDb = acDoc.Database
@@ -1376,18 +1387,19 @@ Public Class ucLayoutManager
                         Dim lay As Layout = CType(entry.Value.GetObject(OpenMode.ForWrite), Layout)
                         If sLayName = lay.LayoutName Then
                             Dim laOrientation As PlotRotation = lay.PlotRotation
+                            'MsgBox(lay.PlotRotation.ToString & " -- " & laOrientation.ToString)
                             myCntrl.ReadSettings = True 'prevent update
-                            Select Case laOrientation
-                                Case 0
+                            Select Case laOrientation.ToString
+                                Case "Degrees000"
                                     'portrait
                                     myCntrl.PlotOrientation = "portrait"
-                                Case 1
+                                Case "Degrees090"
                                     'landscape 
                                     myCntrl.PlotOrientation = "landscape"
-                                Case 2
+                                Case "Degrees180"
                                     'portrait
                                     myCntrl.PlotOrientation = "portrait"
-                                Case 3
+                                Case "Degrees270"
                                     'landscape
                                     myCntrl.PlotOrientation = "landscape"
                             End Select
@@ -1476,9 +1488,29 @@ Public Class ucLayoutManager
                         If sLayName = lay.LayoutName Then
                             Dim plotSetVal As PlotSettingsValidator = PlotSettingsValidator.Current
                             plotSetVal.RefreshLists(lay)
-                            ' Dim plotSet As PlotSettings = New PlotSettings(lay.ModelType)
                             Dim sChoosenMediaSize As String = myCntrl.ChoosenMediaSize
-                            'plotSetVal.SetPlotConfigurationName(plotSet, myCntrl.PlotDevice, sChoosenMediaSize)
+                            'check of portrait / landscape setting overeenkomt met media size, zo niet aanpassen voordat media size wordt gewijzigd.
+                            'Dim sMediaSizeTMP As String() = sChoosenMediaSize.Replace("_", " ").Split("(") 'A2 (420.00 x 594.00 MM) ( H x B)
+                            'Dim sMediaDimensions As String() = sMediaSizeTMP(1).ToLower.Split("x")
+                            'Dim sWidth As String = clsFunctions.ParseDigits(sMediaDimensions(0))
+                            'Dim sHeight As String = clsFunctions.ParseDigits(sMediaDimensions(1))
+                            'Dim dHeight As Double = CDbl(sWidth)
+                            'Dim dWidth As Double = CDbl(sHeight)
+                            ''MsgBox(dWidth.ToString & " X " & dHeight)
+                            'Dim sOrientation As String
+                            'If dWidth < dHeight Then
+                            '    'portrait
+                            '    sOrientation = "portrait"
+                            'Else
+                            '    'landscape
+                            '    sOrientation = "landscape"
+                            'End If
+                            'Select Case sOrientation
+                            '    Case "portrait"
+                            '        plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees000)
+                            '    Case "landscape"
+                            '        plotSetVal.SetPlotRotation(lay, PlotRotation.Degrees090)
+                            'End Select
                             plotSetVal.SetCanonicalMediaName(lay, sChoosenMediaSize)
                             trx.Commit()
                             acEd.Regen()
@@ -1487,6 +1519,7 @@ Public Class ucLayoutManager
                     Next
                 End Using
             End Using
+            'getPageSetup(sender, e)
             Return True
         Catch ex As Exception
             MsgBox("Fout bij wijzigen van de Media Size " & ex.Message)

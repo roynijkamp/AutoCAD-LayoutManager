@@ -182,9 +182,9 @@ Partial Class ucSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmbPlottingDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbPlottingDevice.FormattingEnabled = True
-        Me.cmbPlottingDevice.Location = New System.Drawing.Point(116, 14)
+        Me.cmbPlottingDevice.Location = New System.Drawing.Point(141, 14)
         Me.cmbPlottingDevice.Name = "cmbPlottingDevice"
-        Me.cmbPlottingDevice.Size = New System.Drawing.Size(285, 21)
+        Me.cmbPlottingDevice.Size = New System.Drawing.Size(260, 21)
         Me.cmbPlottingDevice.TabIndex = 0
         '
         'grpDebugOptions
