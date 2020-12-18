@@ -1,0 +1,23 @@
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.dll
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.pdb
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.xml
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.vbprojResolveAssemblyReference.cache
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.frmAlert.resources
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.frmUpdate.resources
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.Resources.resources
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.vbproj.GenerateResource.Cache
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.dll
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.xml
+K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.pdb
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.dll
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.pdb
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\bin\Release\RN-CustomAlerts.xml
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.vbprojAssemblyReference.cache
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.frmAlert.resources
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.frmUpdate.resources
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN_CustomAlerts.Resources.resources
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.vbproj.GenerateResource.cache
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.vbproj.CoreCompileInputs.cache
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.dll
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.xml
+E:\Stack\NET Develop\RN-LayoutManager\RN-CustomAlerts\obj\Release\RN-CustomAlerts.pdb

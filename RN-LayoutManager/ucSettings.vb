@@ -16,8 +16,10 @@ Public Class ucSettings
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim sDefaultOutputLocation As String = ""
+    Dim bUseDWGname As Boolean = False
     Dim sLayoutTemplate As String = ""
     Dim sLayoutTemplates As List(Of String)
+    Dim sLayoutTemplateFolder As String = ""
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
     Dim sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
     Dim bTrashDSD As Boolean = True
@@ -78,6 +80,7 @@ Public Class ucSettings
             If File.Exists(sIniDir & sIniFile) Then
                 'bestand bestaat, instelingen laden
                 iniFile = New clsINI(sIniDir & sIniFile)
+                'MsgBox(sIniDir & sIniFile)
                 'versie updaten
                 iniFile.WriteString("appsettings", "version", sCurrVersion)
                 sPDFuserFolder = iniFile.GetString("publishsettings", "outputfolder", sPDFuserFolder)
@@ -85,7 +88,9 @@ Public Class ucSettings
                 sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
                 'layout templates laden
                 Dim temp As String = iniFile.GetString("template", "layouts", "")
+                'MsgBox(temp.ToString)
                 sLayoutTemplates = New List(Of String)(temp.Split(","c))
+                'MsgBox(sLayoutTemplates.Count.ToString)
                 chkListboxTemplates.Items.Clear()
                 For Each sItem As String In sLayoutTemplates
                     If Not sItem = vbNullString Then
@@ -104,6 +109,8 @@ Public Class ucSettings
                         chkListboxTemplates.SetSelected(0, True)
                     End If
                 End If
+                sLayoutTemplateFolder = iniFile.GetString("template", "templatefolder", "")
+                cmdSetTPLFolder.Text = "Template map: " & sLayoutTemplateFolder
 
                 sDefaultOutputLocation = iniFile.GetString("publishsettings", "defaultoutput", sDefaultOutputLocation)
                 Select Case sDefaultOutputLocation
@@ -118,7 +125,9 @@ Public Class ucSettings
                 End Select
                 sDefaultPlottingDevice = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
                 loadPlotConfigs()
+                bUseDWGname = iniFile.GetBoolean("publishsettings", "usedwgname", bUseDWGname)
                 bAutoLoad = iniFile.GetBoolean("appsettings", "autoload", bAutoLoad)
+
             Else
                 'eerst check of map wel bestaat
                 If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
@@ -129,6 +138,7 @@ Public Class ucSettings
             End If
             lblVersion.Text = sCurrVersion
             chkAutoLoad.Checked = bAutoLoad
+            chkUseDWGname.Checked = bUseDWGname
 
             'load license details
             If IO.File.Exists(sCoreDir & "\RNLAYMAN.LCF") Then
@@ -226,22 +236,32 @@ Public Class ucSettings
 
     Private Sub cmdBrowseLayoutTemplate_Click(sender As Object, e As EventArgs) Handles cmdBrowseLayoutTemplate.Click
         Using fldrDia As OpenFileDialog = New OpenFileDialog
+            fldrDia.InitialDirectory = sLayoutTemplateFolder
             If fldrDia.ShowDialog() = DialogResult.OK Then
                 'eerst check of map wel bestaat
                 If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
                     My.Computer.FileSystem.CreateDirectory(sIniDir)
                 End If
-                If Not sLayoutTemplates.Contains(fldrDia.FileName) Then
-                    sLayoutTemplates.Add(fldrDia.FileName)
-                    chkListboxTemplates.Items.Add(fldrDia.FileName, False)
-                End If
-                'bestand aanmaken
-                'settings schrijven
-                iniFile = New clsINI(sIniDir & sIniFile)
-                If sLayoutTemplates.Count > 0 Then
-                    iniFile.WriteString("template", "layouts", String.Join(",", sLayoutTemplates.ToArray()))
+                If fldrDia.FileName.Contains(sLayoutTemplateFolder) Then
+                    Dim sFile As String = fldrDia.SafeFileName
+                    If Not sLayoutTemplates.Contains(sFile) Then
+                        sLayoutTemplates.Add(sFile)
+                        chkListboxTemplates.Items.Add(sFile, False)
+                    End If
+                    'If Not sLayoutTemplates.Contains(fldrDia.FileName) Then
+                    '    sLayoutTemplates.Add(fldrDia.FileName)
+                    '    chkListboxTemplates.Items.Add(fldrDia.FileName, False)
+                    'End If
+                    'bestand aanmaken
+                    'settings schrijven
+                    iniFile = New clsINI(sIniDir & sIniFile)
+                    If sLayoutTemplates.Count > 0 Then
+                        iniFile.WriteString("template", "layouts", String.Join(",", sLayoutTemplates.ToArray()))
+                    Else
+                        iniFile.WriteString("template", "layouts", "")
+                    End If
                 Else
-                    iniFile.WriteString("template", "layouts", "")
+                    MsgBox("Dit bestand staat niet in de Template map!" & vbCrLf & "Verplaats het bestand naar de template map")
                 End If
             End If
         End Using
@@ -378,4 +398,20 @@ Public Class ucSettings
         End Try
         Return True
     End Function
+
+    Private Sub chkUseDWGname_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseDWGname.CheckedChanged
+        iniFile = New clsINI(sIniDir & sIniFile)
+        bUseDWGname = chkUseDWGname.Checked
+        iniFile.WriteBoolean("publishsettings", "usedwgname", bUseDWGname)
+    End Sub
+
+    Private Sub cmdSetTPLFolder_Click(sender As Object, e As EventArgs) Handles cmdSetTPLFolder.Click
+        Dim fldrBrwsr As FolderBrowserDialog = New FolderBrowserDialog
+        If fldrBrwsr.ShowDialog = DialogResult.OK Then
+            sLayoutTemplateFolder = fldrBrwsr.SelectedPath & "\"
+            iniFile = New clsINI(sIniDir & sIniFile)
+            iniFile.WriteString("template", "templatefolder", sLayoutTemplateFolder)
+            cmdSetTPLFolder.Text = "Template map: " & sLayoutTemplateFolder
+        End If
+    End Sub
 End Class

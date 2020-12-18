@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.1221.0919</AssemblyVersion>
+    <AssemblyVersion>1.0.1113.0748</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +64,7 @@
     <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyVersionSettings>
     <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyInfoVersionSettings>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -156,9 +157,6 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RN-attribute-listitem">
-      <HintPath>..\..\RN-attribute-listitem\RN-attribute-listitem\bin\Debug\RN-attribute-listitem.dll</HintPath>
-    </Reference>
     <Reference Include="RN-LayoutItems">
       <HintPath>..\..\RN-LayoutItems\RN-LayoutItems\bin\Debug\RN-LayoutItems.dll</HintPath>
     </Reference>
@@ -204,7 +202,10 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsBlockSymbols.vb" />
     <Compile Include="clsBlockThumbnail.vb" />
+    <Compile Include="clsDataValues.vb" />
+    <Compile Include="clsDynamicLayout.vb" />
     <Compile Include="clsFilterData.vb" />
     <Compile Include="clsFunctions.vb" />
     <Compile Include="clsGPSConverter.vb" />
@@ -217,6 +218,12 @@
     <Compile Include="clsRDNAPTRANS.vb" />
     <Compile Include="clsRegister.vb" />
     <Compile Include="clsTripleDES.vb" />
+    <Compile Include="frmAddUserSearchPath.Designer.vb">
+      <DependentUpon>frmAddUserSearchPath.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddUserSearchPath.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFilter.Designer.vb">
       <DependentUpon>frmFilter.vb</DependentUpon>
     </Compile>
@@ -272,6 +279,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmAddUserSearchPath.resx">
+      <DependentUpon>frmAddUserSearchPath.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFilter.resx">
       <DependentUpon>frmFilter.vb</DependentUpon>
     </EmbeddedResource>
@@ -402,6 +412,10 @@
     <ProjectReference Include="..\DropDownContainer\DropDownContainer.vbproj">
       <Project>{E0FF137C-8F24-4EBA-ADBB-8CC68775E260}</Project>
       <Name>DropDownContainer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RN-attribute-listitem\RN-attribute-listitem\RN-attribute-listitem.vbproj">
+      <Project>{6bd42762-fc9a-4a33-851a-fc7ac9a85326}</Project>
+      <Name>RN-attribute-listitem</Name>
     </ProjectReference>
     <ProjectReference Include="..\RN-CustomAlerts\RN-CustomAlerts.vbproj">
       <Project>{3a0f00e2-7abc-4d4c-9103-efab1b2fca24}</Project>

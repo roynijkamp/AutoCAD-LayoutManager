@@ -1,29 +1,29 @@
-<project outputDir="K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused" baseDir="K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\RN-LayoutManager\bin\Release" xmlns="http://confuser.codeplex.com">
+<project outputDir="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused" baseDir="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\" xmlns="http://confuser.codeplex.com">
   <rule pattern="true" preset="aggressive" inherit="false">
     <protection id="anti ildasm" />
     <protection id="anti debug" />
     <protection id="anti tamper" />
   </rule>
-  <module path="RN-LayoutManager.dll">
+  <module path="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-LayoutManager.dll">
     <rule pattern="true" preset="aggressive" inherit="false">
       <protection id="anti ildasm" />
       <protection id="anti debug" />
       <protection id="anti tamper" />
     </rule>
   </module>
-  <module path="RN-LayoutItems.dll">
+  <module path="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-LayoutItems.dll">
     <rule pattern="true" preset="aggressive" inherit="false">
       <protection id="anti ildasm" />
       <protection id="anti debug" />
       <protection id="anti tamper" />
     </rule>
   </module>
-  <module path="RN-attribute-listitem.dll">
+  <module path="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-attribute-listitem.dll">
     <rule pattern="true" preset="aggressive" inherit="false">
       <protection id="anti ildasm" />
       <protection id="anti debug" />
       <protection id="anti tamper" />
     </rule>
   </module>
-  <module path="RN-CustomAlerts.dll" />
+  <module path="E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-CustomAlerts.dll" />
 </project>

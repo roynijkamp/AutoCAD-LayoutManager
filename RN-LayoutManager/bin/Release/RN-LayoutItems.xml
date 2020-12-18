@@ -1,0 +1,97 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+RN-LayoutItems
+</name>
+</assembly>
+<members>
+<member name="T:RN_LayoutItems.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_check">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_collapse">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_collapse_close">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_drag_32x15">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_page_size">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_print">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_transparency_off">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_transparency_on">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutItems.My.Resources.Resources.icon_view">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="M:RN_LayoutItems.RN_UCLayoutItem.updateItem">
+ <summary>
+ 'Function to update contents of control
+ </summary>
+ <returns>true</returns>
+</member>
+<member name="M:RN_LayoutItems.RN_UCLayoutItem.updateName">
+ <summary>
+ 'Function to update name with contents of textbox
+ </summary>
+ <returns>true</returns>
+</member>
+<member name="E:RN_LayoutItems.RN_UCLayoutItem.View_Click">
+ <summary>
+ 'Public event to detect click on view button
+ </summary>
+ <param name="sender">control</param>
+ <param name="e"></param>
+</member>
+<member name="M:RN_LayoutItems.RN_UCLayoutItem.cmdView_Click(System.Object,System.EventArgs)">
+ <summary>
+ 'click event on view button
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+</members>
+</doc>

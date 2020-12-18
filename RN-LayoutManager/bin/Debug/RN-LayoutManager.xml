@@ -1,0 +1,312 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+RN-LayoutManager
+</name>
+</assembly>
+<members>
+<member name="T:RN_LayoutManager.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.Clouds">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_add">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_attrib_eddit">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_check">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_copy">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_DWF">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_filter">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_import">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_light_off">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_light_off_2">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_light_on">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_light_on_2">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_PDF">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_PDF_multi">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_penstyle">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_plotter_override">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_print">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_question">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_refresh">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_save">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_selection_all">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_selection_invert">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_settings">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_sort_ascending">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_sort_descending">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_stop">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_success">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_trash">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_view">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.icon_warning">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.My.Resources.Resources.Tool_Head">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="M:RN_LayoutManager.clsBlockSymbols.updateAttribTekst(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.DatabaseServices.Transaction,System.String,System.String)">
+ <summary>
+ 'Function voor updaten van block attributes
+ </summary>
+ <param name="oEntId"></param>
+ <param name="acTrans"></param>
+ <param name="sTagName"></param>
+ <param name="sTagValue"></param>
+ <returns></returns>
+</member>
+<member name="M:RN_LayoutManager.clsFunctions.PrefsSetUnits">
+ <summary>
+ 'Set insertion units
+ </summary>
+</member>
+<member name="M:RN_LayoutManager.clsFunctions.loadPlotPresets(System.String,System.Data.DataTable@,System.Int32@,System.String)">
+ <summary>
+ Get plot presets
+ </summary>
+ <param name="sPresetFile"></param>
+ <param name="dtPlotPresets"></param>
+ <param name="iSelectedIndex"></param>
+ <param name="sCurrentPreset"></param>
+ <returns></returns>
+</member>
+<member name="M:RN_LayoutManager.clsFunctions.getPlotStyleTable">
+ <summary>
+ Get Current plotstyle
+ </summary>
+ <returns>integer 0 = STB, 1 = CTB</returns>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.loadLayouts(System.Boolean)">
+ <summary>
+ 'Load layouts into list
+ </summary>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.renameLayout(System.Object,System.EventArgs)">
+ <summary>
+ 'Rename layout function
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <returns>true or false</returns>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.renameLayoutByValue(System.String,System.String)">
+ <summary>
+ 'Rename layout
+ </summary>
+ <param name="sNewName"></param>
+ <param name="sOldName"></param>
+ <returns></returns>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.ItemViewClick(System.Object,System.EventArgs)">
+ <summary>
+ 'Set active layout
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.item_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ Move item on drag / end drag
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.item_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+ <summary>
+ Detect Drag / start drag
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.setLayoutOrder(System.String)">
+ <summary>
+ 'Apply layout order to drawing
+ </summary>
+ <param name="sOrder"></param>
+ <returns></returns>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.plotLayouts(Autodesk.AutoCAD.PlottingServices.SheetType,System.Collections.Generic.List{Autodesk.AutoCAD.DatabaseServices.Layout},System.Boolean,System.String,System.String)">
+ <summary>
+ 'Plot multiple layouts to one multisheet PDF
+ </summary>
+ <param name="pdfSheetType"></param>
+ <returns></returns>
+</member>
+<member name="M:RN_LayoutManager.ucLayoutManager.ChangePlotStyle(System.Object,System.EventArgs)">
+ <summary>
+ ChangePlotStyle
+ </summary>
+ <param name="sender">ToolStripMenuItem</param>
+ <param name="e"></param>
+ <returns></returns>
+</member>
+<member name="T:RN_LayoutManager.myCommands">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.MyCommandLocal">
+<summary>
+  Looks up a localized string similar to MyCommand.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.MyLispFunctionLocal">
+<summary>
+  Looks up a localized string similar to MyLispFunction.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.MyPickFirstLocal">
+<summary>
+  Looks up a localized string similar to MyPickFirst.
+</summary>
+</member>
+<member name="P:RN_LayoutManager.myCommands.MySessionCmdLocal">
+<summary>
+  Looks up a localized string similar to MySessionCmd.
+</summary>
+</member>
+</members>
+</doc>

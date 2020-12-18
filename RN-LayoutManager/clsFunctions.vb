@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports Autodesk.AutoCAD.ApplicationServices
+Imports Autodesk.AutoCAD.Colors
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Interop
@@ -12,6 +13,10 @@ Public Class clsFunctions
         Dim strTmpPath() As String = strAssemblyPath.Split("\")
         Dim arrUbound As Integer = UBound(strTmpPath)
         getCoreDir = strAssemblyPath.Replace(strTmpPath(arrUbound), "").TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+    End Function
+
+    Public Shared Function getMyDocDir() As String
+        getMyDocDir = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\RNtools\AnaconTools"
     End Function
 
     Public Shared Function ParseDigits(ByVal strRawValue As String) As String
@@ -35,15 +40,19 @@ Public Class clsFunctions
     ''' 'Set insertion units
     ''' </summary>
     Public Shared Sub PrefsSetUnits()
-        '' Set insertion units to meters
+        Try
+            '' Set insertion units to meters
 
-        '' Access the Preferences object
-        Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+            '' Access the Preferences object
+            Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
 
-        '' Disable the scroll bars
-        'acPrefComObj.Display.DisplayScrollBars = False
-        acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
-        acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+            '' Disable the scroll bars
+            'acPrefComObj.Display.DisplayScrollBars = False
+            acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
+            acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
+        Catch ex As Exception
+
+        End Try
     End Sub
 
 
@@ -152,6 +161,26 @@ Public Class clsFunctions
         End Try
     End Sub
 
+    Public Shared Sub saveToFile(ByVal sLogFile As String, ByVal sMessage As String, Optional bVersionInfo As Boolean = False)
+        Try
+            If Not Directory.Exists(Path.GetDirectoryName(sLogFile)) Then
+                Directory.CreateDirectory(Path.GetDirectoryName(sLogFile))
+            End If
+            Dim dtDatum As DateTime = DateTime.Now
+            If Not File.Exists(sLogFile) Then
+                Using sw As StreamWriter = File.CreateText(sLogFile)
+                    sw.WriteLine("FILE AANGEMAAKT OP: " & dtDatum.ToString("dd/MM/yyyy HH:mm:ss"))
+                    sw.WriteLine("----------------------------------------------------------------")
+                End Using
+            End If
+            Using sw As StreamWriter = File.AppendText(sLogFile)
+                sw.WriteLine(sMessage)
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij maken FILE")
+        End Try
+    End Sub
+
     Public Shared ReadOnly Property AcadVersion() As Version
         Get
             Return GetType(Document).Assembly.GetName().Version
@@ -189,7 +218,6 @@ Public Class clsFunctions
         End If
 
     End Function
-
 
     Public Shared Function startCommandMonitor() As Boolean
         'To avoid ambiguity, we have to use the full type here.
@@ -243,5 +271,40 @@ Public Class clsFunctions
         End If
     End Function
 
-
+    Public Shared Function makeLayer(ByVal sLayer As String, Optional ByVal sKleurType As String = "index", Optional ByVal sKleur As String = "7")
+        'makeLog(getMyDocDir() & "\Exceptions.log", "Aanmaken van nieuwe laag" & vbCrLf & "Naam: " & sLayer & vbCrLf & "Type: " & sKleurType & vbCrLf & "Kleur: " & sKleur)
+        Try
+            Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+            Dim acCurDb As Autodesk.AutoCAD.DatabaseServices.Database = acDoc.Database
+            Using acLockDoc As DocumentLock = acDoc.LockDocument()
+                Using acTrans As Autodesk.AutoCAD.DatabaseServices.Transaction = acCurDb.TransactionManager.StartTransaction
+                    Dim acLyrTbl As Autodesk.AutoCAD.DatabaseServices.LayerTable
+                    acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId, Autodesk.AutoCAD.DatabaseServices.OpenMode.ForWrite)
+                    If Not acLyrTbl.Has(sLayer) Then
+                        Dim acLyrTblRec As Autodesk.AutoCAD.DatabaseServices.LayerTableRecord = New Autodesk.AutoCAD.DatabaseServices.LayerTableRecord()
+                        acLyrTblRec.Name = sLayer
+                        Dim arrRGB() As String
+                        Select Case sKleurType
+                            Case "rgb"
+                                arrRGB = sKleur.Split(",")
+                                acLyrTblRec.Color = Color.FromRgb(CInt(arrRGB(0)), CInt(arrRGB(1)), CInt(arrRGB(2)))
+                            Case "bylayer" ' 
+                                acLyrTblRec.Color = Color.FromDictionaryName("White")
+                            Case "index"
+                                acLyrTblRec.Color = Color.FromColorIndex(ColorMethod.ByAci, CShort(sKleur))
+                        End Select
+                        acLyrTbl.UpgradeOpen()
+                        acLyrTbl.Add(acLyrTblRec)
+                        acTrans.AddNewlyCreatedDBObject(acLyrTblRec, True)
+                    End If
+                    acTrans.Commit()
+                End Using
+            End Using
+            Return True
+        Catch ex As Autodesk.AutoCAD.Runtime.Exception
+            MsgBox("Fout bij het aanmaken van de laag" & vbCrLf & ex.ToString)
+            makeLog(getMyDocDir() & "\Exceptions.log", "Fout bij het aanmaken van nieuwe laag" & vbCrLf & ex.Message & vbCrLf & "Stacktrace: " & ex.StackTrace)
+            Return False
+        End Try
+    End Function
 End Class

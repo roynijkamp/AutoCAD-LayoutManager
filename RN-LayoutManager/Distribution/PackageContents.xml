@@ -20,14 +20,14 @@
       Platform="AutoCAD"
       OS="Win32|Win64"
       SeriesMin="R19.1"
-      SeriesMax="R23.0" />
+      SeriesMax="R24.0" />
 
     <ComponentEntry
       AppName="layoutmanager"
       ModuleName="./Contents/RN-LayoutManager.dll"
-      AppDescription="layoutmanager"
+      AppDescription="layoutman"
       LoadOnAppearance="True">
-      <Commands GroupName="layoutmanager">
+      <Commands GroupName="layoutman">
         <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
 		<Command Local="closeallopen" Global="closeallopen" StartupCommand="False" />
@@ -39,14 +39,14 @@
       Platform="Civil3D"
       OS="Win32|Win64"
       SeriesMin="R19.1"
-      SeriesMax="R23.0" />
+      SeriesMax="R24.0" />
 
     <ComponentEntry
       AppName="layoutmanager"
       ModuleName="./Contents/RN-LayoutManager.dll"
-      AppDescription="layoutmanager"
+      AppDescription="layoutman"
       LoadOnAppearance="True">
-      <Commands GroupName="layoutmanager">
+      <Commands GroupName="layoutman">
         <Command Local="autoloadLayoutMan" Global="autoloadLayoutMan" StartupCommand="True" />
         <Command Local="layoutman" Global="layoutman" StartupCommand="False" />
 		<Command Local="closeallopen" Global="closeallopen" StartupCommand="False" />

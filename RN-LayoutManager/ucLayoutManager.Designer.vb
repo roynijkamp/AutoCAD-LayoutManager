@@ -43,7 +43,14 @@ Partial Class ucLayoutManager
         Me.cmdSortASC = New System.Windows.Forms.Button()
         Me.cmdCancel = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cmdDynLayout = New System.Windows.Forms.Button()
         Me.cmdReplaceAttrib = New System.Windows.Forms.Button()
+        Me.ContextMenuAttTagsRename = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.RenameAttributeTagsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RenameAttributeTagsFromFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SaveEditsToFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmdAddLayout = New System.Windows.Forms.Button()
         Me.cmbNewLayout = New System.Windows.Forms.ComboBox()
         Me.ContextMenuTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -75,13 +82,22 @@ Partial Class ucLayoutManager
         Me.sPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.mPDFenMDWF = New System.Windows.Forms.ToolStripMenuItem()
         Me.OverridePlotterLayoutSelection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuVPschaal = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem11 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem12 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem13 = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
+        Me.ContextMenuAttTagsRename.SuspendLayout()
         Me.SubMenu.SuspendLayout()
         Me.ContextMenuFilters.SuspendLayout()
         Me.ContextMenuDWFoptions.SuspendLayout()
+        Me.ContextMenuVPschaal.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -321,6 +337,7 @@ Partial Class ucLayoutManager
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.cmdDynLayout)
         Me.GroupBox2.Controls.Add(Me.cmdReplaceAttrib)
         Me.GroupBox2.Controls.Add(Me.cmdAddLayout)
         Me.GroupBox2.Controls.Add(Me.cmbNewLayout)
@@ -337,8 +354,19 @@ Partial Class ucLayoutManager
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
         '
+        'cmdDynLayout
+        '
+        Me.cmdDynLayout.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdDynLayout.Location = New System.Drawing.Point(183, 17)
+        Me.cmdDynLayout.Name = "cmdDynLayout"
+        Me.cmdDynLayout.Size = New System.Drawing.Size(28, 28)
+        Me.cmdDynLayout.TabIndex = 11
+        Me.cmdDynLayout.Text = "VP"
+        Me.cmdDynLayout.UseVisualStyleBackColor = True
+        '
         'cmdReplaceAttrib
         '
+        Me.cmdReplaceAttrib.ContextMenuStrip = Me.ContextMenuAttTagsRename
         Me.cmdReplaceAttrib.Location = New System.Drawing.Point(227, 19)
         Me.cmdReplaceAttrib.Name = "cmdReplaceAttrib"
         Me.cmdReplaceAttrib.Size = New System.Drawing.Size(41, 24)
@@ -346,6 +374,40 @@ Partial Class ucLayoutManager
         Me.cmdReplaceAttrib.Text = "Geselecteerde attributes vervangen"
         Me.cmdReplaceAttrib.UseVisualStyleBackColor = True
         Me.cmdReplaceAttrib.Visible = False
+        '
+        'ContextMenuAttTagsRename
+        '
+        Me.ContextMenuAttTagsRename.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameAttributeTagsToolStripMenuItem, Me.ToolStripMenuItem5, Me.RenameAttributeTagsFromFileToolStripMenuItem, Me.ToolStripMenuItem6, Me.SaveEditsToFileToolStripMenuItem})
+        Me.ContextMenuAttTagsRename.Name = "ContextMenuAttTagsRename"
+        Me.ContextMenuAttTagsRename.Size = New System.Drawing.Size(262, 82)
+        '
+        'RenameAttributeTagsToolStripMenuItem
+        '
+        Me.RenameAttributeTagsToolStripMenuItem.Name = "RenameAttributeTagsToolStripMenuItem"
+        Me.RenameAttributeTagsToolStripMenuItem.Size = New System.Drawing.Size(261, 22)
+        Me.RenameAttributeTagsToolStripMenuItem.Text = "Rename Attribute Tags"
+        '
+        'ToolStripMenuItem5
+        '
+        Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(258, 6)
+        '
+        'RenameAttributeTagsFromFileToolStripMenuItem
+        '
+        Me.RenameAttributeTagsFromFileToolStripMenuItem.Name = "RenameAttributeTagsFromFileToolStripMenuItem"
+        Me.RenameAttributeTagsFromFileToolStripMenuItem.Size = New System.Drawing.Size(261, 22)
+        Me.RenameAttributeTagsFromFileToolStripMenuItem.Text = "Load Attribute Tags from file"
+        '
+        'ToolStripMenuItem6
+        '
+        Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(258, 6)
+        '
+        'SaveEditsToFileToolStripMenuItem
+        '
+        Me.SaveEditsToFileToolStripMenuItem.Name = "SaveEditsToFileToolStripMenuItem"
+        Me.SaveEditsToFileToolStripMenuItem.Size = New System.Drawing.Size(261, 22)
+        Me.SaveEditsToFileToolStripMenuItem.Text = "Rename Attribute Tags and save file"
         '
         'cmdAddLayout
         '
@@ -566,6 +628,48 @@ Partial Class ucLayoutManager
         Me.OverridePlotterLayoutSelection.Size = New System.Drawing.Size(256, 22)
         Me.OverridePlotterLayoutSelection.Text = "Override Plotter"
         '
+        'ContextMenuVPschaal
+        '
+        Me.ContextMenuVPschaal.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem9, Me.ToolStripMenuItem8, Me.ToolStripMenuItem10, Me.ToolStripMenuItem11, Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
+        Me.ContextMenuVPschaal.Name = "ContextMenuVPschaal"
+        Me.ContextMenuVPschaal.Size = New System.Drawing.Size(108, 136)
+        '
+        'ToolStripMenuItem9
+        '
+        Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
+        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem9.Text = "1:200"
+        '
+        'ToolStripMenuItem8
+        '
+        Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
+        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem8.Text = "1:50"
+        '
+        'ToolStripMenuItem10
+        '
+        Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
+        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem10.Text = "1:100"
+        '
+        'ToolStripMenuItem11
+        '
+        Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
+        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem11.Text = "1:200"
+        '
+        'ToolStripMenuItem12
+        '
+        Me.ToolStripMenuItem12.Name = "ToolStripMenuItem12"
+        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem12.Text = "1:500"
+        '
+        'ToolStripMenuItem13
+        '
+        Me.ToolStripMenuItem13.Name = "ToolStripMenuItem13"
+        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(107, 22)
+        Me.ToolStripMenuItem13.Text = "1:1000"
+        '
         'ucLayoutManager
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -580,9 +684,11 @@ Partial Class ucLayoutManager
         CType(Me.pcbIconFilter, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.ContextMenuAttTagsRename.ResumeLayout(False)
         Me.SubMenu.ResumeLayout(False)
         Me.ContextMenuFilters.ResumeLayout(False)
         Me.ContextMenuDWFoptions.ResumeLayout(False)
+        Me.ContextMenuVPschaal.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -639,4 +745,18 @@ Partial Class ucLayoutManager
     Friend WithEvents PlotterOverrideToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents PlotdeviceWijzigenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents OverridePlotterLayoutSelection As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ContextMenuAttTagsRename As Windows.Forms.ContextMenuStrip
+    Friend WithEvents RenameAttributeTagsToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem5 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents RenameAttributeTagsFromFileToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem6 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents SaveEditsToFileToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents cmdDynLayout As Windows.Forms.Button
+    Friend WithEvents ContextMenuVPschaal As Windows.Forms.ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem9 As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem8 As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem10 As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem11 As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem12 As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem13 As Windows.Forms.ToolStripMenuItem
 End Class

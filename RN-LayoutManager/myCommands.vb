@@ -10,7 +10,6 @@ Imports Autodesk.AutoCAD.Windows
 Imports Autodesk.AutoCAD.Windows.ToolPalette
 Imports System.IO
 Imports Autodesk.AutoCAD.Interop
-Imports CodeTech.Control
 Imports System.Windows.Forms
 Imports Newtonsoft.Json.Linq
 
@@ -88,9 +87,6 @@ Namespace RN_LayoutManager
 
         <CommandMethod("autoloadLayoutMan")>
         Public Sub autoloadLayoutMan()
-            'check op units
-            PrefsSetUnits()
-            'MsgBox("Init Layoutman")
             If File.Exists(sIniDir & sIniFile) Then
                 'bestand bestaat, instelingen laden
                 iniFile = New clsINI(sIniDir & sIniFile)
@@ -99,6 +95,8 @@ Namespace RN_LayoutManager
             If bAutoload = True Then
                 layoutman() 'start program
             End If
+            'check op units
+            PrefsSetUnits()
         End Sub
 
         <CommandMethod("ms")>
@@ -108,16 +106,20 @@ Namespace RN_LayoutManager
 
         <CommandMethod("PrefsSetUnits")>
         Public Sub PrefsSetUnits()
-            ''' Set insertion units to meters
+            ' Set insertion units to meters
 
-            ''' Access the Preferences object
-            'Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
-
-            ''' Disable the scroll bars
-            ''acPrefComObj.Display.DisplayScrollBars = False
-            'acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
-            'acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
             clsFunctions.PrefsSetUnits()
+        End Sub
+
+        <CommandMethod("SetUserSearchPaths")>
+        Public Sub SetUserSearchPaths()
+            Dim frmUserPaths As New frmAddUserSearchPath()
+            frmUserPaths.ShowDialog()
+        End Sub
+
+        <CommandMethod("rnSaveVPCoords")>
+        Public Sub rnSaveVPCoords()
+            clsDynamicLayout.buildVpCoords()
         End Sub
 
         <CommandMethod("closeallopen", CommandFlags.Modal + CommandFlags.Session)>

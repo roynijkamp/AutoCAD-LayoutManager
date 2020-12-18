@@ -14,6 +14,8 @@ Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Imports System.Drawing
 Imports Autodesk.AutoCAD.Interop
+Imports System.Text
+Imports Newtonsoft.Json.Linq
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -30,17 +32,20 @@ Public Class ucLayoutManager
     '/auto scroll during drag and drop
     Dim sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
     Dim sIniFile As String = "\layoutmanager.ini"
-    Dim sPlotPreferences As String = "PlotPresets.json"
+    Dim sPlotPreferences As String = "\PlotPresets.json"
     Dim iniFile As clsINI
     Dim sPDFuserFolder As String
     Dim sDefaultOutputLocation As String = ""
+    Dim bUseDWGname As Boolean = True
     Dim sCurrVersion As String = Assembly.GetExecutingAssembly().GetName().Version.ToString
-    Dim sCurrentLayout As String
+    Dim sCurrentLayout As String = ""
     Dim sLayoutTemplate As String = ""
+    Dim sLayoutTemplateFolder As String = ""
     'layout attributes replace
     Dim layAndTabTemp As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer)
     Dim oBlockID As ObjectId
     Dim sBlockName As String
+    Dim bIsProvFlevoland As Boolean = False
     Dim oModalSpace As ObjectId
     Dim oPaperSpace As ObjectId
     Dim sActiveLayout As String
@@ -51,6 +56,9 @@ Public Class ucLayoutManager
     Dim dStartValue(0 To 99) As Double
     Dim dCurrValue(0 To 99) As Double
     Dim dIncrementValue(0 To 99) As Double
+
+    Dim sBlockToFind As String
+    Dim sAttribFile As String = ""
     'list item height based on DPI
     Dim dItemHeightMin As Double
     Dim dItemHeightMax As Double
@@ -59,6 +67,13 @@ Public Class ucLayoutManager
     Dim aPstyleLayouts As List(Of String) = New List(Of String)
     'filter values
     Dim aFilters As List(Of String)
+    'dynamic viewport vars
+    Dim vpCenter As Point3d
+    Dim vpScale As String
+    Dim vpCustScale As Double
+    Dim vpCoordinates As ViewPortCoordinates
+    Dim vpCoordinatesList As New ViewPortCoordinatesList
+
     'Active Drawing Tracking
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
@@ -70,15 +85,8 @@ Public Class ucLayoutManager
     Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
         'tekening wordt geactiveerd
         Try
-            '' Set insertion units to meters
+            ' Set insertion units to meters
 
-            ''' Access the Preferences object
-            'Dim acPrefComObj As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
-
-            ''' Disable the scroll bars
-            ''acPrefComObj.Display.DisplayScrollBars = False
-            'acPrefComObj.User.ADCInsertUnitsDefaultSource = Common.AcInsertUnits.acInsertUnitsMeters
-            'acPrefComObj.User.ADCInsertUnitsDefaultTarget = Common.AcInsertUnits.acInsertUnitsMeters
             clsFunctions.PrefsSetUnits()
 
             'remap vars to current document
@@ -218,6 +226,7 @@ Public Class ucLayoutManager
         If File.Exists(sIniDir & sIniFile) Then
             'bestand bestaat, instelingen laden
             iniFile = New clsINI(sIniDir & sIniFile)
+            sLayoutTemplateFolder = iniFile.GetString("template", "templatefolder", sLayoutTemplateFolder)
             sLayoutTemplate = iniFile.GetString("template", "layout", sLayoutTemplate)
             If sLayoutTemplate.Length > 0 Then
                 loadExternalTemplate()
@@ -251,40 +260,43 @@ Public Class ucLayoutManager
     ''' 'Load layouts into list
     ''' </summary>
     Public Sub loadLayouts(Optional ByVal bLoadFromList As Boolean = False)
-        'reset and clear list
-        'clsFunctions.makeLog(sIniDir & "\log.txt", "Load Layouts")
-        'reset check count
-        iCheckCount = 0
-        updateCheckLabel()
-        'clear flow
-        flowLayouts.Controls.Clear()
-        flowLayouts.AllowDrop = True
-        flowLayouts.AutoScroll = True
-        flowLayouts.SetAutoScrollMargin(5, 5)
-        'load current layout name
-        getCurrentLayout()
-        'first add model item
-        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
-        'current layout control
-        Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
-        myCntrl.LayoutName = "Model"
-        myCntrl.PlotStyle = "" 'model has no plotstyle
-        myCntrl.PlotDevice = "" 'model as no plotdevice
-        myCntrl.IsModel = True
-        drag_drop_scroll_amount = myCntrl.Height + 40
-        'hide button print and checkbox
-        myCntrl.hideButtons()
-        myCntrl.updateItem()
-        'only handler to change view since model can't be renamed
-        AddHandler myCntrl.View_Click, AddressOf ItemViewClick
-        flowLayouts.Controls.Add(myCntrl)
-        ' Get the layout dictionary of the current database
         Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layAndTabOID As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotStyle As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotDevice As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
         Dim layPlotTransparency As SortedDictionary(Of Integer, Boolean) = New SortedDictionary(Of Integer, Boolean)
+
+        Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
+        'current layout control
+        Dim myCntrlCurrent As RN_LayoutItems.RN_UCLayoutItem = New RN_LayoutItems.RN_UCLayoutItem()
         Try
+            'reset and clear list
+            'clsFunctions.makeLog(sIniDir & "\log.txt", "Load Layouts")
+            'reset check count
+            iCheckCount = 0
+            updateCheckLabel()
+            'clear flow
+            flowLayouts.Controls.Clear()
+            flowLayouts.AllowDrop = True
+            flowLayouts.AutoScroll = True
+            flowLayouts.SetAutoScrollMargin(5, 5)
+            'load current layout name
+            getCurrentLayout()
+            'first add model item
+            myCntrl.LayoutName = "Model"
+            myCntrl.PlotStyle = "" 'model has no plotstyle
+            myCntrl.PlotDevice = "" 'model as no plotdevice
+            myCntrl.IsModel = True
+            drag_drop_scroll_amount = myCntrl.Height + 40
+            'hide button print and checkbox
+            myCntrl.hideButtons()
+            myCntrl.updateItem()
+            'only handler to change view since model can't be renamed
+            AddHandler myCntrl.View_Click, AddressOf ItemViewClick
+            flowLayouts.Controls.Add(myCntrl)
+            ' Get the layout dictionary of the current database
+
+
             Using trx As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim layDict As DBDictionary = acCurDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
                 For Each entry As DBDictionaryEntry In layDict
@@ -522,27 +534,31 @@ Public Class ucLayoutManager
     End Sub
 
     Public Sub setLayoutCurrent(ByVal sLayoutName As String, ByVal bIsModel As Boolean)
-        Using acLockDoc As DocumentLock = acDoc.LockDocument
-            Dim acLayoutMgr As LayoutManager = LayoutManager.Current
-            acLayoutMgr.CurrentLayout = sLayoutName
-            acDoc.Editor.Regen()
-            'zoom extends when not model view
-            If bIsModel = False Then
-                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                    Dim oId As ObjectId = acLayoutMgr.GetLayoutId(sLayoutName)
-                    Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
-                    'lock viewports when not locked
-                    For Each vpId As ObjectId In lay.GetViewports()
-                        Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
-                        vp.Locked = True
-                    Next
-                    acTrans.Commit()
-                    Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
-                    acadApp.ZoomExtents()
-                    acDoc.Editor.Regen()
-                End Using
-            End If
-        End Using
+        Try
+            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                Dim acLayoutMgr As LayoutManager = LayoutManager.Current
+                acLayoutMgr.CurrentLayout = sLayoutName
+                acDoc.Editor.Regen()
+                'zoom extends when not model view
+                If bIsModel = False Then
+                    Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        Dim oId As ObjectId = acLayoutMgr.GetLayoutId(sLayoutName)
+                        Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
+                        'lock viewports when not locked
+                        For Each vpId As ObjectId In lay.GetViewports()
+                            Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
+                            vp.Locked = True
+                        Next
+                        acTrans.Commit()
+                        Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
+                        acadApp.ZoomExtents()
+                        acDoc.Editor.Regen()
+                    End Using
+                End If
+            End Using
+        Catch ex As Exception
+            MsgBox("Fout bij het Current zetten van de layout!" & vbCrLf & ex.Message & vbCrLf & ex.StackTrace)
+        End Try
     End Sub
 
     Public Sub scrollCurrentLayoutIntoView(ByVal myCntrl As RN_LayoutItems.RN_UCLayoutItem)
@@ -1535,9 +1551,9 @@ Public Class ucLayoutManager
     End Function
 
     Public Function loadExternalTemplate()
-        If File.Exists(sLayoutTemplate) Then
+        If File.Exists(sLayoutTemplateFolder & sLayoutTemplate) Then
             Dim acExDb As Database = New Database(False, True)
-            acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
+            acExDb.ReadDwgFile(sLayoutTemplateFolder & sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
 
             ' Get the layout dictionary of the current database
             Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
@@ -1571,121 +1587,207 @@ Public Class ucLayoutManager
             End Try
             Return True
         Else
-            cmbNewLayout.Visible = False
-            cmdAddLayout.Visible = False
+            MsgBox(sLayoutTemplateFolder & sLayoutTemplate & " niet gevonden")
+
+            'cmbNewLayout.Visible = False
+            'cmdAddLayout.Visible = False
             Return False
         End If
     End Function
 
     Private Sub cmdAddLayout_Click(sender As Object, e As EventArgs) Handles cmdAddLayout.Click
+        insertLayout(False)
+    End Sub
+    Public Sub insertLayout(Optional ByVal bDynamicVP As Boolean = False, Optional sLayoutName As String = "", Optional bProcessList As Boolean = False)
         If cmbNewLayout.Text.Length = 0 Then
             MsgBox("Selecteer eerst een layout!")
             Exit Sub
         End If
-        Dim sNewLayoutName As String = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
-        If LayoutExists(sNewLayoutName) = False Then
+        Dim sNewLayoutName As String
+        Dim iLayoutCnt As Integer = 1
+        If bDynamicVP = True Then
+            'bij lijst naam automatisch
+            sNewLayoutName = sLayoutName
+        Else
+            'bij enkele layout vragen om de naam
+            sNewLayoutName = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
+            'handmatig viewport lijst maken
+            vpCoordinates = New ViewPortCoordinates
+            vpCoordinatesList = New ViewPortCoordinatesList
+            vpCoordinatesList.Add(vpCoordinates)
+        End If
 
-            If sNewLayoutName <> "" Then
-                If File.Exists(sLayoutTemplate) Then
-                    Using acLockDoc As DocumentLock = acDoc.LockDocument
-                        Dim acExDb As Database = New Database(False, True)
-                        acExDb.ReadDwgFile(sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
-                        ' Get the layout dictionary of the current database
-                        Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
-                        Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
-                        Try
-                            Using acTransEx As Transaction = acExDb.TransactionManager.StartTransaction()
-                                Dim layoutsEx As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
+        For Each vpViewPort As ViewPortCoordinates In vpCoordinatesList.ViewPorts
+            Dim oLayout As ObjectId
+            If bProcessList = True Then
+                'in geval van lijst automatisch nummer toevoegen
+                sNewLayoutName = sLayoutName & " Lay" & iLayoutCnt.ToString
+                iLayoutCnt += 1
+            End If
 
-                                If layoutsEx.Contains(cmbNewLayout.Text) Then
-                                    Dim layEx As Layout = layoutsEx.GetAt(cmbNewLayout.Text).GetObject(OpenMode.ForRead)
-                                    Dim blkBlkRecEx As BlockTableRecord = acTransEx.GetObject(layEx.BlockTableRecordId, OpenMode.ForRead)
+            If LayoutExists(sNewLayoutName) = False Then
+                If sNewLayoutName <> "" Then
+                    If File.Exists(sLayoutTemplateFolder & sLayoutTemplate) Then
+                        Using acLockDoc As DocumentLock = acDoc.LockDocument
+                            Dim acExDb As Database = New Database(False, True)
+                            acExDb.ReadDwgFile(sLayoutTemplateFolder & sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
+                            ' Get the layout dictionary of the current database
+                            Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
+                            Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+                            Try
+                                Using acTransEx As Transaction = acExDb.TransactionManager.StartTransaction()
+                                    Dim layoutsEx As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
 
-                                    Dim idCol As ObjectIdCollection = New ObjectIdCollection()
-                                    For Each id As ObjectId In blkBlkRecEx
-                                        idCol.Add(id)
-                                    Next
-                                    'invoegen in huidige dwg
-                                    Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                                        Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+                                    If layoutsEx.Contains(cmbNewLayout.Text) Then
+                                        Dim layEx As Layout = layoutsEx.GetAt(cmbNewLayout.Text).GetObject(OpenMode.ForRead)
+                                        Dim blkBlkRecEx As BlockTableRecord = acTransEx.GetObject(layEx.BlockTableRecordId, OpenMode.ForRead)
 
-                                        Using blkBlkRec As New BlockTableRecord
-                                            blkBlkRec.Name = "*Paper_Space" & CStr(layoutsEx.Count() - 1)
-                                            blkTbl.Add(blkBlkRec)
-                                            acTrans.AddNewlyCreatedDBObject(blkBlkRec, True)
-                                            acExDb.WblockCloneObjects(idCol,
-                                                                      blkBlkRec.ObjectId,
-                                                                      New IdMapping(),
-                                                                      DuplicateRecordCloning.Ignore,
-                                                                      False)
+                                        Dim idCol As ObjectIdCollection = New ObjectIdCollection()
+                                        For Each id As ObjectId In blkBlkRecEx
+                                            idCol.Add(id)
+                                        Next
+                                        'invoegen in huidige dwg
+                                        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                            Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
 
-                                            ' Create a new layout and then copy properties between drawings
-                                            Dim layouts As DBDictionary =
-                                                acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForWrite)
+                                            Using blkBlkRec As New BlockTableRecord
+                                                blkBlkRec.Name = "*Paper_Space" & CStr(layoutsEx.Count() - 1)
+                                                blkTbl.Add(blkBlkRec)
+                                                acTrans.AddNewlyCreatedDBObject(blkBlkRec, True)
+                                                acExDb.WblockCloneObjects(idCol,
+                                                                          blkBlkRec.ObjectId,
+                                                                          New IdMapping(),
+                                                                          DuplicateRecordCloning.Ignore,
+                                                                          False)
 
-                                            Using lay As New Layout
-                                                lay.LayoutName = sNewLayoutName
-                                                lay.AddToLayoutDictionary(acCurDb, blkBlkRec.ObjectId)
-                                                acTrans.AddNewlyCreatedDBObject(lay, True)
-                                                lay.CopyFrom(layEx)
+                                                ' Create a new layout and then copy properties between drawings
+                                                Dim layouts As DBDictionary =
+                                                    acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForWrite)
 
-                                                Dim plSets As DBDictionary =
-                                                    acTrans.GetObject(
-                                                        acCurDb.PlotSettingsDictionaryId,
-                                                        OpenMode.ForRead)
 
-                                                ' Check to see if a named page setup was assigned to the layout,
-                                                ' if so then copy the page setup settings
-                                                If lay.PlotSettingsName <> "" Then
 
-                                                    ' Check to see if the page setup exists
-                                                    If plSets.Contains(lay.PlotSettingsName) = False Then
-                                                        plSets.UpgradeOpen()
+                                                Using lay As New Layout
+                                                    lay.LayoutName = sNewLayoutName
+                                                    lay.AddToLayoutDictionary(acCurDb, blkBlkRec.ObjectId)
+                                                    acTrans.AddNewlyCreatedDBObject(lay, True)
+                                                    lay.CopyFrom(layEx)
 
-                                                        Using plSet As New PlotSettings(lay.ModelType)
-                                                            plSet.PlotSettingsName = lay.PlotSettingsName
-                                                            plSet.AddToPlotSettingsDictionary(acCurDb)
-                                                            acTrans.AddNewlyCreatedDBObject(plSet, True)
+                                                    'save object id voor viewport manipulatie
+                                                    oLayout = lay.ObjectId
 
-                                                            Dim plSetsEx As DBDictionary =
-                                                                acTransEx.GetObject(
-                                                                    acExDb.PlotSettingsDictionaryId,
-                                                                    OpenMode.ForRead)
+                                                    Dim plSets As DBDictionary =
+                                                        acTrans.GetObject(
+                                                            acCurDb.PlotSettingsDictionaryId,
+                                                            OpenMode.ForRead)
 
-                                                            Dim plSetEx As PlotSettings =
-                                                                plSetsEx.GetAt(
-                                                                    lay.PlotSettingsName).GetObject(
-                                                                    OpenMode.ForRead)
+                                                    ' Check to see if a named page setup was assigned to the layout,
+                                                    ' if so then copy the page setup settings
+                                                    If lay.PlotSettingsName <> "" Then
+                                                        Try
+                                                            ' Check to see if the page setup exists
+                                                            If plSets.Contains(lay.PlotSettingsName) = False Then
+                                                                plSets.UpgradeOpen()
 
-                                                            plSet.CopyFrom(plSetEx)
-                                                        End Using
+                                                                Using plSet As New PlotSettings(lay.ModelType)
+                                                                    plSet.PlotSettingsName = lay.PlotSettingsName
+                                                                    plSet.AddToPlotSettingsDictionary(acCurDb)
+                                                                    acTrans.AddNewlyCreatedDBObject(plSet, True)
+
+                                                                    Dim plSetsEx As DBDictionary =
+                                                                        acTransEx.GetObject(
+                                                                            acExDb.PlotSettingsDictionaryId,
+                                                                            OpenMode.ForRead)
+
+                                                                    Dim plSetEx As PlotSettings =
+                                                                        plSetsEx.GetAt(
+                                                                            lay.PlotSettingsName).GetObject(
+                                                                            OpenMode.ForRead)
+
+                                                                    plSet.CopyFrom(plSetEx)
+                                                                End Using
+                                                            End If
+                                                        Catch ex As Exception
+                                                            MsgBox("Fout bij het toepassen van de Pagesetup!" & vbCrLf & ex.Message & vbCrLf & ex.StackTrace)
+                                                        End Try
                                                     End If
-                                                End If
+                                                End Using
                                             End Using
+                                            ' Regen the drawing to get the layout tab to display
+                                            acDoc.Editor.Regen()
+
+                                            ' Save the changes made
+                                            acTrans.Commit()
                                         End Using
-                                        ' Regen the drawing to get the layout tab to display
-                                        acDoc.Editor.Regen()
+                                    Else
+                                        MsgBox("Layout " & cmbNewLayout.Text & " kon niet worden ingevoegd!")
+                                        Exit Sub
+                                    End If
+                                    acTransEx.Abort()
+                                End Using
+                            Catch ex As Exception
+                                MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
+                                Exit Sub
+                            End Try
+                        End Using
+                        setLayoutCurrent(sNewLayoutName, False)
+                        loadLayouts()
 
-                                        ' Save the changes made
-                                        acTrans.Commit()
-                                    End Using
-                                    setLayoutCurrent(sNewLayoutName, False)
-                                    loadLayouts()
-                                Else
-                                    MsgBox("Layout " & cmbNewLayout.Text & " kon niet worden ingevoegd!")
-                                End If
-                                acTransEx.Abort()
+                        If bDynamicVP Then
+                            Using acLockDoc As DocumentLock = acDoc.LockDocument
+                                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                    Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+
+                                    Dim nwLayout As Layout = acTrans.GetObject(oLayout, OpenMode.ForWrite)
+
+                                    'viewport van current layout opzoeken, unlocken, zoomen en locken
+                                    Dim vpIds As ObjectIdCollection = nwLayout.GetViewports()
+                                    Dim iTeller As Integer = 0
+                                    'Dim currVpId As ObjectId
+                                    For Each vpId As ObjectId In vpIds
+                                        'we hebben enkel het 2e vp nodig
+                                        iTeller = iTeller + 1
+                                        If iTeller = 2 Then
+                                            'viewport aanpassen.
+                                            'currVpId = vpId
+                                            Dim currViewport As Viewport = acTrans.GetObject(vpId, OpenMode.ForWrite)
+                                            currViewport.Locked = False
+                                            'rotatie van view
+                                            currViewport.ViewDirection = Vector3d.ZAxis
+                                            currViewport.ViewTarget = New Point3d(vpViewPort.vpCenter.X, vpViewPort.vpCenter.Y, 0)
+                                            currViewport.TwistAngle = Math.PI * 2 - vpViewPort.vpRotation
+                                            currViewport.ViewCenter = Point2d.Origin
+                                            'locatie van view
+                                            'currViewport.ViewCenter = vpCoordinates.vpCenter
+                                            'schaal van view
+                                            Dim dCustScale As Double = 1000 / vpCustScale
+                                            currViewport.CustomScale = dCustScale
+
+                                            'Dim ocm As ObjectContextManager = acCurDb.ObjectContextManager
+                                            'Dim occ As ObjectContextCollection = ocm.GetContextCollection("ACDB_ANNOTAIONSCALES")
+                                            'For Each objcon As AnnotationScale In occ
+                                            '    If objcon.Name = "M_1:" & vpCustScale Then
+                                            '        currViewport.AnnotationScale = objcon
+                                            '    End If
+                                            'Next
+
+                                            'lock viewport
+                                            currViewport.Locked = True
+                                        End If
+                                    Next
+                                    acTrans.Commit()
+                                End Using
                             End Using
-                        Catch ex As Exception
-                            MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
-                        End Try
-                    End Using
 
-                Else
-                    MsgBox("Kan de layout niet invoegen, Template bestand is niet gevonden!" & vbCrLf & "Het bestand: " & sLayoutTemplate & " is niet gevonden", MsgBoxStyle.Critical)
+                        End If
+
+
+
+                    Else
+                        MsgBox("Kan de layout niet invoegen, Template bestand is niet gevonden!" & vbCrLf & "Het bestand: " & sLayoutTemplateFolder & sLayoutTemplate & " is niet gevonden", MsgBoxStyle.Critical)
+                    End If
                 End If
             End If
-        End If
+        Next
     End Sub
 
     Private Sub cmdBatchAttributes_Click(sender As Object, e As EventArgs) Handles cmdBatchAttributes.Click
@@ -1726,16 +1828,33 @@ Public Class ucLayoutManager
                         Dim blkRef As BlockReference = TryCast(acTrans.GetObject(oBlockID, OpenMode.ForRead), BlockReference)
                         Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(blkRef.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
                         sBlockName = btr.Name
+                        'check voor PFL titelblock
+                        If sBlockName.ToUpper.Contains("WOS_HFD") Then
+                            Dim RNmsgBox As RN_CustomAlerts.frmAlert = New RN_CustomAlerts.frmAlert
+                            RNmsgBox.WindowTitle = "Titelblock van Provicie Flevoland gedetecteerd"
+                            RNmsgBox.LabelTekst = "Provincie Flevoland tekening gedetecteerd, PFL instellingen toepassen?"
+                            RNmsgBox.applytoall = False
+                            RNmsgBox.ShowCancelButton = False
+                            RNmsgBox.ShowCheckbox = False
+                            Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                            If dlgRes = Windows.Forms.DialogResult.No Then
+                                bIsProvFlevoland = False
+                            Else
+                                bIsProvFlevoland = True
+                            End If
+                        End If
                         Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
-                        For Each oAttID As ObjectId In colATT
-                            'attributes doorlopen
-                            Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
-                            Dim attListItem As RN_attribute_listitem.AttributeListItem = New RN_attribute_listitem.AttributeListItem
-                            attListItem.AttribName = refATT.Tag
-                            flowLayouts.Controls.Add(attListItem)
-                        Next
-                    Else
-                        'geen block geselecteerd
+                            For Each oAttID As ObjectId In colATT
+                                'attributes doorlopen
+                                Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
+                                Dim attListItem As RN_attribute_listitem.AttributeListItem = New RN_attribute_listitem.AttributeListItem
+                                attListItem.AttribName = refATT.Tag
+                                attListItem.AttribCurrValue = refATT.TextString
+                                flowLayouts.Controls.Add(attListItem)
+                            Next
+                        Else
+                            'geen block geselecteerd
+                            GoTo resestlistitems
                     End If
 
                 Catch ex As Autodesk.AutoCAD.Runtime.Exception
@@ -1744,6 +1863,7 @@ Public Class ucLayoutManager
                 acTrans.Commit()
             End Using
             If flowLayouts.Controls.Count < 0 Then
+resestlistitems:
                 'reset items
                 loadLayouts(True)
                 cmdBatchAttributes.Enabled = True
@@ -1754,6 +1874,10 @@ Public Class ucLayoutManager
 
 
     Private Sub cmdReplaceAttrib_Click(sender As Object, e As EventArgs) Handles cmdReplaceAttrib.Click
+        replaceAttrib()
+    End Sub
+
+    Public Sub replaceAttrib(Optional bModifyTag As Boolean = False, Optional bSaveToFile As Boolean = False)
         pgbVoortgang.Visible = True
         Dim iItmCount As Integer = 0
         For Each attListItem As RN_attribute_listitem.AttributeListItem In flowLayouts.Controls
@@ -1776,6 +1900,10 @@ Public Class ucLayoutManager
                         dIncrementValue(iItmCount) = 1
                     End If
                     iItmCount += 1
+                    If bSaveToFile = True Then
+                        'output to file
+                        clsFunctions.saveToFile(sAttribFile, attListItem.AttribName & ";" & attListItem.AttribNewValue)
+                    End If
                 End If
             End If
         Next
@@ -1788,7 +1916,11 @@ Public Class ucLayoutManager
         Me.Update()
         Dim iPaperSpaceCount As Integer = 0
         'LayoutWalker(iPaperSpaceCount)
-        LayoutWalker2()
+        If bModifyTag = False Then
+            LayoutWalker2()
+        Else
+            LayoutWalker2(bModifyTag)
+        End If
 
         'rest items
         pgbVoortgang.Visible = False
@@ -1819,7 +1951,7 @@ Public Class ucLayoutManager
         Return oEmpty
     End Function
 
-    Public Function LayoutWalker2()
+    Public Function LayoutWalker2(Optional bModifyTag As Boolean = False)
         Dim layoutMgr As LayoutManager = LayoutManager.Current
         sActiveLayout = layoutMgr.CurrentLayout
         'check of er ook layouts geselecteerd zijn, zo ja vragen of alleen de geselecteerde layouts verwerkt moeten worden
@@ -1853,7 +1985,7 @@ Public Class ucLayoutManager
                             setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                             '## paperspace id pakken en attributes updaten
                             updateProgressBar(True)
-                            UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+                            UpdateAttributesInBlock(getSpaceID("paper"), sBlockName, False, bModifyTag)
                         End If
                     Else
                         '## layout active zetten
@@ -1862,7 +1994,7 @@ Public Class ucLayoutManager
                         setLayoutCurrent(sLayoutName, True) 'ismodal op true zodat we niet alle viewports lang hoeven
                         '## paperspace id pakken en attributes updaten
                         updateProgressBar(True)
-                        UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+                        UpdateAttributesInBlock(getSpaceID("paper"), sBlockName, False, bModifyTag)
                     End If
                 End If
             End If
@@ -1918,7 +2050,7 @@ Public Class ucLayoutManager
     End Function
 
 
-    Public Function UpdateAttributesInBlock(ByVal oBtrId As ObjectId, ByVal sBlockName As String, Optional bRecursive As Boolean = False) As Integer
+    Public Function UpdateAttributesInBlock(ByVal oBtrId As ObjectId, ByVal sBlockName As String, Optional bRecursive As Boolean = False, Optional bModifyTag As Boolean = False) As Integer
         Dim iChangedCount As Integer = 0
         Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim acCurDb As Database = acDoc.Database
@@ -1936,37 +2068,73 @@ Public Class ucLayoutManager
                         Dim br As BlockReference = TryCast(ent, BlockReference)
                         If br IsNot Nothing Then
                             Dim bd As BlockTableRecord = DirectCast(acTrans.GetObject(br.BlockTableRecord, OpenMode.ForRead), BlockTableRecord)
-                            If bd.Name.ToUpper = sBlockName.ToUpper Then
-                                ' Check each of the attributes...
-                                For Each arId As ObjectId In br.AttributeCollection
-                                    Dim obj As DBObject = acTrans.GetObject(arId, OpenMode.ForRead)
-                                    Dim ar As AttributeReference = TryCast(obj, AttributeReference)
-                                    If ar IsNot Nothing Then
-                                        'kijken of we de tag in de array kunnen vinden
-                                        Dim iItemIndex As Integer = Array.IndexOf(sAttribNames, ar.Tag.ToUpper)
-                                        If iItemIndex >= 0 Then
-                                            ar.UpgradeOpen()
-                                            Dim sTmpValue As String = sAttribValue(iItemIndex)
-                                            'kijke of we autonumber hebben
-                                            If bAutoNumber(iItemIndex) = True Then
-                                                sTmpValue = sTmpValue.Replace("[#nummer]", dCurrValue(iItemIndex).ToString)
-                                                'sTmpValue = sTmpValue & " autonr"
-                                                dCurrValue(iItemIndex) += dIncrementValue(iItemIndex)
-                                            End If
-                                            'check of we de layoutnaam moeten invoegen
-                                            If sTmpValue.Contains("[#layout]") = True Then
-                                                'layoutnaam vervangen
-                                                sTmpValue = sTmpValue.Replace("[#layout]", sCurrLayout)
-                                            End If
-                                            ar.TextString = sTmpValue
-                                            ar.DowngradeOpen()
-                                            iChangedCount += 1
-                                        End If
+                            If bModifyTag = False Then
+                                Dim bThisBlock As Boolean = False
+                                If bIsProvFlevoland = True Then
+                                    'checken of het een PFL block is
+                                    If bd.Name.ToUpper.Contains("WOS_HFD") Then
+                                        bThisBlock = True
                                     End If
-                                Next 'for each attribute
+                                Else
+                                    'normaal block
+                                    If bd.Name.ToUpper = sBlockName.ToUpper Then
+                                        bThisBlock = True
+                                    End If
+                                End If
+                                'If bd.Name.ToUpper = sBlockName.ToUpper Then
+                                If bThisBlock = True Then
+                                    ' Check each of the attributes...
+                                    For Each arId As ObjectId In br.AttributeCollection
+                                        Dim obj As DBObject = acTrans.GetObject(arId, OpenMode.ForRead)
+                                        Dim ar As AttributeReference = TryCast(obj, AttributeReference)
+                                        If ar IsNot Nothing Then
+                                            'kijken of we de tag in de array kunnen vinden
+                                            Dim iItemIndex As Integer = Array.IndexOf(sAttribNames, ar.Tag.ToUpper)
+                                            If iItemIndex >= 0 Then
+                                                ar.UpgradeOpen()
+                                                Dim sTmpValue As String = sAttribValue(iItemIndex)
+                                                'kijke of we autonumber hebben
+                                                If bAutoNumber(iItemIndex) = True Then
+                                                    sTmpValue = sTmpValue.Replace("[#nummer]", dCurrValue(iItemIndex).ToString)
+                                                    'sTmpValue = sTmpValue & " autonr"
+                                                    dCurrValue(iItemIndex) += dIncrementValue(iItemIndex)
+                                                End If
+                                                'check of we de layoutnaam moeten invoegen
+                                                If sTmpValue.Contains("[#layout]") = True Then
+                                                    'layoutnaam vervangen
+                                                    sTmpValue = sTmpValue.Replace("[#layout]", sCurrLayout)
+                                                End If
+                                                ar.TextString = sTmpValue
+                                                ar.DowngradeOpen()
+                                                iChangedCount += 1
+                                            End If
+                                        End If
+                                    Next 'for each attribute
+                                End If
+                            Else
+                                If bd.Name.ToUpper.Contains(sBlockName.ToUpper) Then
+                                    ' Check each of the attributes...
+                                    For Each arId As ObjectId In br.AttributeCollection
+                                        Dim obj As DBObject = acTrans.GetObject(arId, OpenMode.ForRead)
+                                        Dim ar As AttributeReference = TryCast(obj, AttributeReference)
+                                        If ar IsNot Nothing Then
+                                            'kijken of we de tag in de array kunnen vinden
+                                            Dim iItemIndex As Integer = Array.IndexOf(sAttribNames, ar.Tag.ToUpper)
+                                            If iItemIndex >= 0 Then
+                                                ar.UpgradeOpen()
+                                                Dim sTmpValue As String = sAttribValue(iItemIndex)
+                                                'wijzig tag name op basis van de value
+                                                'ar.TextString = sTmpValue
+                                                ar.Tag = sTmpValue
+                                                ar.DowngradeOpen()
+                                                iChangedCount += 1
+                                            End If
+                                        End If
+                                    Next 'for each attribute
+                                End If
                             End If
                             ' Recurse for nested blocks
-                            iChangedCount += UpdateAttributesInBlock(br.BlockTableRecord, sBlockName, True)
+                            iChangedCount += UpdateAttributesInBlock(br.BlockTableRecord, sBlockName, True, bModifyTag)
                         End If
                     End If
                     If bRecursive = False Then
@@ -2283,4 +2451,307 @@ Public Class ucLayoutManager
         'recente instellingen laden
         loadSettingsFromINI()
     End Sub
+
+    Private Sub RenameAttributeTagsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameAttributeTagsToolStripMenuItem.Click
+        sBlockToFind = InputBox("Blockname waar op gezocht moet worden:", "Blocknaam", sBlockName)
+
+        If sBlockToFind = "" Then
+            Exit Sub 'cancel button
+        End If
+        replaceAttrib(True)
+
+    End Sub
+
+    Private Sub SaveEditsToFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveEditsToFileToolStripMenuItem.Click
+        Dim dlgSaveAs As Forms.SaveFileDialog = New Forms.SaveFileDialog
+        dlgSaveAs.Filter = "Attribute Definitions|*.attdef"
+        If dlgSaveAs.ShowDialog() = DialogResult.OK Then
+            sAttribFile = dlgSaveAs.FileName
+            If Not sAttribFile.Contains(".attdef") Then
+                sAttribFile = sAttribFile & ".attdef"
+            End If
+            sBlockToFind = InputBox("Blockname waar op gezocht moet worden:", "Blocknaam", sBlockName)
+
+            If sBlockToFind = "" Then
+                Exit Sub 'cancel button
+            End If
+            replaceAttrib(True, True)
+        End If
+    End Sub
+
+    Private Sub RenameAttributeTagsFromFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameAttributeTagsFromFileToolStripMenuItem.Click
+        Dim dlgFileOpen As Forms.OpenFileDialog = New Forms.OpenFileDialog
+        dlgFileOpen.Filter = "Attribute Definitions|*.attdef"
+        If dlgFileOpen.ShowDialog() = DialogResult.OK Then
+            Dim reader As StreamReader = My.Computer.FileSystem.OpenTextFileReader(dlgFileOpen.FileName, Encoding.Default)
+
+            Dim line As String = Nothing
+            Dim iRows As Integer = 0
+            Dim iChanged As Integer = 0
+            Try
+                Do
+                    line = reader.ReadLine
+                    iRows = iRows + 1
+                    If iRows >= 3 Then 'eerste 2 rijen overslaan
+                        Dim sValues() As String = line.Split(";")
+                        'juiste Attribute vinden
+                        For Each attListItem As RN_attribute_listitem.AttributeListItem In flowLayouts.Controls
+                            If attListItem.AttribName.ToUpper = sValues(0).ToUpper Then
+                                attListItem.AttribCurrValue = sValues(1)
+                                attListItem.AttribNewValue = sValues(1)
+                                attListItem.IsItemSelected = True
+                                attListItem.Update()
+                                Exit For
+                            End If
+                        Next
+                    End If
+                Loop Until line Is Nothing
+            Catch
+
+            End Try
+
+            'sBlockToFind = InputBox("Blockname waar op gezocht moet worden:", "Blocknaam", sBlockName)
+
+            'If sBlockToFind = "" Then
+            '    Exit Sub 'cancel button
+            'End If
+            'replaceAttrib(True, True)
+        End If
+    End Sub
+
+
+
+    '    Private Sub cmdDynLayout_Click(sender As Object, e As EventArgs) Handles cmdDynLayout.Click
+    '        If cmbNewLayout.Text.Length = 0 Then
+    '            MsgBox("Selecteer eerst een layout!")
+    '            Exit Sub
+    '        End If
+    '        'clsDynamicLayout.DynamicLayout()
+    '        Dim cntMenu As ContextMenuStrip = New ContextMenuStrip()
+    '        Dim mnuItm As ToolStripMenuItem
+
+    '#Region "TODO"
+    '        'menu dynamisch inlezen uit JSON / XML en opbouwen
+    '#End Region
+    '        mnuItm = New ToolStripMenuItem()
+    '        mnuItm.Text = "1:50"
+    '        mnuItm.Tag = "50"
+    '        AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        cntMenu.Items.Add(mnuItm)
+    '        mnuItm = New ToolStripMenuItem()
+    '        mnuItm.Text = "1:100"
+    '        mnuItm.Tag = "100"
+    '        AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        cntMenu.Items.Add(mnuItm)
+    '        mnuItm = New ToolStripMenuItem()
+    '        mnuItm.Text = "1:200"
+    '        mnuItm.Tag = "200"
+    '        AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        cntMenu.Items.Add(mnuItm)
+    '        mnuItm = New ToolStripMenuItem()
+    '        mnuItm.Text = "1:500"
+    '        mnuItm.Tag = "500"
+    '        AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        cntMenu.Items.Add(mnuItm)
+    '        mnuItm = New ToolStripMenuItem()
+    '        mnuItm.Text = "1:1000"
+    '        mnuItm.Tag = "1000"
+    '        AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        cntMenu.Items.Add(mnuItm)
+    '        'mnuItm = New ToolStripMenuItem()
+    '        'mnuItm.Text = "RANGETEST"
+    '        'mnuItm.Tag = "200"
+    '        'AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+    '        'cntMenu.Items.Add(mnuItm)
+
+    '        cntMenu.Show(cmdDynLayout, 0, 0)
+
+    '    End Sub
+
+    Public Function ShowVPextends(ByVal sender As Object, ByVal e As EventArgs)
+        Dim mnuItmClick As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        'layout type achterhalen en checken of het voldoet aan de eisen
+        Dim sTemp As String = cmbNewLayout.Text
+        Dim sVpType As String '= cmbNewLayout.Text.Substring(0, 5)
+        Try
+            If sTemp.Length >= 5 Then
+                sVpType = sTemp.Substring(0, 5)
+            Else
+                sVpType = sTemp.Substring(0, 2)
+                Select Case sVpType
+                    Case "A0", "A1", "A2", "A3", "A4"
+                        'geen orientatie beschikbaar, default LS
+                        sVpType = sVpType & "_LS"
+                    Case Else
+                        'layout niet ondersteund voor dynamisch inserten
+                        insertLayout(False)
+                        Exit Function
+                End Select
+            End If
+        Catch ex As Exception
+            'ging iets fout bij het uitlezen
+            insertLayout(False)
+            Exit Function
+        End Try
+
+        vpScale = mnuItmClick.Text
+        vpCustScale = mnuItmClick.Tag
+        'vpCoordinates = clsDynamicLayout.DynamicLayout(sVpType & "-" & mnuItmClick.Text, sLayoutTemplate, sVpType)
+        vpCoordinates = clsDynamicLayout.DynamicLayout(vpScale, sLayoutTemplate, sVpType)
+        If vpCoordinates.vpEmpty = False Then
+            'insert Layout hier
+            insertLayout(True)
+        End If
+        Return True
+    End Function
+
+    Public Function ShowVPextendsRange(ByVal sender As Object, ByVal e As EventArgs)
+        vpCoordinatesList = New ViewPortCoordinatesList
+
+        Dim mnuItmClick As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        'Dim sVpType As String = cmbNewLayout.Text.Substring(0, 5)
+        Dim sTemp As String = cmbNewLayout.Text
+        Dim sVpType As String '= cmbNewLayout.Text.Substring(0, 5)
+        Try
+            If sTemp.Length >= 5 Then
+                sVpType = sTemp.Substring(0, 5)
+                If sTemp.Substring(2, 3) = "_LS" Or sTemp.Substring(2, 3) = "_PT" Then
+                    'layout is goed
+                Else
+                    sVpType = sTemp.Substring(0, 2)
+                    Select Case sVpType
+                        Case "A0", "A1", "A2", "A3", "A4"
+                            'geen orientatie beschikbaar, default LS
+                            sVpType = sVpType & "_LS"
+                        Case Else
+                            'layout niet ondersteund voor dynamisch inserten
+                            insertLayout(False)
+                            Exit Function
+                    End Select
+                End If
+            Else
+                sVpType = sTemp.Substring(0, 2)
+                Select Case sVpType
+                    Case "A0", "A1", "A2", "A3", "A4"
+                        'geen orientatie beschikbaar, default LS
+                        sVpType = sVpType & "_LS"
+                    Case Else
+                        'layout niet ondersteund voor dynamisch inserten
+                        insertLayout(False)
+                        Exit Function
+                End Select
+            End If
+        Catch ex As Exception
+            'ging iets fout bij het uitlezen
+            insertLayout(False)
+            Exit Function
+        End Try
+
+        vpScale = mnuItmClick.Text
+        vpCustScale = mnuItmClick.Tag
+
+        'tijdelijke override van vars voor TEST
+        'vpScale = "1:200"
+        'vpCustScale = "200"
+        'sVpType = "A1_LS"
+        Dim bLoopLayouts As Boolean = False
+        vpCoordinatesList = New ViewPortCoordinatesList
+
+        Using acLockDoc As DocumentLock = acDoc.LockDocument()
+            Using acTrans As Transaction = acDoc.TransactionManager.StartTransaction
+                Dim acTypeValAr(0) As TypedValue
+                Dim pKeyOpts As PromptKeywordOptions
+
+                pKeyOpts = New PromptKeywordOptions(vbCrLf & " Hoeveel layouts wil je aanmaken?: ")
+                pKeyOpts.Keywords.Add("Een")
+                pKeyOpts.Keywords.Add("Meerdere")
+                pKeyOpts.AllowNone = False
+                Dim pKeyRes As PromptResult = acEd.GetKeywords(pKeyOpts)
+                If pKeyRes.Status = PromptStatus.Cancel Then
+                    'default een layout
+                    bLoopLayouts = False
+                    Exit Function
+                Else
+                    Select Case pKeyRes.StringResult.ToLower
+                        Case "een"
+                            bLoopLayouts = False
+                        Case "meerdere"
+                            bLoopLayouts = True
+                        Case Else
+                            'onbekende keuze, zou niet mogen gebeuren maar Just In Case
+                            bLoopLayouts = False
+                            Exit Function
+                    End Select
+                End If
+            End Using
+        End Using
+
+        'layouts plaatsen
+        If bLoopLayouts = False Then
+            'een enkele layout
+            vpCoordinates = clsDynamicLayout.DynamicLayout(vpScale, sLayoutTemplate, sVpType)
+            If vpCoordinates.vpEmpty = False Then
+                vpCoordinatesList.Add(vpCoordinates)
+            End If
+        Else
+            'meerdere layouts
+            Dim bMakeNewVP As Boolean = True
+            While bMakeNewVP = True
+                vpCoordinates = clsDynamicLayout.DynamicLayout(vpScale, sLayoutTemplate, sVpType)
+                If vpCoordinates.vpEmpty = False Then
+                    vpCoordinatesList.Add(vpCoordinates)
+                Else
+                    bMakeNewVP = False
+                End If
+            End While
+        End If
+        Dim sNewLayoutName As String
+        sNewLayoutName = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
+
+        'insert layouts hier
+        insertLayout(True, sNewLayoutName, bLoopLayouts)
+        Return True
+    End Function
+
+    Private Sub cmdDynLayout_MouseDown(sender As Object, e As MouseEventArgs) Handles cmdDynLayout.MouseDown
+        If e.Button = MouseButtons.Left Then
+            If cmbNewLayout.Text.Length = 0 Then
+                MsgBox("Selecteer eerst een layout!")
+                Exit Sub
+            End If
+            Dim cntMenu As ContextMenuStrip = New ContextMenuStrip()
+            Dim mnuItm As ToolStripMenuItem
+            Dim sFormaat As String = cmbNewLayout.Text
+            'menu dynamisch inlezen uit JSON 
+            Dim sFilePath As String = clsFunctions.getCoreDir & "\viewports.json"
+            Dim plVirtViewport As Autodesk.AutoCAD.DatabaseServices.Polyline = New Autodesk.AutoCAD.DatabaseServices.Polyline
+            If File.Exists(sFilePath) Then
+                Dim sJson As String = File.ReadAllText(sFilePath)
+                Dim myJsonObject As JObject = JObject.Parse(sJson)
+                Dim aPresets As JArray = myJsonObject("viewports")
+                For i = 0 To aPresets.Count - 1
+                    If aPresets(i).SelectToken("formaat").ToString = sFormaat Then
+                        'dit is het juiste formaat blad, nu de juiste schaal vinden
+                        Dim aSchalen As JArray = aPresets(i).SelectToken("schalen")
+                        For x = 0 To aSchalen.Count - 1
+                            mnuItm = New ToolStripMenuItem()
+                            mnuItm.Text = aSchalen(x).SelectToken("schaal")
+                            Dim tmpVar() As String = aSchalen(x).SelectToken("schaal").ToString.Split(":")
+                            mnuItm.Tag = tmpVar(1)
+                            AddHandler mnuItm.Click, AddressOf ShowVPextendsRange
+                            cntMenu.Items.Add(mnuItm)
+                        Next
+                    End If
+                Next
+            End If
+            cntMenu.Show(cmdDynLayout, 0, 0)
+        ElseIf e.Button = MouseButtons.Right Then
+            'schalen laten zien voor de geselecteerde layout
+            Dim sFormaat As String = cmbNewLayout.Text
+            'clsDynamicLayout.LoadViewports(sFormaat)
+            clsDynamicLayout.showViewports(sFormaat)
+        End If
+    End Sub
+
+
 End Class

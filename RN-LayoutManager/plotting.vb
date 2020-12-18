@@ -10,7 +10,7 @@ Public Class plotting
     Public Class MultiSheetsPdf
         Private sIniDir As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\RNtools"
         Private sIniFile As String = "\layoutmanager.ini"
-        Private sPlotPreferences As String = "PlotPresets.json"
+        Private sPlotPreferences As String = "\PlotPresets.json"
         Private bTrashDSD As Boolean = True
         Private iniFile As clsINI
         Private sDefaultPlottingDevice As String = "AutoCAD PDF (General Documentation).PC3"
@@ -21,6 +21,7 @@ Public Class plotting
         Private pdfSheetType As SheetType = SheetType.MultiPdf
         Private pdfOutputDIR As String
         Private sPlottingDeviceOverride As String = ""
+        Private bUseDWGname As Boolean = True
 
         Private bSuppressMessage As Boolean
 
@@ -42,6 +43,7 @@ Public Class plotting
             Me.pdfSheetType = pdfSheetType
             Me.bSuppressMessage = bSuppressMessage
             Me.sPlottingDeviceOverride = sPlottingDeviceOverride 'plotter override 
+            Me.bUseDWGname = iniFile.GetBoolean("publishsettings", "usedwgname", bUseDWGname)
         End Sub
 
         Public Sub Publish()
@@ -105,8 +107,11 @@ Public Class plotting
                 If Me.pdfSheetType = SheetType.MultiPdf Or Me.pdfSheetType = SheetType.MultiDwf Then
                     dsdEntry.Title = layout.LayoutName
                     dsdEntry.Nps = layout.TabOrder.ToString()
-                Else
+                ElseIf bUseDWGname = True Then
                     dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + "-" + layout.LayoutName
+                    dsdEntry.Nps = "Setup1"
+                Else
+                    dsdEntry.Title = layout.LayoutName
                     dsdEntry.Nps = "Setup1"
                 End If
                 entries.Add(dsdEntry)
@@ -220,6 +225,8 @@ Public Class plotting
 
                     End If
                 Next
+            Else
+                MsgBox("Print Preset file Niet gevonden, mogelijk zijn de resultaten anders dan verwacht")
             End If
         End Sub
 

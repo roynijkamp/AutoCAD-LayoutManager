@@ -39,6 +39,7 @@
     <DefineConstants>_MYFORMS=True</DefineConstants>
     <NoWarn>42353,42354,42355</NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Beta</AssemblyInfoVersionSemVerSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />

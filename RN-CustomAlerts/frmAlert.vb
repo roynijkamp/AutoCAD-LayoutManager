@@ -2,12 +2,32 @@
     Shared bApplytoall As Boolean = False
     Shared sLabelTekst As String = "Wilt u de wijzigingen aan de geopende documenten opslaan?"
     Shared sWindowTitle As String = "RN Custom Alert Dialog"
+    Shared bShowCheckbox As Boolean = True
+    Shared bShowCancelButton As Boolean = True
     Public Property applytoall() As Boolean
         Get
             Return bApplytoall
         End Get
         Set(value As Boolean)
             bApplytoall = value
+        End Set
+    End Property
+
+    Public Property ShowCheckbox() As Boolean
+        Get
+            Return bShowCheckbox
+        End Get
+        Set(value As Boolean)
+            bShowCheckbox = value
+        End Set
+    End Property
+
+    Public Property ShowCancelButton() As Boolean
+        Get
+            Return bShowCancelButton
+        End Get
+        Set(value As Boolean)
+            bShowCancelButton = value
         End Set
     End Property
 
@@ -54,5 +74,11 @@
         lblTekst.Text = sLabelTekst
         Me.Text = sWindowTitle
         chk_aplytoall.Checked = bApplytoall
+        showElements()
+    End Sub
+
+    Public Sub showElements()
+        chk_aplytoall.Visible = bShowCheckbox
+        Cancel_Button.Visible = bShowCancelButton
     End Sub
 End Class

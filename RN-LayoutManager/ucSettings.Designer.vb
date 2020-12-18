@@ -25,6 +25,7 @@ Partial Class ucSettings
         Me.components = New System.ComponentModel.Container()
         Me.lblTitel = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.radioPDFfolderAsk = New System.Windows.Forms.RadioButton()
         Me.cmdSelectUserSaveFolder = New System.Windows.Forms.Button()
         Me.txtUserSaveFolder = New System.Windows.Forms.TextBox()
@@ -57,12 +58,16 @@ Partial Class ucSettings
         Me.lblUserName = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.chkUseDWGname = New System.Windows.Forms.CheckBox()
+        Me.cmdSetTPLFolder = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.editListTemplates.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        Me.GroupBox6.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitel
@@ -82,6 +87,7 @@ Partial Class ucSettings
         '
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.GroupBox5)
         Me.GroupBox1.Controls.Add(Me.radioPDFfolderAsk)
         Me.GroupBox1.Controls.Add(Me.cmdSelectUserSaveFolder)
         Me.GroupBox1.Controls.Add(Me.txtUserSaveFolder)
@@ -93,6 +99,15 @@ Partial Class ucSettings
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Opslag locatie PDF bestanden"
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Location = New System.Drawing.Point(0, 124)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(415, 37)
+        Me.GroupBox5.TabIndex = 5
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "GroupBox5"
         '
         'radioPDFfolderAsk
         '
@@ -160,7 +175,7 @@ Partial Class ucSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Controls.Add(Me.cmbPlottingDevice)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 150)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 199)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(415, 58)
         Me.GroupBox2.TabIndex = 5
@@ -222,9 +237,10 @@ Partial Class ucSettings
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.cmdSetTPLFolder)
         Me.GroupBox3.Controls.Add(Me.chkListboxTemplates)
         Me.GroupBox3.Controls.Add(Me.cmdBrowseLayoutTemplate)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 217)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 266)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(415, 200)
         Me.GroupBox3.TabIndex = 7
@@ -234,14 +250,14 @@ Partial Class ucSettings
         'chkListboxTemplates
         '
         Me.chkListboxTemplates.FormattingEnabled = True
-        Me.chkListboxTemplates.Location = New System.Drawing.Point(18, 48)
+        Me.chkListboxTemplates.Location = New System.Drawing.Point(18, 63)
         Me.chkListboxTemplates.Name = "chkListboxTemplates"
-        Me.chkListboxTemplates.Size = New System.Drawing.Size(383, 139)
+        Me.chkListboxTemplates.Size = New System.Drawing.Size(383, 124)
         Me.chkListboxTemplates.TabIndex = 3
         '
         'cmdBrowseLayoutTemplate
         '
-        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(18, 22)
+        Me.cmdBrowseLayoutTemplate.Location = New System.Drawing.Point(18, 37)
         Me.cmdBrowseLayoutTemplate.Name = "cmdBrowseLayoutTemplate"
         Me.cmdBrowseLayoutTemplate.Size = New System.Drawing.Size(379, 20)
         Me.cmdBrowseLayoutTemplate.TabIndex = 1
@@ -265,7 +281,7 @@ Partial Class ucSettings
         Me.chkAutoLoad.AutoSize = True
         Me.chkAutoLoad.Checked = True
         Me.chkAutoLoad.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkAutoLoad.Location = New System.Drawing.Point(8, 423)
+        Me.chkAutoLoad.Location = New System.Drawing.Point(8, 472)
         Me.chkAutoLoad.Name = "chkAutoLoad"
         Me.chkAutoLoad.Size = New System.Drawing.Size(198, 17)
         Me.chkAutoLoad.TabIndex = 8
@@ -274,7 +290,7 @@ Partial Class ucSettings
         '
         'cmdGPStest
         '
-        Me.cmdGPStest.Location = New System.Drawing.Point(3, 456)
+        Me.cmdGPStest.Location = New System.Drawing.Point(3, 505)
         Me.cmdGPStest.Name = "cmdGPStest"
         Me.cmdGPStest.Size = New System.Drawing.Size(139, 36)
         Me.cmdGPStest.TabIndex = 9
@@ -284,7 +300,7 @@ Partial Class ucSettings
         '
         'txtLat
         '
-        Me.txtLat.Location = New System.Drawing.Point(234, 456)
+        Me.txtLat.Location = New System.Drawing.Point(234, 505)
         Me.txtLat.Name = "txtLat"
         Me.txtLat.Size = New System.Drawing.Size(100, 20)
         Me.txtLat.TabIndex = 10
@@ -292,7 +308,7 @@ Partial Class ucSettings
         '
         'txtLon
         '
-        Me.txtLon.Location = New System.Drawing.Point(234, 486)
+        Me.txtLon.Location = New System.Drawing.Point(234, 535)
         Me.txtLon.Name = "txtLon"
         Me.txtLon.Size = New System.Drawing.Size(100, 20)
         Me.txtLon.TabIndex = 11
@@ -301,7 +317,7 @@ Partial Class ucSettings
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(176, 456)
+        Me.Label2.Location = New System.Drawing.Point(176, 505)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(22, 13)
         Me.Label2.TabIndex = 12
@@ -311,7 +327,7 @@ Partial Class ucSettings
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(176, 486)
+        Me.Label3.Location = New System.Drawing.Point(176, 535)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(25, 13)
         Me.Label3.TabIndex = 12
@@ -320,7 +336,7 @@ Partial Class ucSettings
         '
         'txtConversion
         '
-        Me.txtConversion.Location = New System.Drawing.Point(160, 518)
+        Me.txtConversion.Location = New System.Drawing.Point(160, 567)
         Me.txtConversion.Name = "txtConversion"
         Me.txtConversion.Size = New System.Drawing.Size(249, 20)
         Me.txtConversion.TabIndex = 13
@@ -408,12 +424,42 @@ Partial Class ucSettings
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Gebruiker:"
         '
+        'GroupBox6
+        '
+        Me.GroupBox6.Controls.Add(Me.chkUseDWGname)
+        Me.GroupBox6.Location = New System.Drawing.Point(3, 150)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(415, 43)
+        Me.GroupBox6.TabIndex = 15
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "Bestandsnaam"
+        '
+        'chkUseDWGname
+        '
+        Me.chkUseDWGname.AutoSize = True
+        Me.chkUseDWGname.Location = New System.Drawing.Point(9, 20)
+        Me.chkUseDWGname.Name = "chkUseDWGname"
+        Me.chkUseDWGname.Size = New System.Drawing.Size(280, 17)
+        Me.chkUseDWGname.TabIndex = 0
+        Me.chkUseDWGname.Text = "DWG Bestandsnaam opnemen in PDF bestandsnaam"
+        Me.chkUseDWGname.UseVisualStyleBackColor = True
+        '
+        'cmdSetTPLFolder
+        '
+        Me.cmdSetTPLFolder.Location = New System.Drawing.Point(18, 16)
+        Me.cmdSetTPLFolder.Name = "cmdSetTPLFolder"
+        Me.cmdSetTPLFolder.Size = New System.Drawing.Size(379, 20)
+        Me.cmdSetTPLFolder.TabIndex = 4
+        Me.cmdSetTPLFolder.Text = "Template map: NotSET"
+        Me.cmdSetTPLFolder.UseVisualStyleBackColor = True
+        '
         'ucSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoScroll = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.Controls.Add(Me.GroupBox6)
         Me.Controls.Add(Me.cmdDebugOptions)
         Me.Controls.Add(Me.txtConversion)
         Me.Controls.Add(Me.Label3)
@@ -441,6 +487,8 @@ Partial Class ucSettings
         Me.editListTemplates.ResumeLayout(False)
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox6.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -480,4 +528,8 @@ Partial Class ucSettings
     Friend WithEvents Label5 As Windows.Forms.Label
     Friend WithEvents Label6 As Windows.Forms.Label
     Friend WithEvents cmdUpdate As Windows.Forms.Button
+    Friend WithEvents GroupBox5 As Windows.Forms.GroupBox
+    Friend WithEvents GroupBox6 As Windows.Forms.GroupBox
+    Friend WithEvents chkUseDWGname As Windows.Forms.CheckBox
+    Friend WithEvents cmdSetTPLFolder As Windows.Forms.Button
 End Class
