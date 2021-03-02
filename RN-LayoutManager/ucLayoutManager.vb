@@ -56,6 +56,11 @@ Public Class ucLayoutManager
     Dim dStartValue(0 To 99) As Double
     Dim dCurrValue(0 To 99) As Double
     Dim dIncrementValue(0 To 99) As Double
+    Dim sLayoutNames As Dictionary(Of String, Dictionary(Of String, String)) = New Dictionary(Of String, Dictionary(Of String, String))
+    Dim sVersie As String
+    Dim sBestek As String
+    Dim sBlad As String
+    Dim bIsCentrumplan As Boolean = False
 
     Dim sBlockToFind As String
     Dim sAttribFile As String = ""
@@ -790,6 +795,8 @@ Public Class ucLayoutManager
                                     acLayoutMgr.DeleteLayout(cntrl.LayoutName)
                                 End If
                                 layouts.Add(lay)
+                                'kijken of we de layoutnaam kunnen samenstellen uit block Attributes
+
                             End If
                         Next
                         acTrans.Commit()
@@ -831,7 +838,7 @@ Public Class ucLayoutManager
             End If
 
 
-            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, bSuppressMessage, sOverridePlotDevice)
+            Dim plotter As New plotting.MultiSheetsPdf(filename, layouts, pdfSheetType, bSuppressMessage, sOverridePlotDevice, sLayoutNames)
             plotter.Publish()
 
         Catch e As System.Exception
@@ -867,6 +874,10 @@ Public Class ucLayoutManager
         Dim layouts As New List(Of Layout)()
         layouts = checkedLayouts()
         If layouts.Count > 1 Then
+            'layouts doorlopen en titelblok attributes saven voor CENTRUMPLAN
+            'BESTEKNUMMER, BLADNUMMER, VERSIE = centrumplan (SAL-TITELBLOK-CENTERUMPLAN-V2)
+            'BESTEKNUMMER, BLADNUMMER = anacon (SAL-TITELBLOK)
+            sLayoutNames = clsLayout.getLayoutPrintNames(layouts)
             regenDrawing()
             plotLayouts(SheetType.SinglePdf, checkedLayouts())
         End If
@@ -2019,7 +2030,7 @@ resestlistitems:
         End If
     End Function
 
-    Public Function LayoutWalker(ByRef iPaperSpaceCount As Integer)
+    Public Function LayoutWalker(ByRef iPaperSpaceCount As Integer, Optional bBuildOutputNameList As Boolean = False)
         Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim db As Database = doc.Database
         Dim ed As Editor = doc.Editor
@@ -2039,6 +2050,7 @@ resestlistitems:
                     layoutMgr.CurrentLayout = layout.LayoutName
                     '## paperspace id pakken en attributes updaten
                     iPaperSpaceCount = UpdateAttributesInBlock(getSpaceID("paper"), sBlockName)
+
                     iLayoutCnt = iLayoutCnt + 1
                 Next
                 'originele layout terugzetten
@@ -2055,6 +2067,8 @@ resestlistitems:
         Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim acCurDb As Database = acDoc.Database
         Dim acEd As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+        bIsCentrumplan = False
+
         Using acLockDoc As DocumentLock = acDoc.LockDocument()
             Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
                 Dim btr As BlockTableRecord = TryCast(acTrans.GetObject(oBtrId, OpenMode.ForRead), BlockTableRecord)

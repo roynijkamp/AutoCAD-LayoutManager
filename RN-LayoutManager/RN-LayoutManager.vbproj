@@ -44,7 +44,7 @@
     <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <AssemblyVersion>1.0.1113.0748</AssemblyVersion>
+    <AssemblyVersion>1.0.0302.0949</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -213,6 +213,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="clsINI.vb" />
+    <Compile Include="clsLayout.vb" />
     <Compile Include="clsMyDocData.vb" />
     <Compile Include="clsNOD.vb" />
     <Compile Include="clsRDNAPTRANS.vb" />

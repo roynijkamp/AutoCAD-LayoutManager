@@ -22,12 +22,13 @@ Public Class plotting
         Private pdfOutputDIR As String
         Private sPlottingDeviceOverride As String = ""
         Private bUseDWGname As Boolean = True
+        Private sLayouts As Dictionary(Of String, Dictionary(Of String, String))
 
         Private bSuppressMessage As Boolean
 
         Private Const LOG As String = "publish.log"
 
-        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, bSuppressMessage As Boolean, Optional sPlottingDeviceOverride As String = "")
+        Public Sub New(pdfFile As String, layouts As IEnumerable(Of Layout), pdfSheetType As SheetType, bSuppressMessage As Boolean, Optional sPlottingDeviceOverride As String = "", Optional sLayouts As Dictionary(Of String, Dictionary(Of String, String)) = Nothing)
             'get settings from INI
             iniFile = New clsINI(sIniDir & sIniFile)
             bTrashDSD = iniFile.GetBoolean("debugoptions", "trashdsd", bTrashDSD)
@@ -44,6 +45,7 @@ Public Class plotting
             Me.bSuppressMessage = bSuppressMessage
             Me.sPlottingDeviceOverride = sPlottingDeviceOverride 'plotter override 
             Me.bUseDWGname = iniFile.GetBoolean("publishsettings", "usedwgname", bUseDWGname)
+            Me.sLayouts = sLayouts
         End Sub
 
         Public Sub Publish()
@@ -98,20 +100,40 @@ Public Class plotting
 
         Private Function CreateDsdEntryCollection(layouts As IEnumerable(Of Layout)) As DsdEntryCollection
             Dim entries As New DsdEntryCollection()
+            Dim sFileName As String = ""
 
             For Each layout As Layout In layouts
                 Dim dsdEntry As New DsdEntry()
+                sFileName = ""
                 dsdEntry.DwgName = Me.dwgFile
                 dsdEntry.Layout = layout.LayoutName
                 dsdEntry.NpsSourceDwg = dsdEntry.DwgName
+
+                If sLayouts.ContainsKey(layout.LayoutName) Then
+                    'kijken of we de juiste attributen kunnen opbouwen
+                    Dim dictAttrib As Dictionary(Of String, String) = sLayouts.Item(layout.LayoutName)
+                    If dictAttrib.ContainsKey("VERSIE") Then
+                        sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
+                    End If
+                    If dictAttrib.ContainsKey("BESTEKNUMMER") Then
+                        sFileName = sFileName & dictAttrib.Item("BESTEKNUMMER") & "-"
+                    End If
+                    If dictAttrib.ContainsKey("BLADNUMMER") Then
+                        sFileName = sFileName & dictAttrib.Item("BLADNUMMER") & " "
+                    End If
+                End If
+                sFileName = sFileName & layout.LayoutName
+
                 If Me.pdfSheetType = SheetType.MultiPdf Or Me.pdfSheetType = SheetType.MultiDwf Then
-                    dsdEntry.Title = layout.LayoutName
+                    'dsdEntry.Title = layout.LayoutName
+                    dsdEntry.Title = sFileName
                     dsdEntry.Nps = layout.TabOrder.ToString()
                 ElseIf bUseDWGname = True Then
                     dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + "-" + layout.LayoutName
                     dsdEntry.Nps = "Setup1"
                 Else
-                    dsdEntry.Title = layout.LayoutName
+                    'dsdEntry.Title = layout.LayoutName
+                    dsdEntry.Title = sFileName
                     dsdEntry.Nps = "Setup1"
                 End If
                 entries.Add(dsdEntry)
