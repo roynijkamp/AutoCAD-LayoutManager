@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RN Layout Manager"
-#define MyAppVersion "1.0.20181.1110"
 #define MyAppPublisher "Roy Nijkamp"
 #define MyAppURL "http://www.roynijkamp.nl"
+#define MyAppFileVersion GetFileVersion("E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\Confused\RN-LayoutManager.dll")  
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -12,7 +12,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{50FBDEB1-BFEE-4AF0-9CE6-9E826689CDDB}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppVersion={#MyAppFileVersion}
 ; AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -23,7 +23,7 @@ DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\Distribution
-OutputBaseFilename=RNLayoutManager-{#MyAppVersion}
+OutputBaseFilename=RNLayoutManager-{#MyAppFileVersion}
 SetupIconFile=E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\Distribution\logo.ico
 Compression=lzma
 SolidCompression=yes

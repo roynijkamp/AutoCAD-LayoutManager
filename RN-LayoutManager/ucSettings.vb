@@ -26,6 +26,9 @@ Public Class ucSettings
     Dim dtPlotPresets As System.Data.DataTable
     Dim bIsLoading As Boolean = False
     Dim bAutoLoad As Boolean = True
+    Dim bUseBesteknr As Boolean = False
+    Dim bUseBladnr As Boolean = False
+    Dim bUseVersie As Boolean = False
     'license vars
     Dim sUserName As String
     Dim sUserEmail As String
@@ -128,6 +131,12 @@ Public Class ucSettings
                 bUseDWGname = iniFile.GetBoolean("publishsettings", "usedwgname", bUseDWGname)
                 bAutoLoad = iniFile.GetBoolean("appsettings", "autoload", bAutoLoad)
 
+                'filename settings
+                bUseBesteknr = iniFile.GetBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
+                bUseBladnr = iniFile.GetBoolean("publishsettings", "usebladnummer", bUseBladnr)
+                bUseVersie = iniFile.GetBoolean("publishsettings", "useversie", bUseVersie)
+                setFileNameSettings()
+
             Else
                 'eerst check of map wel bestaat
                 If My.Computer.FileSystem.DirectoryExists(sIniDir) = False Then
@@ -204,6 +213,29 @@ Public Class ucSettings
         End If
     End Sub
 
+    Public Sub setFileNameSettings()
+        Dim sFileNamePeview As String = ""
+        chkUseBesteknummer.Checked = bUseBesteknr
+        chkUseBladnummer.Checked = bUseBladnr
+        chkUseVersienummer.Checked = bUseVersie
+        'saven die hap
+        iniFile = New clsINI(sIniDir & sIniFile)
+        iniFile.WriteBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
+        iniFile.WriteBoolean("publishsettings", "usebladnummer", bUseBladnr)
+        iniFile.WriteBoolean("publishsettings", "useversie", bUseVersie)
+
+        If bUseVersie Then
+            sFileNamePeview = "V[versienr]-"
+        End If
+        If bUseBesteknr Then
+            sFileNamePeview = sFileNamePeview & "[#besteknr]-"
+        End If
+        If bUseBladnr Then
+            sFileNamePeview = sFileNamePeview & "[#bladnummer] "
+        End If
+        sFileNamePeview = sFileNamePeview & "[#layoutnaam]"
+        lblFilenamePreview.Text = sFileNamePeview
+    End Sub
 
     Private Sub cmbPlottingDevice_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPlottingDevice.SelectedIndexChanged
         iniFile = New clsINI(sIniDir & sIniFile)
@@ -413,5 +445,24 @@ Public Class ucSettings
             iniFile.WriteString("template", "templatefolder", sLayoutTemplateFolder)
             cmdSetTPLFolder.Text = "Template map: " & sLayoutTemplateFolder
         End If
+    End Sub
+
+    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles Label8.Click, lblFilenamePreview.Click
+
+    End Sub
+
+    Private Sub chkUseBesteknummer_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseBesteknummer.CheckedChanged
+        bUseBesteknr = chkUseBesteknummer.Checked
+        setFileNameSettings()
+    End Sub
+
+    Private Sub chkUseBladnummer_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseBladnummer.CheckedChanged
+        bUseBladnr = chkUseBladnummer.Checked
+        setFileNameSettings()
+    End Sub
+
+    Private Sub chkUseVersienummer_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseVersienummer.CheckedChanged
+        bUseVersie = chkUseVersienummer.Checked
+        setFileNameSettings()
     End Sub
 End Class

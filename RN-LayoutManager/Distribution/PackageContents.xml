@@ -20,7 +20,7 @@
       Platform="AutoCAD"
       OS="Win32|Win64"
       SeriesMin="R19.1"
-      SeriesMax="R24.0" />
+      SeriesMax="R25.0" />
 
     <ComponentEntry
       AppName="layoutmanager"
@@ -39,7 +39,7 @@
       Platform="Civil3D"
       OS="Win32|Win64"
       SeriesMin="R19.1"
-      SeriesMax="R24.0" />
+      SeriesMax="R25.0" />
 
     <ComponentEntry
       AppName="layoutmanager"

@@ -23,6 +23,9 @@ Public Class plotting
         Private sPlottingDeviceOverride As String = ""
         Private bUseDWGname As Boolean = True
         Private sLayouts As Dictionary(Of String, Dictionary(Of String, String))
+        Private bUseBesteknr As Boolean = False
+        Private bUseBladnr As Boolean = False
+        Private bUseVersie As Boolean = False
 
         Private bSuppressMessage As Boolean
 
@@ -45,6 +48,9 @@ Public Class plotting
             Me.bSuppressMessage = bSuppressMessage
             Me.sPlottingDeviceOverride = sPlottingDeviceOverride 'plotter override 
             Me.bUseDWGname = iniFile.GetBoolean("publishsettings", "usedwgname", bUseDWGname)
+            Me.bUseBesteknr = iniFile.GetBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
+            Me.bUseBladnr = iniFile.GetBoolean("publishsettings", "usebladnummer", bUseBladnr)
+            Me.bUseVersie = iniFile.GetBoolean("publishsettings", "useversie", bUseVersie)
             Me.sLayouts = sLayouts
         End Sub
 
@@ -112,13 +118,13 @@ Public Class plotting
                 If sLayouts.ContainsKey(layout.LayoutName) Then
                     'kijken of we de juiste attributen kunnen opbouwen
                     Dim dictAttrib As Dictionary(Of String, String) = sLayouts.Item(layout.LayoutName)
-                    If dictAttrib.ContainsKey("VERSIE") Then
+                    If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
                         sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
                     End If
-                    If dictAttrib.ContainsKey("BESTEKNUMMER") Then
+                    If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
                         sFileName = sFileName & dictAttrib.Item("BESTEKNUMMER") & "-"
                     End If
-                    If dictAttrib.ContainsKey("BLADNUMMER") Then
+                    If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
                         sFileName = sFileName & dictAttrib.Item("BLADNUMMER") & " "
                     End If
                 End If
@@ -298,3 +304,4 @@ Public Class plotting
 
 
 End Class
+

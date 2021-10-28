@@ -509,6 +509,12 @@ Public Class ucLayoutManager
                     layouts.Add(lay)
 
                     acTrans.Commit()
+
+                    'layouts doorlopen en titelblok attributes saven voor CENTRUMPLAN
+                    'BESTEKNUMMER, BLADNUMMER, VERSIE = centrumplan (SAL-TITELBLOK-CENTERUMPLAN-V2)
+                    'BESTEKNUMMER, BLADNUMMER = anacon (SAL-TITELBLOK)
+                    sLayoutNames = clsLayout.getLayoutPrintNames(layouts)
+
                     If sDWF = False Then
                         'plot PDF
                         plotLayouts(SheetType.SinglePdf, layouts, False, "pdf", sOverrideDevice)

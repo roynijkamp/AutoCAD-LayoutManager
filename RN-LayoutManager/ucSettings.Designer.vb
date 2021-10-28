@@ -39,6 +39,7 @@ Partial Class ucSettings
         Me.chkTrashDSD = New System.Windows.Forms.CheckBox()
         Me.cmdDebugOptions = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.cmdSetTPLFolder = New System.Windows.Forms.Button()
         Me.chkListboxTemplates = New System.Windows.Forms.CheckedListBox()
         Me.cmdBrowseLayoutTemplate = New System.Windows.Forms.Button()
         Me.editListTemplates = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -59,8 +60,13 @@ Partial Class ucSettings
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.lblFilenamePreview = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.chkUseBesteknummer = New System.Windows.Forms.CheckBox()
+        Me.chkUseBladnummer = New System.Windows.Forms.CheckBox()
+        Me.chkUseVersienummer = New System.Windows.Forms.CheckBox()
         Me.chkUseDWGname = New System.Windows.Forms.CheckBox()
-        Me.cmdSetTPLFolder = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -175,7 +181,7 @@ Partial Class ucSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Controls.Add(Me.cmbPlottingDevice)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 199)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 271)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(415, 58)
         Me.GroupBox2.TabIndex = 5
@@ -240,12 +246,21 @@ Partial Class ucSettings
         Me.GroupBox3.Controls.Add(Me.cmdSetTPLFolder)
         Me.GroupBox3.Controls.Add(Me.chkListboxTemplates)
         Me.GroupBox3.Controls.Add(Me.cmdBrowseLayoutTemplate)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 266)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 338)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(415, 200)
         Me.GroupBox3.TabIndex = 7
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Layout Template File"
+        '
+        'cmdSetTPLFolder
+        '
+        Me.cmdSetTPLFolder.Location = New System.Drawing.Point(18, 16)
+        Me.cmdSetTPLFolder.Name = "cmdSetTPLFolder"
+        Me.cmdSetTPLFolder.Size = New System.Drawing.Size(379, 20)
+        Me.cmdSetTPLFolder.TabIndex = 4
+        Me.cmdSetTPLFolder.Text = "Template map: NotSET"
+        Me.cmdSetTPLFolder.UseVisualStyleBackColor = True
         '
         'chkListboxTemplates
         '
@@ -281,7 +296,7 @@ Partial Class ucSettings
         Me.chkAutoLoad.AutoSize = True
         Me.chkAutoLoad.Checked = True
         Me.chkAutoLoad.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkAutoLoad.Location = New System.Drawing.Point(8, 472)
+        Me.chkAutoLoad.Location = New System.Drawing.Point(8, 544)
         Me.chkAutoLoad.Name = "chkAutoLoad"
         Me.chkAutoLoad.Size = New System.Drawing.Size(198, 17)
         Me.chkAutoLoad.TabIndex = 8
@@ -290,7 +305,7 @@ Partial Class ucSettings
         '
         'cmdGPStest
         '
-        Me.cmdGPStest.Location = New System.Drawing.Point(3, 505)
+        Me.cmdGPStest.Location = New System.Drawing.Point(3, 571)
         Me.cmdGPStest.Name = "cmdGPStest"
         Me.cmdGPStest.Size = New System.Drawing.Size(139, 36)
         Me.cmdGPStest.TabIndex = 9
@@ -300,7 +315,7 @@ Partial Class ucSettings
         '
         'txtLat
         '
-        Me.txtLat.Location = New System.Drawing.Point(234, 505)
+        Me.txtLat.Location = New System.Drawing.Point(234, 571)
         Me.txtLat.Name = "txtLat"
         Me.txtLat.Size = New System.Drawing.Size(100, 20)
         Me.txtLat.TabIndex = 10
@@ -308,7 +323,7 @@ Partial Class ucSettings
         '
         'txtLon
         '
-        Me.txtLon.Location = New System.Drawing.Point(234, 535)
+        Me.txtLon.Location = New System.Drawing.Point(234, 601)
         Me.txtLon.Name = "txtLon"
         Me.txtLon.Size = New System.Drawing.Size(100, 20)
         Me.txtLon.TabIndex = 11
@@ -317,7 +332,7 @@ Partial Class ucSettings
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(176, 505)
+        Me.Label2.Location = New System.Drawing.Point(176, 571)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(22, 13)
         Me.Label2.TabIndex = 12
@@ -327,7 +342,7 @@ Partial Class ucSettings
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(176, 535)
+        Me.Label3.Location = New System.Drawing.Point(176, 601)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(25, 13)
         Me.Label3.TabIndex = 12
@@ -336,7 +351,7 @@ Partial Class ucSettings
         '
         'txtConversion
         '
-        Me.txtConversion.Location = New System.Drawing.Point(160, 567)
+        Me.txtConversion.Location = New System.Drawing.Point(160, 633)
         Me.txtConversion.Name = "txtConversion"
         Me.txtConversion.Size = New System.Drawing.Size(249, 20)
         Me.txtConversion.TabIndex = 13
@@ -426,32 +441,89 @@ Partial Class ucSettings
         '
         'GroupBox6
         '
+        Me.GroupBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox6.Controls.Add(Me.lblFilenamePreview)
+        Me.GroupBox6.Controls.Add(Me.Label8)
+        Me.GroupBox6.Controls.Add(Me.Label7)
+        Me.GroupBox6.Controls.Add(Me.chkUseBesteknummer)
+        Me.GroupBox6.Controls.Add(Me.chkUseBladnummer)
+        Me.GroupBox6.Controls.Add(Me.chkUseVersienummer)
         Me.GroupBox6.Controls.Add(Me.chkUseDWGname)
         Me.GroupBox6.Location = New System.Drawing.Point(3, 150)
         Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(415, 43)
+        Me.GroupBox6.Size = New System.Drawing.Size(415, 115)
         Me.GroupBox6.TabIndex = 15
         Me.GroupBox6.TabStop = False
         Me.GroupBox6.Text = "Bestandsnaam"
         '
+        'lblFilenamePreview
+        '
+        Me.lblFilenamePreview.AutoSize = True
+        Me.lblFilenamePreview.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFilenamePreview.Location = New System.Drawing.Point(185, 75)
+        Me.lblFilenamePreview.Name = "lblFilenamePreview"
+        Me.lblFilenamePreview.Size = New System.Drawing.Size(163, 13)
+        Me.lblFilenamePreview.TabIndex = 3
+        Me.lblFilenamePreview.Text = "V1-12345-01 [#layoutnaam]"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(185, 60)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(130, 13)
+        Me.Label8.TabIndex = 3
+        Me.Label8.Text = "Voorbeeld bestandsnaam:"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(9, 38)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(154, 13)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "Gebruik velden uit Tekenhoofd"
+        '
+        'chkUseBesteknummer
+        '
+        Me.chkUseBesteknummer.AutoSize = True
+        Me.chkUseBesteknummer.Location = New System.Drawing.Point(9, 56)
+        Me.chkUseBesteknummer.Name = "chkUseBesteknummer"
+        Me.chkUseBesteknummer.Size = New System.Drawing.Size(96, 17)
+        Me.chkUseBesteknummer.TabIndex = 1
+        Me.chkUseBesteknummer.Text = "Besteknummer"
+        Me.chkUseBesteknummer.UseVisualStyleBackColor = True
+        '
+        'chkUseBladnummer
+        '
+        Me.chkUseBladnummer.AutoSize = True
+        Me.chkUseBladnummer.Location = New System.Drawing.Point(9, 74)
+        Me.chkUseBladnummer.Name = "chkUseBladnummer"
+        Me.chkUseBladnummer.Size = New System.Drawing.Size(84, 17)
+        Me.chkUseBladnummer.TabIndex = 1
+        Me.chkUseBladnummer.Text = "Bladnummer"
+        Me.chkUseBladnummer.UseVisualStyleBackColor = True
+        '
+        'chkUseVersienummer
+        '
+        Me.chkUseVersienummer.AutoSize = True
+        Me.chkUseVersienummer.Location = New System.Drawing.Point(9, 93)
+        Me.chkUseVersienummer.Name = "chkUseVersienummer"
+        Me.chkUseVersienummer.Size = New System.Drawing.Size(55, 17)
+        Me.chkUseVersienummer.TabIndex = 1
+        Me.chkUseVersienummer.Text = "Versie"
+        Me.chkUseVersienummer.UseVisualStyleBackColor = True
+        '
         'chkUseDWGname
         '
         Me.chkUseDWGname.AutoSize = True
-        Me.chkUseDWGname.Location = New System.Drawing.Point(9, 20)
+        Me.chkUseDWGname.Location = New System.Drawing.Point(9, 16)
         Me.chkUseDWGname.Name = "chkUseDWGname"
         Me.chkUseDWGname.Size = New System.Drawing.Size(280, 17)
         Me.chkUseDWGname.TabIndex = 0
         Me.chkUseDWGname.Text = "DWG Bestandsnaam opnemen in PDF bestandsnaam"
         Me.chkUseDWGname.UseVisualStyleBackColor = True
-        '
-        'cmdSetTPLFolder
-        '
-        Me.cmdSetTPLFolder.Location = New System.Drawing.Point(18, 16)
-        Me.cmdSetTPLFolder.Name = "cmdSetTPLFolder"
-        Me.cmdSetTPLFolder.Size = New System.Drawing.Size(379, 20)
-        Me.cmdSetTPLFolder.TabIndex = 4
-        Me.cmdSetTPLFolder.Text = "Template map: NotSET"
-        Me.cmdSetTPLFolder.UseVisualStyleBackColor = True
         '
         'ucSettings
         '
@@ -532,4 +604,10 @@ Partial Class ucSettings
     Friend WithEvents GroupBox6 As Windows.Forms.GroupBox
     Friend WithEvents chkUseDWGname As Windows.Forms.CheckBox
     Friend WithEvents cmdSetTPLFolder As Windows.Forms.Button
+    Friend WithEvents Label8 As Windows.Forms.Label
+    Friend WithEvents Label7 As Windows.Forms.Label
+    Friend WithEvents chkUseBesteknummer As Windows.Forms.CheckBox
+    Friend WithEvents chkUseBladnummer As Windows.Forms.CheckBox
+    Friend WithEvents chkUseVersienummer As Windows.Forms.CheckBox
+    Friend WithEvents lblFilenamePreview As Windows.Forms.Label
 End Class
