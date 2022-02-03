@@ -2644,9 +2644,15 @@ resestlistitems:
                             'geen orientatie beschikbaar, default LS
                             sVpType = sVpType & "_LS"
                         Case Else
-                            'layout niet ondersteund voor dynamisch inserten
-                            insertLayout(False)
-                            Exit Function
+                            'check of het toevalig PGL of PFL is
+                            If (sTemp.Contains("PGL") Or sTemp.Contains("PFL")) Then
+                                'pgl of pfl layout, gehele string gebruiken
+                                sVpType = sTemp
+                            Else
+                                'layout niet ondersteund voor dynamisch inserten
+                                insertLayout(False)
+                                Exit Function
+                            End If
                     End Select
                 End If
             Else
