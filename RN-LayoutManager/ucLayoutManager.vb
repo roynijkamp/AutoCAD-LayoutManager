@@ -1727,6 +1727,8 @@ Public Class ucLayoutManager
                                                             MsgBox("Fout bij het toepassen van de Pagesetup!" & vbCrLf & ex.Message & vbCrLf & ex.StackTrace)
                                                         End Try
                                                     End If
+                                                    'set show annotations
+                                                    lay.AnnoAllVisible = True
                                                 End Using
                                             End Using
                                             ' Regen the drawing to get the layout tab to display
