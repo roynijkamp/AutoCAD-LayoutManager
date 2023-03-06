@@ -29,6 +29,7 @@ Public Class ucSettings
     Dim bUseBesteknr As Boolean = False
     Dim bUseBladnr As Boolean = False
     Dim bUseVersie As Boolean = False
+    Dim bVersieInFront As Boolean = False
     'license vars
     Dim sUserName As String
     Dim sUserEmail As String
@@ -135,6 +136,7 @@ Public Class ucSettings
                 bUseBesteknr = iniFile.GetBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
                 bUseBladnr = iniFile.GetBoolean("publishsettings", "usebladnummer", bUseBladnr)
                 bUseVersie = iniFile.GetBoolean("publishsettings", "useversie", bUseVersie)
+                bVersieInFront = iniFile.GetBoolean("publishsettings", "versieinfront", bVersieInFront)
                 setFileNameSettings()
 
             Else
@@ -218,15 +220,14 @@ Public Class ucSettings
         chkUseBesteknummer.Checked = bUseBesteknr
         chkUseBladnummer.Checked = bUseBladnr
         chkUseVersienummer.Checked = bUseVersie
+        chkVersieVooraan.Checked = bVersieInFront
         'saven die hap
         iniFile = New clsINI(sIniDir & sIniFile)
         iniFile.WriteBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
         iniFile.WriteBoolean("publishsettings", "usebladnummer", bUseBladnr)
         iniFile.WriteBoolean("publishsettings", "useversie", bUseVersie)
+        iniFile.WriteBoolean("publishsettings", "versieinfront", bVersieInFront)
 
-        If bUseVersie Then
-            sFileNamePeview = "V[versienr]-"
-        End If
         If bUseBesteknr Then
             sFileNamePeview = sFileNamePeview & "[#besteknr]-"
         End If
@@ -234,6 +235,14 @@ Public Class ucSettings
             sFileNamePeview = sFileNamePeview & "[#bladnummer] "
         End If
         sFileNamePeview = sFileNamePeview & "[#layoutnaam]"
+        If bUseVersie Then
+            'check versie voor of achteraan
+            If bVersieInFront Then
+                sFileNamePeview = "V[versienr]-" & sFileNamePeview
+            Else
+                sFileNamePeview = sFileNamePeview & " - V[versienr]"
+            End If
+        End If
         lblFilenamePreview.Text = sFileNamePeview
     End Sub
 
@@ -463,6 +472,11 @@ Public Class ucSettings
 
     Private Sub chkUseVersienummer_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseVersienummer.CheckedChanged
         bUseVersie = chkUseVersienummer.Checked
+        setFileNameSettings()
+    End Sub
+
+    Private Sub chkVersieVooraan_CheckedChanged(sender As Object, e As EventArgs) Handles chkVersieVooraan.CheckedChanged
+        bVersieInFront = chkVersieVooraan.Checked
         setFileNameSettings()
     End Sub
 End Class

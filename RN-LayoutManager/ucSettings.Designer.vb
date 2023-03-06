@@ -67,6 +67,7 @@ Partial Class ucSettings
         Me.chkUseBladnummer = New System.Windows.Forms.CheckBox()
         Me.chkUseVersienummer = New System.Windows.Forms.CheckBox()
         Me.chkUseDWGname = New System.Windows.Forms.CheckBox()
+        Me.chkVersieVooraan = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpDebugOptions.SuspendLayout()
@@ -443,6 +444,7 @@ Partial Class ucSettings
         '
         Me.GroupBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox6.Controls.Add(Me.chkVersieVooraan)
         Me.GroupBox6.Controls.Add(Me.lblFilenamePreview)
         Me.GroupBox6.Controls.Add(Me.Label8)
         Me.GroupBox6.Controls.Add(Me.Label7)
@@ -524,6 +526,16 @@ Partial Class ucSettings
         Me.chkUseDWGname.TabIndex = 0
         Me.chkUseDWGname.Text = "DWG Bestandsnaam opnemen in PDF bestandsnaam"
         Me.chkUseDWGname.UseVisualStyleBackColor = True
+        '
+        'chkVersieVooraan
+        '
+        Me.chkVersieVooraan.AutoSize = True
+        Me.chkVersieVooraan.Location = New System.Drawing.Point(126, 96)
+        Me.chkVersieVooraan.Name = "chkVersieVooraan"
+        Me.chkVersieVooraan.Size = New System.Drawing.Size(97, 17)
+        Me.chkVersieVooraan.TabIndex = 4
+        Me.chkVersieVooraan.Text = "Versie vooraan"
+        Me.chkVersieVooraan.UseVisualStyleBackColor = True
         '
         'ucSettings
         '
@@ -610,4 +622,5 @@ Partial Class ucSettings
     Friend WithEvents chkUseBladnummer As Windows.Forms.CheckBox
     Friend WithEvents chkUseVersienummer As Windows.Forms.CheckBox
     Friend WithEvents lblFilenamePreview As Windows.Forms.Label
+    Friend WithEvents chkVersieVooraan As Windows.Forms.CheckBox
 End Class

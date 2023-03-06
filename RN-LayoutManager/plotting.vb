@@ -26,6 +26,7 @@ Public Class plotting
         Private bUseBesteknr As Boolean = False
         Private bUseBladnr As Boolean = False
         Private bUseVersie As Boolean = False
+        Private bVersieInFront As Boolean = False
 
         Private bSuppressMessage As Boolean
 
@@ -51,6 +52,7 @@ Public Class plotting
             Me.bUseBesteknr = iniFile.GetBoolean("publishsettings", "usebesteknummer", bUseBesteknr)
             Me.bUseBladnr = iniFile.GetBoolean("publishsettings", "usebladnummer", bUseBladnr)
             Me.bUseVersie = iniFile.GetBoolean("publishsettings", "useversie", bUseVersie)
+            Me.bVersieInFront = iniFile.GetBoolean("publishsettings", "versieinfront", bVersieInFront)
             Me.sLayouts = sLayouts
         End Sub
 
@@ -107,6 +109,8 @@ Public Class plotting
         Private Function CreateDsdEntryCollection(layouts As IEnumerable(Of Layout)) As DsdEntryCollection
             Dim entries As New DsdEntryCollection()
             Dim sFileName As String = ""
+            Dim sPreffix As String = ""
+            Dim sSuffix As String = ""
 
             For Each layout As Layout In layouts
                 Dim dsdEntry As New DsdEntry()
@@ -118,17 +122,25 @@ Public Class plotting
                 If sLayouts.ContainsKey(layout.LayoutName) Then
                     'kijken of we de juiste attributen kunnen opbouwen
                     Dim dictAttrib As Dictionary(Of String, String) = sLayouts.Item(layout.LayoutName)
-                    If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
-                        sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
-                    End If
+                    'If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                    '    sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
+                    'End If
                     If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
-                        sFileName = sFileName & dictAttrib.Item("BESTEKNUMMER") & "-"
+                        sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
                     End If
                     If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
-                        sFileName = sFileName & dictAttrib.Item("BLADNUMMER") & " "
+                        sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
+                    End If
+                    If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                        If bVersieInFront Then
+                            sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
+                        Else
+                            sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                        End If
                     End If
                 End If
-                sFileName = sFileName & layout.LayoutName
+                'filename opbouwen op basis van preffix en layoutnaam en suffix
+                sFileName = sPreffix & layout.LayoutName & sSuffix
 
                 If Me.pdfSheetType = SheetType.MultiPdf Or Me.pdfSheetType = SheetType.MultiDwf Then
                     'dsdEntry.Title = layout.LayoutName
