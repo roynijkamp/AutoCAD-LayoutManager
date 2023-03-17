@@ -115,6 +115,8 @@ Public Class plotting
             For Each layout As Layout In layouts
                 Dim dsdEntry As New DsdEntry()
                 sFileName = ""
+                sPreffix = ""
+                sSuffix = ""
                 dsdEntry.DwgName = Me.dwgFile
                 dsdEntry.Layout = layout.LayoutName
                 dsdEntry.NpsSourceDwg = dsdEntry.DwgName

@@ -24,8 +24,8 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("1.0.0306.1337")>
-<Assembly: AssemblyFileVersion("1.0.0306.1337")>
+<Assembly: AssemblyVersion("1.0.0317.1534")>
+<Assembly: AssemblyFileVersion("1.0.0317.1534")>
 
 ' In order to sign your assembly you must specify a key to use. Refer to the 
 ' Microsoft .NET Framework documentation for more information on assembly signing.
@@ -62,4 +62,4 @@ Imports System.Runtime.InteropServices
 ' The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("fad7b1e9-625e-4c10-9ba4-c94681a982cf")>
 
-<Assembly: AssemblyInformationalVersion("1.0.0306")>
+<Assembly: AssemblyInformationalVersion("1.0.0317")>
