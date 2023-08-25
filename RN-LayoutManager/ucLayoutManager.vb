@@ -16,6 +16,7 @@ Imports System.Drawing
 Imports Autodesk.AutoCAD.Interop
 Imports System.Text
 Imports Newtonsoft.Json.Linq
+Imports Autodesk.AutoCAD.Internal.CommandPiper
 
 Public Class ucLayoutManager
     Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -84,7 +85,8 @@ Public Class ucLayoutManager
     Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
     Dim _lm As LayoutManager
 
-
+    'DEBUG vars
+    Dim sDebugLog As String = clsFunctions.getMyDocDir() & "\RN-LayManDebugLog.log"
 
     '### Active Drawing Tracking
     Private Sub DocumentManager_DocumentActivated(ByVal sender As Object, ByVal e As DocumentCollectionEventArgs)
@@ -545,29 +547,50 @@ Public Class ucLayoutManager
     End Sub
 
     Public Sub setLayoutCurrent(ByVal sLayoutName As String, ByVal bIsModel As Boolean)
+        'DEBUG logging
+        clsFunctions.makeLog(sDebugLog, "function SetLayoutCurrent()", False)
         Try
             Using acLockDoc As DocumentLock = acDoc.LockDocument
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "acDoc.LockDocument", False)
                 Dim acLayoutMgr As LayoutManager = LayoutManager.Current
                 acLayoutMgr.CurrentLayout = sLayoutName
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "Get Current Layout", False)
                 acDoc.Editor.Regen()
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "Editor.Regen()", False)
                 'zoom extends when not model view
                 If bIsModel = False Then
+                    'DEBUG logging
+                    clsFunctions.makeLog(sDebugLog, "bIsModel = False", False)
                     Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Start Transaction", False)
                         Dim oId As ObjectId = acLayoutMgr.GetLayoutId(sLayoutName)
                         Dim lay As Layout = acTrans.GetObject(oId, OpenMode.ForWrite)
                         'lock viewports when not locked
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Loop Viewports", False)
                         For Each vpId As ObjectId In lay.GetViewports()
                             Dim vp As Viewport = DirectCast(acTrans.GetObject(vpId, OpenMode.ForWrite, False, True), Viewport)
                             vp.Locked = True
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "LockViewport", False)
                         Next
                         acTrans.Commit()
                         Dim acadApp As Object = Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication
                         acadApp.ZoomExtents()
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "ZoomExtents()", False)
                         acDoc.Editor.Regen()
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Editor.Regen()", False)
                     End Using
                 End If
             End Using
         Catch ex As Exception
+            clsFunctions.LogException(ex, "setLayoutCurrent()")
             MsgBox("Fout bij het Current zetten van de layout!" & vbCrLf & ex.Message & vbCrLf & ex.StackTrace)
         End Try
     End Sub
@@ -1616,6 +1639,12 @@ Public Class ucLayoutManager
         insertLayout(False)
     End Sub
     Public Sub insertLayout(Optional ByVal bDynamicVP As Boolean = False, Optional sLayoutName As String = "", Optional bProcessList As Boolean = False)
+        If Not bDynamicVP Then
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "INVOEGEN LAYOUT ZONDER DYNAMISCHE PLAATSING", True)
+        End If
+        'DEBUG logging
+        clsFunctions.makeLog(sDebugLog, "Start insertLayout(" & bDynamicVP.ToString & ", " & sLayoutName & ", " & bProcessList.ToString & ")", False)
         If cmbNewLayout.Text.Length = 0 Then
             MsgBox("Selecteer eerst een layout!")
             Exit Sub
@@ -1628,6 +1657,8 @@ Public Class ucLayoutManager
         Else
             'bij enkele layout vragen om de naam
             sNewLayoutName = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "Geen DynViewport => InputBox: Layoutnaam " & sNewLayoutName, False)
             'handmatig viewport lijst maken
             vpCoordinates = New ViewPortCoordinates
             vpCoordinatesList = New ViewPortCoordinatesList
@@ -1635,172 +1666,271 @@ Public Class ucLayoutManager
         End If
 
         For Each vpViewPort As ViewPortCoordinates In vpCoordinatesList.ViewPorts
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "Begin For Each vpViewport", False)
             Dim oLayout As ObjectId
             If bProcessList = True Then
                 'in geval van lijst automatisch nummer toevoegen
                 sNewLayoutName = sLayoutName & " Lay" & iLayoutCnt.ToString
                 iLayoutCnt += 1
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "bProcessList = True => " & sNewLayoutName, False)
             End If
 
             If LayoutExists(sNewLayoutName) = False Then
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "LayoutExists = False", False)
                 If sNewLayoutName <> "" Then
                     If File.Exists(sLayoutTemplateFolder & sLayoutTemplate) Then
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Template DWG gevonden", False)
                         Using acLockDoc As DocumentLock = acDoc.LockDocument
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "acDoc.LockDocument", False)
                             Dim acExDb As Database = New Database(False, True)
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "Init Empty DB", False)
                             acExDb.ReadDwgFile(sLayoutTemplateFolder & sLayoutTemplate, FileOpenMode.OpenForReadAndAllShare, True, "")
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "Read Template to Empty DB", False)
                             ' Get the layout dictionary of the current database
                             Dim layAndTab As SortedDictionary(Of Integer, String) = New SortedDictionary(Of Integer, String)
                             Dim layAndTabOID As SortedDictionary(Of Integer, ObjectId) = New SortedDictionary(Of Integer, ObjectId)
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "Create SorteDictionarie LayAndTab", False)
                             Try
+                                'DEBUG logging
+                                clsFunctions.makeLog(sDebugLog, "Begin Try", False)
                                 Using acTransEx As Transaction = acExDb.TransactionManager.StartTransaction()
+                                    'DEBUG logging
+                                    clsFunctions.makeLog(sDebugLog, "acExDb.TransactionManager.StartTransaction()", False)
                                     Dim layoutsEx As DBDictionary = acExDb.LayoutDictionaryId.GetObject(OpenMode.ForRead)
-
+                                    'DEBUG logging
+                                    clsFunctions.makeLog(sDebugLog, "Get Layout DBDictionary", False)
                                     If layoutsEx.Contains(cmbNewLayout.Text) Then
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "Layout gevonden", False)
                                         Dim layEx As Layout = layoutsEx.GetAt(cmbNewLayout.Text).GetObject(OpenMode.ForRead)
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "get Layout", False)
                                         Dim blkBlkRecEx As BlockTableRecord = acTransEx.GetObject(layEx.BlockTableRecordId, OpenMode.ForRead)
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "Set BlockTableRecord", False)
 
                                         Dim idCol As ObjectIdCollection = New ObjectIdCollection()
                                         For Each id As ObjectId In blkBlkRecEx
                                             idCol.Add(id)
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "Add LayID to Collection : ID=" & id.ToString, False)
                                         Next
                                         'invoegen in huidige dwg
                                         Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "acCurDb.TransactionManager.StartTransaction()", False)
                                             Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "Open BlockTable", False)
 
                                             Using blkBlkRec As New BlockTableRecord
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Using bklBlkRec", False)
                                                 blkBlkRec.Name = "*Paper_Space" & CStr(layoutsEx.Count() - 1)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "blkBlkRec.Name=" & blkBlkRec.Name.ToString, False)
                                                 blkTbl.Add(blkBlkRec)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "bklTbl.Add(blkBlkRec)", False)
                                                 acTrans.AddNewlyCreatedDBObject(blkBlkRec, True)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "acTrans.AddNewlyCreatedDBObject(blkBlkRec, True)", False)
                                                 acExDb.WblockCloneObjects(idCol,
                                                                           blkBlkRec.ObjectId,
                                                                           New IdMapping(),
                                                                           DuplicateRecordCloning.Ignore,
                                                                           False)
-
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "acExDb.WblockCloneObject => currDB", False)
                                                 ' Create a new layout and then copy properties between drawings
-                                                Dim layouts As DBDictionary =
-                                                    acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForWrite)
-
+                                                Dim layouts As DBDictionary = acTrans.GetObject(acCurDb.LayoutDictionaryId, OpenMode.ForWrite)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "create layouts DBDictionary", False)
 
 
                                                 Using lay As New Layout
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "Using lay As New Layout", False)
                                                     lay.LayoutName = sNewLayoutName
                                                     lay.AddToLayoutDictionary(acCurDb, blkBlkRec.ObjectId)
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "AddToLayoutDictionary => " & sNewLayoutName, False)
                                                     acTrans.AddNewlyCreatedDBObject(lay, True)
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "acTrans.AddNewlyCreatedDBObject(lay, True)", False)
                                                     lay.CopyFrom(layEx)
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "Copy layout from ExDB", False)
 
                                                     'save object id voor viewport manipulatie
                                                     oLayout = lay.ObjectId
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "Save VP ObjectID", False)
 
-                                                    Dim plSets As DBDictionary =
-                                                        acTrans.GetObject(
-                                                            acCurDb.PlotSettingsDictionaryId,
-                                                            OpenMode.ForRead)
-
+                                                    Dim plSets As DBDictionary = acTrans.GetObject(acCurDb.PlotSettingsDictionaryId, OpenMode.ForRead)
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "Get Plotsetting Dictionary", False)
                                                     ' Check to see if a named page setup was assigned to the layout,
                                                     ' if so then copy the page setup settings
                                                     If lay.PlotSettingsName <> "" Then
                                                         Try
                                                             ' Check to see if the page setup exists
                                                             If plSets.Contains(lay.PlotSettingsName) = False Then
+                                                                'DEBUG logging
+                                                                clsFunctions.makeLog(sDebugLog, "Geen PlotSettings gevonden in Layout", False)
                                                                 plSets.UpgradeOpen()
-
+                                                                'DEBUG logging
+                                                                clsFunctions.makeLog(sDebugLog, "plSets.UpgradeOpen", False)
                                                                 Using plSet As New PlotSettings(lay.ModelType)
                                                                     plSet.PlotSettingsName = lay.PlotSettingsName
+                                                                    'DEBUG logging
+                                                                    clsFunctions.makeLog(sDebugLog, "add PlotSettings : " & lay.PlotSettingsName, False)
                                                                     plSet.AddToPlotSettingsDictionary(acCurDb)
                                                                     acTrans.AddNewlyCreatedDBObject(plSet, True)
 
-                                                                    Dim plSetsEx As DBDictionary =
-                                                                        acTransEx.GetObject(
-                                                                            acExDb.PlotSettingsDictionaryId,
-                                                                            OpenMode.ForRead)
+                                                                    Dim plSetsEx As DBDictionary = acTransEx.GetObject(acExDb.PlotSettingsDictionaryId, OpenMode.ForRead)
 
-                                                                    Dim plSetEx As PlotSettings =
-                                                                        plSetsEx.GetAt(
-                                                                            lay.PlotSettingsName).GetObject(
-                                                                            OpenMode.ForRead)
+                                                                    Dim plSetEx As PlotSettings = plSetsEx.GetAt(lay.PlotSettingsName).GetObject(OpenMode.ForRead)
 
                                                                     plSet.CopyFrom(plSetEx)
+                                                                    'DEBUG logging
+                                                                    clsFunctions.makeLog(sDebugLog, "PlotSettings CopyFrom(plSetEx)", False)
                                                                 End Using
                                                             End If
                                                         Catch ex As Exception
+                                                            clsFunctions.LogException(ex, "insertLayout()", "create Plotsettings")
                                                             MsgBox("Fout bij het toepassen van de Pagesetup!" & vbCrLf & ex.Message & vbCrLf & ex.StackTrace)
                                                         End Try
                                                     End If
                                                     'set show annotations
                                                     lay.AnnoAllVisible = True
+                                                    'DEBUG logging
+                                                    clsFunctions.makeLog(sDebugLog, "Set show annotations to True", False)
                                                 End Using
                                             End Using
                                             ' Regen the drawing to get the layout tab to display
                                             acDoc.Editor.Regen()
-
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "Regen()", False)
                                             ' Save the changes made
                                             acTrans.Commit()
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "Commit()", False)
                                         End Using
                                     Else
                                         MsgBox("Layout " & cmbNewLayout.Text & " kon niet worden ingevoegd!")
                                         Exit Sub
                                     End If
                                     acTransEx.Abort()
+                                    'DEBUG logging
+                                    clsFunctions.makeLog(sDebugLog, "Abort External Transaction acTransEx.Abort()", False)
                                 End Using
                             Catch ex As Exception
+                                clsFunctions.LogException(ex, "insertLayout()", "fout bij het laden van de layout uit de Template")
                                 MsgBox("Fout bij het laden van de Layouts uit de Template " & ex.Message)
                                 Exit Sub
                             End Try
                         End Using
                         setLayoutCurrent(sNewLayoutName, False)
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Reload Layout List", False)
                         loadLayouts()
+                        'DEBUG logging
+                        clsFunctions.makeLog(sDebugLog, "Reload Layout List OK", False)
 
-                        If bDynamicVP Then
-                            Using acLockDoc As DocumentLock = acDoc.LockDocument
-                                Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-                                    Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+                        Try
+                            If bDynamicVP Then
+                                'DEBUG logging
+                                clsFunctions.makeLog(sDebugLog, "Dynamic Viewport Added, set settings", False)
+                                Using acLockDoc As DocumentLock = acDoc.LockDocument
+                                    'DEBUG logging
+                                    clsFunctions.makeLog(sDebugLog, "acDoc.LockDocument", False)
+                                    Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "StartTransaction()", False)
+                                        Dim blkTbl As BlockTable = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForWrite)
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "Get BlockTable", False)
+                                        Dim nwLayout As Layout = acTrans.GetObject(oLayout, OpenMode.ForWrite)
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "Get Layout Object", False)
 
-                                    Dim nwLayout As Layout = acTrans.GetObject(oLayout, OpenMode.ForWrite)
+                                        'viewport van current layout opzoeken, unlocken, zoomen en locken
+                                        Dim vpIds As ObjectIdCollection = nwLayout.GetViewports()
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "get Viewport IDS", False)
+                                        Dim iTeller As Integer = 0
+                                        'Dim currVpId As ObjectId
+                                        For Each vpId As ObjectId In vpIds
+                                            'DEBUG logging
+                                            clsFunctions.makeLog(sDebugLog, "For Each Viewport on Layout", False)
+                                            'we hebben enkel het 2e vp nodig
+                                            iTeller = iTeller + 1
+                                            If iTeller = 2 Then
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "2e Viewport gevonden, aanpassen", False)
+                                                'viewport aanpassen.
+                                                'currVpId = vpId
+                                                Dim currViewport As Viewport = acTrans.GetObject(vpId, OpenMode.ForWrite)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Open Viewport ForWrite", False)
+                                                currViewport.Locked = False
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set Locked = False", False)
+                                                'rotatie van view
+                                                currViewport.ViewDirection = Vector3d.ZAxis
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set ViewDirection", False)
+                                                currViewport.ViewTarget = New Point3d(vpViewPort.vpCenter.X, vpViewPort.vpCenter.Y, 0)
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set ViewTarget", False)
+                                                currViewport.TwistAngle = Math.PI * 2 - vpViewPort.vpRotation
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set TwistAngle", False)
+                                                currViewport.ViewCenter = Point2d.Origin
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set ViewCenter", False)
+                                                'locatie van view
+                                                'currViewport.ViewCenter = vpCoordinates.vpCenter
+                                                'schaal van view
+                                                Dim dCustScale As Double = 1000 / vpCustScale
+                                                currViewport.CustomScale = dCustScale
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set CustomScale", False)
+                                                'Dim ocm As ObjectContextManager = acCurDb.ObjectContextManager
+                                                'Dim occ As ObjectContextCollection = ocm.GetContextCollection("ACDB_ANNOTAIONSCALES")
+                                                'For Each objcon As AnnotationScale In occ
+                                                '    If objcon.Name = "M_1:" & vpCustScale Then
+                                                '        currViewport.AnnotationScale = objcon
+                                                '    End If
+                                                'Next
 
-                                    'viewport van current layout opzoeken, unlocken, zoomen en locken
-                                    Dim vpIds As ObjectIdCollection = nwLayout.GetViewports()
-                                    Dim iTeller As Integer = 0
-                                    'Dim currVpId As ObjectId
-                                    For Each vpId As ObjectId In vpIds
-                                        'we hebben enkel het 2e vp nodig
-                                        iTeller = iTeller + 1
-                                        If iTeller = 2 Then
-                                            'viewport aanpassen.
-                                            'currVpId = vpId
-                                            Dim currViewport As Viewport = acTrans.GetObject(vpId, OpenMode.ForWrite)
-                                            currViewport.Locked = False
-                                            'rotatie van view
-                                            currViewport.ViewDirection = Vector3d.ZAxis
-                                            currViewport.ViewTarget = New Point3d(vpViewPort.vpCenter.X, vpViewPort.vpCenter.Y, 0)
-                                            currViewport.TwistAngle = Math.PI * 2 - vpViewPort.vpRotation
-                                            currViewport.ViewCenter = Point2d.Origin
-                                            'locatie van view
-                                            'currViewport.ViewCenter = vpCoordinates.vpCenter
-                                            'schaal van view
-                                            Dim dCustScale As Double = 1000 / vpCustScale
-                                            currViewport.CustomScale = dCustScale
-
-                                            'Dim ocm As ObjectContextManager = acCurDb.ObjectContextManager
-                                            'Dim occ As ObjectContextCollection = ocm.GetContextCollection("ACDB_ANNOTAIONSCALES")
-                                            'For Each objcon As AnnotationScale In occ
-                                            '    If objcon.Name = "M_1:" & vpCustScale Then
-                                            '        currViewport.AnnotationScale = objcon
-                                            '    End If
-                                            'Next
-
-                                            'lock viewport
-                                            currViewport.Locked = True
-                                        End If
-                                    Next
-                                    acTrans.Commit()
+                                                'lock viewport
+                                                currViewport.Locked = True
+                                                'DEBUG logging
+                                                clsFunctions.makeLog(sDebugLog, "Set Locked = True", False)
+                                            End If
+                                        Next
+                                        acTrans.Commit()
+                                        'DEBUG logging
+                                        clsFunctions.makeLog(sDebugLog, "Commit()", False)
+                                    End Using
                                 End Using
-                            End Using
 
-                        End If
-
-
-
+                            End If
+                        Catch ex As Exception
+                            clsFunctions.LogException(ex, "insertLayout()", "Fout bij het aanpassen van het Viewport")
+                            MsgBox("Fout bij het aanpassen van het Viewport " & ex.Message)
+                            Exit Sub
+                        End Try
                     Else
                         MsgBox("Kan de layout niet invoegen, Template bestand is niet gevonden!" & vbCrLf & "Het bestand: " & sLayoutTemplateFolder & sLayoutTemplate & " is niet gevonden", MsgBoxStyle.Critical)
                     End If
@@ -1863,17 +1993,17 @@ Public Class ucLayoutManager
                             End If
                         End If
                         Dim colATT As Autodesk.AutoCAD.DatabaseServices.AttributeCollection = blkRef.AttributeCollection
-                            For Each oAttID As ObjectId In colATT
-                                'attributes doorlopen
-                                Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
-                                Dim attListItem As RN_attribute_listitem.AttributeListItem = New RN_attribute_listitem.AttributeListItem
-                                attListItem.AttribName = refATT.Tag
-                                attListItem.AttribCurrValue = refATT.TextString
-                                flowLayouts.Controls.Add(attListItem)
-                            Next
-                        Else
-                            'geen block geselecteerd
-                            GoTo resestlistitems
+                        For Each oAttID As ObjectId In colATT
+                            'attributes doorlopen
+                            Dim refATT As AttributeReference = TryCast(acTrans.GetObject(oAttID, OpenMode.ForRead), AttributeReference)
+                            Dim attListItem As RN_attribute_listitem.AttributeListItem = New RN_attribute_listitem.AttributeListItem
+                            attListItem.AttribName = refATT.Tag
+                            attListItem.AttribCurrValue = refATT.TextString
+                            flowLayouts.Controls.Add(attListItem)
+                        Next
+                    Else
+                        'geen block geselecteerd
+                        GoTo resestlistitems
                     End If
 
                 Catch ex As Autodesk.AutoCAD.Runtime.Exception
@@ -2634,6 +2764,11 @@ resestlistitems:
         'Dim sVpType As String = cmbNewLayout.Text.Substring(0, 5)
         Dim sTemp As String = cmbNewLayout.Text
         Dim sVpType As String '= cmbNewLayout.Text.Substring(0, 5)
+
+        'DEBUG logging
+        clsFunctions.makeLog(sDebugLog, "START Dynamisch invoegen layout ShowVPextendsRange()", True)
+        clsFunctions.makeLog(sDebugLog, "Gekozen layout: " & sTemp, False)
+
         Try
             If sTemp.Length >= 5 Then
                 sVpType = sTemp.Substring(0, 5)
@@ -2653,6 +2788,7 @@ resestlistitems:
                             Else
                                 'layout niet ondersteund voor dynamisch inserten
                                 insertLayout(False)
+                                Return False
                                 Exit Function
                             End If
                     End Select
@@ -2666,12 +2802,14 @@ resestlistitems:
                     Case Else
                         'layout niet ondersteund voor dynamisch inserten
                         insertLayout(False)
+                        Return False
                         Exit Function
                 End Select
             End If
         Catch ex As Exception
             'ging iets fout bij het uitlezen
             insertLayout(False)
+            Return False
             Exit Function
         End Try
 
@@ -2686,7 +2824,11 @@ resestlistitems:
         vpCoordinatesList = New ViewPortCoordinatesList
 
         Using acLockDoc As DocumentLock = acDoc.LockDocument()
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "acDoc.LockDocument()", False)
             Using acTrans As Transaction = acDoc.TransactionManager.StartTransaction
+                'DEBUG logging
+                clsFunctions.makeLog(sDebugLog, "acDoc.TransactionManager.StartTransaction", False)
                 Dim acTypeValAr(0) As TypedValue
                 Dim pKeyOpts As PromptKeywordOptions
 
@@ -2698,16 +2840,24 @@ resestlistitems:
                 If pKeyRes.Status = PromptStatus.Cancel Then
                     'default een layout
                     bLoopLayouts = False
+                    'DEBUG logging
+                    clsFunctions.makeLog(sDebugLog, "Prompt=>cancelled, bLoopLayouts=False", False)
+                    Return False
                     Exit Function
                 Else
                     Select Case pKeyRes.StringResult.ToLower
                         Case "een"
                             bLoopLayouts = False
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "Prompt=>choose: een, bLoopLayouts=False", False)
                         Case "meerdere"
                             bLoopLayouts = True
                         Case Else
                             'onbekende keuze, zou niet mogen gebeuren maar Just In Case
                             bLoopLayouts = False
+                            'DEBUG logging
+                            clsFunctions.makeLog(sDebugLog, "Prompt=>choose: Unknown, bLoopLayouts=False", False)
+                            Return False
                             Exit Function
                     End Select
                 End If
@@ -2717,12 +2867,16 @@ resestlistitems:
         'layouts plaatsen
         If bLoopLayouts = False Then
             'een enkele layout
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "Start weergave ENKEL DynamicLayout(" & vpScale & ", " & sLayoutTemplate & ", " & sVpType & ")", False)
             vpCoordinates = clsDynamicLayout.DynamicLayout(vpScale, sLayoutTemplate, sVpType)
             If vpCoordinates.vpEmpty = False Then
                 vpCoordinatesList.Add(vpCoordinates)
             End If
         Else
             'meerdere layouts
+            'DEBUG logging
+            clsFunctions.makeLog(sDebugLog, "Start weergave MEERDERE DynamicLayout(" & vpScale & ", " & sLayoutTemplate & ", " & sVpType & ")", False)
             Dim bMakeNewVP As Boolean = True
             While bMakeNewVP = True
                 vpCoordinates = clsDynamicLayout.DynamicLayout(vpScale, sLayoutTemplate, sVpType)
@@ -2735,6 +2889,8 @@ resestlistitems:
         End If
         Dim sNewLayoutName As String
         sNewLayoutName = InputBox("Layout naam", "Layout naam", cmbNewLayout.Text)
+        'DEBUG logging
+        clsFunctions.makeLog(sDebugLog, "InputBox: Layout naam? " & sNewLayoutName, False)
 
         'insert layouts hier
         insertLayout(True, sNewLayoutName, bLoopLayouts)
@@ -2780,6 +2936,5 @@ resestlistitems:
             clsDynamicLayout.showViewports(sFormaat)
         End If
     End Sub
-
 
 End Class

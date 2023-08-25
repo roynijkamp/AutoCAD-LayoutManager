@@ -83,7 +83,6 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Debug\en-US\AcWindows
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Debug\en-US\AcDx.resources.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Debug\en-US\AcDxPublishUi.resources.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Debug\en-US\AcMr.resources.dll
-E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN-LayoutManager.vbprojAssemblyReference.cache
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN_LayoutManager.frmFilter.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN_LayoutManager.frmRegister.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN_LayoutManager.frmRenameLayouts.resources
@@ -99,3 +98,4 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN-LayoutManage
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN-LayoutManager.pdb
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN_LayoutManager.frmAddUserSearchPath.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Debug\RN-attribute-listitem.dll
+E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Debug\RN-LayoutManager.vbproj.AssemblyReference.cache

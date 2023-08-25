@@ -161,6 +161,41 @@ Public Class clsFunctions
         End Try
     End Sub
 
+    Public Shared Sub LogException(ByVal ex As Exception, ByVal sFunction As String, Optional sExtraMessage As String = "")
+        Dim sLogFile As String = getMyDocDir() & "\RN-LayManExceptions.log"
+        Try
+            If Not Directory.Exists(Path.GetDirectoryName(sLogFile)) Then
+                Directory.CreateDirectory(Path.GetDirectoryName(sLogFile))
+            End If
+            Dim dtDatum As DateTime = DateTime.Now
+            If Not File.Exists(sLogFile) Then
+                Using sw As StreamWriter = File.CreateText(sLogFile)
+                    sw.WriteLine("LOG FILE AANGEMAAKT OP: " & dtDatum.ToString("dd/MM/yyyy HH:mm:ss"))
+                    sw.WriteLine("----------------------------------------------------------------")
+                End Using
+            End If
+            Using sw As StreamWriter = File.AppendText(sLogFile)
+                sw.WriteLine("Computer: " & My.Computer.Name)
+                Dim sAcadVersion As String = clsFunctions.AcadVersion.Major.ToString & "." & clsFunctions.AcadVersion.Minor.ToString & "." & clsFunctions.AcadVersion.Revision.ToString
+                sw.WriteLine("Autodesk Software: R" & sAcadVersion)
+                sw.WriteLine(dtDatum.ToString("dd/MM/yyyy HH:mm:ss") & " - Exception in " & sFunction)
+                sw.WriteLine("Message: " & ex.Message)
+                sw.WriteLine("Source: " & ex.Source)
+                sw.WriteLine("StackTrace: " & ex.StackTrace)
+                sw.WriteLine("TargetSite: " & ex.TargetSite.ToString)
+                If sExtraMessage.Length > 0 Then
+                    sw.WriteLine("Bericht: " & sExtraMessage)
+                End If
+                sw.WriteLine("-------------------------------------------------------------------------------")
+                If clsFunctions.isDebugMode Then
+                    MsgBox("Exception in " & sFunction & vbCrLf & "Message: " & ex.Message & vbCrLf & "Zie Logfile voor details" & vbCrLf & sLogFile)
+                End If
+            End Using
+        Catch exx As Exception
+            MsgBox("Fout bij maken Exception LOG")
+        End Try
+    End Sub
+
     Public Shared Sub saveToFile(ByVal sLogFile As String, ByVal sMessage As String, Optional bVersionInfo As Boolean = False)
         Try
             If Not Directory.Exists(Path.GetDirectoryName(sLogFile)) Then

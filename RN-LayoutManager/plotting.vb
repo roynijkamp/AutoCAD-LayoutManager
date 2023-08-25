@@ -213,6 +213,7 @@ Public Class plotting
                 sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
             Else
                 sSelectedPreset = sPlottingDeviceOverride
+                MsgBox("Override " & sSelectedPreset)
             End If
             'define settings
             Dim sPdfType As String = "5" 'default single sheet PDF
