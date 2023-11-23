@@ -83,7 +83,6 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\en-US\AcWindo
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\en-US\AcDx.resources.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\en-US\AcDxPublishUi.resources.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\en-US\AcMr.resources.dll
-E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN-LayoutManager.vbprojAssemblyReference.cache
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN_LayoutManager.frmAddUserSearchPath.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN_LayoutManager.frmFilter.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN_LayoutManager.frmRegister.resources
@@ -99,3 +98,4 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN-LayoutMana
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN-LayoutManager.xml
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN-LayoutManager.pdb
 E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\bin\Release\RN-attribute-listitem.dll
+E:\Stack\NET Develop\RN-LayoutManager\RN-LayoutManager\obj\Release\RN-LayoutManager.vbproj.AssemblyReference.cache

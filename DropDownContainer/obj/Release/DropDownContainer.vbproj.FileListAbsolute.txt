@@ -11,7 +11,6 @@ K:\RoyN_doc\Documenten\Visual Studio 2015\Projects\RN-LayoutManager\DropDownCont
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\bin\Release\DropDownContainer.dll
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\bin\Release\DropDownContainer.pdb
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\bin\Release\DropDownContainer.xml
-E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.vbprojAssemblyReference.cache
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.DDContainer.resources
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.Resources.resources
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.vbproj.GenerateResource.cache
@@ -19,3 +18,4 @@ E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownCont
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.dll
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.xml
 E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.pdb
+E:\Stack\NET Develop\RN-LayoutManager\DropDownContainer\obj\Release\DropDownContainer.vbproj.AssemblyReference.cache

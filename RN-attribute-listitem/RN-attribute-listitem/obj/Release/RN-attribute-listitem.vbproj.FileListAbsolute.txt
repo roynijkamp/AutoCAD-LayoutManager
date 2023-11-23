@@ -3,7 +3,6 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listite
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\Release\RN-attribute-listitem.xml
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\Release\Microsoft.VisualBasic.PowerPacks.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\Release\Microsoft.VisualBasic.PowerPacks.xml
-E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.vbprojAssemblyReference.cache
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN_attribute_listitem.AttributeListItem.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN_attribute_listitem.Resources.resources
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.vbproj.GenerateResource.cache
@@ -12,3 +11,4 @@ E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listite
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.dll
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.xml
 E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.pdb
+E:\Stack\NET Develop\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\Release\RN-attribute-listitem.vbproj.AssemblyReference.cache

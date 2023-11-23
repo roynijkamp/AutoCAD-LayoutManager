@@ -149,7 +149,7 @@ Public Class plotting
                     dsdEntry.Title = sFileName
                     dsdEntry.Nps = layout.TabOrder.ToString()
                 ElseIf bUseDWGname = True Then
-                    dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + "-" + layout.LayoutName
+                    dsdEntry.Title = Path.GetFileNameWithoutExtension(Me.dwgFile) + " - " + sFileName ' layout.LayoutName
                     dsdEntry.Nps = "Setup1"
                 Else
                     'dsdEntry.Title = layout.LayoutName
@@ -213,7 +213,7 @@ Public Class plotting
                 sSelectedPreset = iniFile.GetString("publishsettings", "defaultplotter", sDefaultPlottingDevice)
             Else
                 sSelectedPreset = sPlottingDeviceOverride
-                MsgBox("Override " & sSelectedPreset)
+                'MsgBox("Override " & sSelectedPreset)
             End If
             'define settings
             Dim sPdfType As String = "5" 'default single sheet PDF
