@@ -111,6 +111,7 @@ Public Class plotting
             Dim sFileName As String = ""
             Dim sPreffix As String = ""
             Dim sSuffix As String = ""
+            Dim sLayoutNaam As String = ""
 
             For Each layout As Layout In layouts
                 Dim dsdEntry As New DsdEntry()
@@ -124,25 +125,57 @@ Public Class plotting
                 If sLayouts.ContainsKey(layout.LayoutName) Then
                     'kijken of we de juiste attributen kunnen opbouwen
                     Dim dictAttrib As Dictionary(Of String, String) = sLayouts.Item(layout.LayoutName)
+                    sLayoutNaam = layout.LayoutName
                     'If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
                     '    sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
                     'End If
-                    If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
-                        sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
-                    End If
-                    If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
-                        sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
-                    End If
-                    If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
-                        If bVersieInFront Then
-                            sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
-                        Else
-                            sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                    'attributen voor juiste bedrijf selectern
+                    If dictAttrib.Item("BEDRIJF") = "ANACON" Then
+                        If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
+                            sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
+                        End If
+                        If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
+                            sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
+                        End If
+                        If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                            If bVersieInFront Then
+                                sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
+                            Else
+                                sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                            End If
+                        End If
+                    ElseIf dictAttrib.Item("BEDRIJF") = "PRVGLD" Then
+                        If dictAttrib.ContainsKey("NL_META_TEKENINGNUMMER") And bUseBesteknr = True Then
+                            sPreffix = sPreffix & dictAttrib.Item("NL_META_TEKENINGNUMMER")
+                        End If
+                        If dictAttrib.ContainsKey("NL_META_VERSIE") And bUseVersie = True Then
+                            If bVersieInFront Then
+                                sPreffix = "V" & dictAttrib.Item("NL_META_VERSIE") & " " & sPreffix
+                            Else
+                                sSuffix = " - V" & dictAttrib.Item("NL_META_VERSIE")
+                            End If
+                        End If
+                        sLayoutNaam = "" 'layoutnaam zit al in tekeningnummer
+                    Else
+                        'onbekend bedrijf, hopen dat de standaard wat oplevert
+                        If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
+                            sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
+                        End If
+                        If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
+                            sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
+                        End If
+                        If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                            If bVersieInFront Then
+                                sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
+                            Else
+                                sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                            End If
                         End If
                     End If
+
                 End If
                 'filename opbouwen op basis van preffix en layoutnaam en suffix
-                sFileName = sPreffix & layout.LayoutName & sSuffix
+                sFileName = sPreffix & sLayoutNaam & sSuffix
 
                 If Me.pdfSheetType = SheetType.MultiPdf Or Me.pdfSheetType = SheetType.MultiDwf Then
                     'dsdEntry.Title = layout.LayoutName

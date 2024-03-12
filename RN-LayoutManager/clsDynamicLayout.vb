@@ -245,13 +245,23 @@ Public Class clsDynamicLayout
                             Dim jiggerRotate As RotateJig = New RotateJig(ent, ptBasePnt, dStartRotation, ucs)
                             Dim jigResRotate As PromptResult = acEd.Drag(jiggerRotate)
                             If jigResRotate.Status = PromptStatus.OK Then
+                                'rotatie van JIG overnemen
                                 dRotation = jiggerRotate.GetRotation()
-                                jiggerRotate.GetEntity().Dispose()
-                                Dim trans As Matrix3d = Matrix3d.Rotation(dRotation, ucs.CoordinateSystem3d.Zaxis, ptBasePnt)
-                                vpCoordinates.vpRotation = dRotation
-                                ent.UpgradeOpen()
-                                ent.TransformBy(trans)
+                                'jiggerRotate.GetEntity().Dispose()
+                                'Dim trans As Matrix3d = Matrix3d.Rotation(dRotation, ucs.CoordinateSystem3d.Zaxis, ptBasePnt)
+                                'vpCoordinates.vpRotation = dRotation
+                                'ent.UpgradeOpen()
+                                'ent.TransformBy(trans)
+                            Else
+                                'rotatie is gecancelled, op 0 zetten
+                                dRotation = 0.0
                             End If
+                            'Rotatie verwerken op de JIG
+                            jiggerRotate.GetEntity().Dispose()
+                            Dim trans As Matrix3d = Matrix3d.Rotation(dRotation, ucs.CoordinateSystem3d.Zaxis, ptBasePnt)
+                            vpCoordinates.vpRotation = dRotation
+                            ent.UpgradeOpen()
+                            ent.TransformBy(trans)
                             tr.Commit()
                         Else
                             ent.Erase()

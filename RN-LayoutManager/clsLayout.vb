@@ -72,6 +72,14 @@ Public Class clsLayout
                             'If bd.Name.ToUpper.Contains(sBlockName.ToUpper) Then
                             If sCurrName.ToUpper.Contains(sBlockName.ToUpper) Then
                                 'dit block uitpluizen om bestandsnaam te genereren
+                                'kijken of dit een AI of PGL block is
+                                If sCurrName.ToUpper.Contains("-AI") Then
+                                    sData.Add("BEDRIJF", "ANACON")
+                                ElseIf sCurrName.ToUpper.Contains("PRVGLD") Then
+                                    sData.Add("BEDRIJF", "PRVGLD")
+                                Else
+                                    sData.Add("BEDRIJF", "ONBEKEND")
+                                End If
                                 For Each arId As ObjectId In br.AttributeCollection
                                     Dim obj As DBObject = acTrans.GetObject(arId, OpenMode.ForRead)
                                     Dim ar As AttributeReference = TryCast(obj, AttributeReference)
