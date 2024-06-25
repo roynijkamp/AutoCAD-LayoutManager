@@ -417,12 +417,12 @@ Public Class ucSettings
                     RNmsgBox.RegDate = sRegDate
                     RNmsgBox.UpdateOmschrijving = "Software update V: " & sNewVersion & " beschikbaar"
                     RNmsgBox.ReleaseNotes = sReleaseNotes
-                    Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                    Dim dlgRes As System.Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
                     'bij cancel result exit sub
-                    If dlgRes = Windows.Forms.DialogResult.Cancel Then
+                    If dlgRes = System.Windows.Forms.DialogResult.Cancel Then
                         'update geannuleerd, wel programma starten
                         Return True
-                    ElseIf dlgRes = Windows.Forms.DialogResult.Yes Then
+                    ElseIf dlgRes = System.Windows.Forms.DialogResult.Yes Then
                         'update hier
                         If clsRegister.createUpdateFile(sUserEmail, "update", sUserID) Then
                             'meesturen update url, appname en core dir

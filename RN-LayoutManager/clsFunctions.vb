@@ -89,7 +89,7 @@ Public Class clsFunctions
                     iSelectedIndex = i
                 End If
 
-                Dim dtRow As DataRow = dtPlotPresets.NewRow()
+                Dim dtRow As System.Data.DataRow = dtPlotPresets.NewRow()
                 dtRow(0) = i
                 dtRow(1) = sPreset
                 dtPlotPresets.Rows.Add(dtRow)

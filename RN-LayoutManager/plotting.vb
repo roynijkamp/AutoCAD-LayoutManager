@@ -130,32 +130,35 @@ Public Class plotting
                     '    sFileName = sFileName & "V" & dictAttrib.Item("VERSIE") & " "
                     'End If
                     'attributen voor juiste bedrijf selectern
-                    If dictAttrib.Item("BEDRIJF") = "ANACON" Then
-                        If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
-                            sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
-                        End If
-                        If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
-                            sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
-                        End If
-                        If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
-                            If bVersieInFront Then
-                                sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
-                            Else
-                                sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                    If dictAttrib.ContainsKey("BEDRIJF") Then
+                        If dictAttrib.Item("BEDRIJF") = "ANACON" Then
+
+                            If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
+                                sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
                             End If
-                        End If
-                    ElseIf dictAttrib.Item("BEDRIJF") = "PRVGLD" Then
-                        If dictAttrib.ContainsKey("NL_META_TEKENINGNUMMER") And bUseBesteknr = True Then
-                            sPreffix = sPreffix & dictAttrib.Item("NL_META_TEKENINGNUMMER")
-                        End If
-                        If dictAttrib.ContainsKey("NL_META_VERSIE") And bUseVersie = True Then
-                            If bVersieInFront Then
-                                sPreffix = "V" & dictAttrib.Item("NL_META_VERSIE") & " " & sPreffix
-                            Else
-                                sSuffix = " - V" & dictAttrib.Item("NL_META_VERSIE")
+                            If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
+                                sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
                             End If
+                            If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                                If bVersieInFront Then
+                                    sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
+                                Else
+                                    sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                                End If
+                            End If
+                        ElseIf dictAttrib.Item("BEDRIJF") = "PRVGLD" Then
+                            If dictAttrib.ContainsKey("NL_META_TEKENINGNUMMER") And bUseBesteknr = True Then
+                                sPreffix = sPreffix & dictAttrib.Item("NL_META_TEKENINGNUMMER")
+                            End If
+                            If dictAttrib.ContainsKey("NL_META_VERSIE") And bUseVersie = True Then
+                                If bVersieInFront Then
+                                    sPreffix = "V" & dictAttrib.Item("NL_META_VERSIE") & " " & sPreffix
+                                Else
+                                    sSuffix = " - V" & dictAttrib.Item("NL_META_VERSIE")
+                                End If
+                            End If
+                            sLayoutNaam = "" 'layoutnaam zit al in tekeningnummer
                         End If
-                        sLayoutNaam = "" 'layoutnaam zit al in tekeningnummer
                     Else
                         'onbekend bedrijf, hopen dat de standaard wat oplevert
                         If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then

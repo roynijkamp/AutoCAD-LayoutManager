@@ -1,0 +1,15 @@
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\x64\Debug\net8.0-windows\RN-attribute-listitem.deps.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\x64\Debug\net8.0-windows\RN-attribute-listitem.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\x64\Debug\net8.0-windows\RN-attribute-listitem.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\bin\x64\Debug\net8.0-windows\RN-attribute-listitem.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN_attribute_listitem.AttributeListItem.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN_attribute_listitem.Resources.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.vbproj.GenerateResource.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.GeneratedMSBuildEditorConfig.editorconfig
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.vbproj.CoreCompileInputs.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.sourcelink.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\refint\RN-attribute-listitem.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\RN-attribute-listitem.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-attribute-listitem\RN-attribute-listitem\obj\x64\Debug\net8.0-windows\ref\RN-attribute-listitem.dll

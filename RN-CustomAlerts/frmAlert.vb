@@ -53,17 +53,17 @@
 
     Private Sub Yes_Button_Click(sender As Object, e As EventArgs) Handles Yes_Button.Click
         bApplytoall = chk_aplytoall.Checked
-        Me.DialogResult = Windows.Forms.DialogResult.Yes
+        Me.DialogResult = System.Windows.Forms.DialogResult.Yes
     End Sub
 
     Private Sub No_Button_Click(sender As Object, e As EventArgs) Handles No_Button.Click
         bApplytoall = chk_aplytoall.Checked
-        Me.DialogResult = Windows.Forms.DialogResult.No
+        Me.DialogResult = System.Windows.Forms.DialogResult.No
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         bApplytoall = chk_aplytoall.Checked
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
     End Sub
 
     Private Sub chk_aplytoall_CheckedChanged(sender As Object, e As EventArgs) Handles chk_aplytoall.CheckedChanged

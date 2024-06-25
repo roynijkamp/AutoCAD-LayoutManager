@@ -1,0 +1,99 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|d:\\ontwikkeling\\plugins\\rn-layoutmanager\\rn-layoutmanager\\plotting.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|solutionrelative:rn-layoutmanager\\plotting.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|d:\\ontwikkeling\\plugins\\rn-layoutmanager\\rn-layoutmanager\\clslayout.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|solutionrelative:rn-layoutmanager\\clslayout.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|d:\\ontwikkeling\\plugins\\rn-layoutmanager\\rn-layoutmanager\\uclayoutmanager.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|solutionrelative:rn-layoutmanager\\uclayoutmanager.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|d:\\ontwikkeling\\plugins\\rn-layoutmanager\\rn-layoutmanager\\uclayoutmanager.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{799E3A71-CA28-4E05-B430-DE708B4D3F0D}|RN-LayoutManager\\RN-LayoutManager.vbproj|solutionrelative:rn-layoutmanager\\uclayoutmanager.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 183,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "plotting.vb",
+              "DocumentMoniker": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\plotting.vb",
+              "RelativeDocumentMoniker": "RN-LayoutManager\\plotting.vb",
+              "ToolTip": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\plotting.vb",
+              "RelativeToolTip": "RN-LayoutManager\\plotting.vb",
+              "ViewState": "AQIAAH4AAAAAAAAAAAAAAKUAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-06-25T12:08:01.952Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "clsLayout.vb",
+              "DocumentMoniker": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\clsLayout.vb",
+              "RelativeDocumentMoniker": "RN-LayoutManager\\clsLayout.vb",
+              "ToolTip": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\clsLayout.vb",
+              "RelativeToolTip": "RN-LayoutManager\\clsLayout.vb",
+              "ViewState": "AQIAADAAAAAAAAAAAAAAAE8AAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-06-25T11:59:56.997Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ucLayoutManager.vb",
+              "DocumentMoniker": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\ucLayoutManager.vb",
+              "RelativeDocumentMoniker": "RN-LayoutManager\\ucLayoutManager.vb",
+              "ToolTip": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\ucLayoutManager.vb",
+              "RelativeToolTip": "RN-LayoutManager\\ucLayoutManager.vb",
+              "ViewState": "AQIAAOoBAAAAAAAAAAAwwAUCAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-06-25T11:53:51.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ucLayoutManager.vb [Design]",
+              "DocumentMoniker": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\ucLayoutManager.vb",
+              "RelativeDocumentMoniker": "RN-LayoutManager\\ucLayoutManager.vb",
+              "ToolTip": "D:\\Ontwikkeling\\Plugins\\RN-LayoutManager\\RN-LayoutManager\\ucLayoutManager.vb [Design]",
+              "RelativeToolTip": "RN-LayoutManager\\ucLayoutManager.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-06-25T11:52:07.998Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

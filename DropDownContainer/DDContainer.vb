@@ -751,7 +751,7 @@ Public Class DDContainer
     Private MouseDownButton As Boolean = False
 
     Private Sub DDContainer_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        If e.Button = System.Windows.Forms.MouseButtons.Left Then
             If e.Y < _HeaderHeight Then
                 If GetButtonPath.IsVisible(e.Location) Then
                     If PushPinState = ePushPinState.Down Then Exit Sub
@@ -1182,8 +1182,8 @@ Public Class DDContainerDesigner
             Else
                 Return SelectionRules.LeftSizeable _
                        Or SelectionRules.RightSizeable _
-                       Or Windows.Forms.Design.SelectionRules.Visible _
-                       Or Windows.Forms.Design.SelectionRules.Moveable
+                       Or System.Windows.Forms.Design.SelectionRules.Visible _
+                       Or System.Windows.Forms.Design.SelectionRules.Moveable
             End If
         End Get
     End Property

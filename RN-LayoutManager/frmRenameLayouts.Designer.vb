@@ -179,16 +179,16 @@ Partial Class frmRenameLayouts
 
     End Sub
 
-    Friend WithEvents Label1 As Windows.Forms.Label
-    Friend WithEvents txtLayoutNaam As Windows.Forms.TextBox
-    Friend WithEvents Label2 As Windows.Forms.Label
-    Friend WithEvents Label3 As Windows.Forms.Label
-    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
-    Friend WithEvents radioSkipRename As Windows.Forms.RadioButton
-    Friend WithEvents radioLayoutNameExists As Windows.Forms.RadioButton
-    Friend WithEvents cmdCancel As Windows.Forms.Button
-    Friend WithEvents cmdRename As Windows.Forms.Button
-    Friend WithEvents chkAutoNummer As Windows.Forms.CheckBox
-    Friend WithEvents txtAutoNummer As Windows.Forms.NumericUpDown
-    Friend WithEvents Label4 As Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents txtLayoutNaam As System.Windows.Forms.TextBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents radioSkipRename As System.Windows.Forms.RadioButton
+    Friend WithEvents radioLayoutNameExists As System.Windows.Forms.RadioButton
+    Friend WithEvents cmdCancel As System.Windows.Forms.Button
+    Friend WithEvents cmdRename As System.Windows.Forms.Button
+    Friend WithEvents chkAutoNummer As System.Windows.Forms.CheckBox
+    Friend WithEvents txtAutoNummer As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

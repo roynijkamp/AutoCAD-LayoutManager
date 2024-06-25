@@ -131,12 +131,12 @@ Partial Class frmFilter
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents cmbFilter As Windows.Forms.ComboBox
-    Friend WithEvents Label1 As Windows.Forms.Label
-    Friend WithEvents cmdSaveFilter As Windows.Forms.Button
-    Friend WithEvents cmdDelFilter As Windows.Forms.Button
-    Friend WithEvents radioVisibleItems As Windows.Forms.RadioButton
-    Friend WithEvents TextBox1 As Windows.Forms.TextBox
-    Friend WithEvents cmdNieuw As Windows.Forms.Button
-    Friend WithEvents radioSaveAsSelection As Windows.Forms.RadioButton
+    Friend WithEvents cmbFilter As System.Windows.Forms.ComboBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents cmdSaveFilter As System.Windows.Forms.Button
+    Friend WithEvents cmdDelFilter As System.Windows.Forms.Button
+    Friend WithEvents radioVisibleItems As System.Windows.Forms.RadioButton
+    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents cmdNieuw As System.Windows.Forms.Button
+    Friend WithEvents radioSaveAsSelection As System.Windows.Forms.RadioButton
 End Class

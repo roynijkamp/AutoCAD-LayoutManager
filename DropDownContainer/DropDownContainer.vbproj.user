@@ -6,7 +6,19 @@
     <StartWorkingDirectory>C:\Documents and Settings\SNYDER\My Documents\Visual Studio 2005\Projects\DropDownContainer\</StartWorkingDirectory>
     <StartArguments>DropDownContainer.sln</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe</StartProgram>
+    <StartWorkingDirectory>C:\Documents and Settings\SNYDER\My Documents\Visual Studio 2005\Projects\DropDownContainer\</StartWorkingDirectory>
+    <StartArguments>DropDownContainer.sln</StartArguments>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe</StartProgram>
+    <StartWorkingDirectory>C:\Documents and Settings\SNYDER\My Documents\Visual Studio 2005\Projects\DropDownContainer\</StartWorkingDirectory>
+    <StartArguments>DropDownContainer.sln</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe</StartProgram>
     <StartWorkingDirectory>C:\Documents and Settings\SNYDER\My Documents\Visual Studio 2005\Projects\DropDownContainer\</StartWorkingDirectory>

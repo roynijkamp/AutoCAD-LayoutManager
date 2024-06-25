@@ -7,4 +7,25 @@
     <StartProgram>C:\Program Files\Autodesk\AutoCAD 2018\acad.exe</StartProgram>
     <StartAction>Program</StartAction>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <StartProgram>C:\Program Files\Autodesk\AutoCAD 2018\acad.exe</StartProgram>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="clsImageForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmAddUserSearchPath.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmRegister.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frmRenameLayouts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

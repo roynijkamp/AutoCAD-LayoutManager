@@ -175,18 +175,18 @@ Partial Class frmAddUserSearchPath
 
     End Sub
 
-    Friend WithEvents lstUserPaths As Windows.Forms.ListBox
-    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
-    Friend WithEvents cmdClose As Windows.Forms.Button
-    Friend WithEvents cmdSelectPath As Windows.Forms.Button
-    Friend WithEvents txtSelectedPath As Windows.Forms.TextBox
-    Friend WithEvents cmdSave As Windows.Forms.Button
-    Friend WithEvents submenu As Windows.Forms.ContextMenuStrip
-    Friend WithEvents BewerkenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem1 As Windows.Forms.ToolStripSeparator
-    Friend WithEvents VerwijderenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ItemOmhoogPlaatsenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ItemOmlaagPlaatsenToolStripMenuItem As Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button1 As Windows.Forms.Button
-    Friend WithEvents Button2 As Windows.Forms.Button
+    Friend WithEvents lstUserPaths As System.Windows.Forms.ListBox
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents cmdClose As System.Windows.Forms.Button
+    Friend WithEvents cmdSelectPath As System.Windows.Forms.Button
+    Friend WithEvents txtSelectedPath As System.Windows.Forms.TextBox
+    Friend WithEvents cmdSave As System.Windows.Forms.Button
+    Friend WithEvents submenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents BewerkenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents VerwijderenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ItemOmhoogPlaatsenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ItemOmlaagPlaatsenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 End Class

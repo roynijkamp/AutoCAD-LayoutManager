@@ -1,23 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>
-    </SchemaVersion>
-    <ProjectGuid>{799E3A71-CA28-4E05-B430-DE708B4D3F0D}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>RN_LayoutManager</RootNamespace>
-    <AssemblyName>RN-LayoutManager</AssemblyName>
-    <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -45,13 +31,33 @@
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
     <AssemblyVersion>1.0.0312.1336</AssemblyVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <AssemblyTitle>RN-LayoutManager</AssemblyTitle>
+    <Product>RN-LayoutManager</Product>
+    <Copyright>Copyright ©  2017</Copyright>
+    <FileVersion>1.0.0312.1336</FileVersion>
+    <InformationalVersion>1.0.0312</InformationalVersion>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>RN-LayoutManager.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>IncrementOnDemand.IncrementOnDemand.MMddStamp.TimeStamp</AssemblyInfoVersionSettings>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DocumentationFile>RN-LayoutManager.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -67,11 +73,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>RN-LayoutManager.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -85,107 +87,32 @@
     <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemandWithReset.DateStamp.TimeStamp</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>IncrementOnDemand.IncrementOnDemandWithReset.DateStamp.TimeStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
-  <PropertyGroup>
-    <OptionExplicit>On</OptionExplicit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionCompare>Binary</OptionCompare>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionStrict>Off</OptionStrict>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionInfer>On</OptionInfer>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DefineDebug>false</DefineDebug>
+    <DocumentationFile>RN-LayoutManager.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemandWithReset.DateStamp.TimeStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemandWithReset.DateStamp.TimeStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>IncrementOnDemand.IncrementOnDemandWithReset.DateStamp.TimeStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <ItemGroup>
-    <!--AutoCAD References-->
-    <Reference Include="AcCoreMgd">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Update="System.Drawing">
       <Private>True</Private>
     </Reference>
-    <Reference Include="AcDbMgd">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Update="System">
       <Private>True</Private>
     </Reference>
-    <Reference Include="AcMgd">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Update="System.Data">
       <Private>True</Private>
     </Reference>
-    <Reference Include="AdWindows">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AcWindows">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AcTcMgd">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AcDx">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Autodesk.AutoCAD.Interop.Common">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Autodesk.AutoCAD.Interop">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="acdbmgdbrep">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AcCui">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <!--Map 3D References-->
-    <!--Civil 3D Refernces-->
-    <Reference Include="AecBaseMgd">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <!--ACA References Begin-->
-    <!--ACA Refences End-->
-    <!--AME Referebces Begin-->
-    <!--AME Reference End-->
-    <Reference Include="RN-LayoutItems">
-      <HintPath>..\..\RN-LayoutItems\RN-LayoutItems\bin\Debug\RN-LayoutItems.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Design">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml">
+    <Reference Update="System.Xml">
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -193,135 +120,56 @@
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System" />
-    <Import Include="System.Collections" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
-    <Import Include="System.Diagnostics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="clsBlockSymbols.vb" />
-    <Compile Include="clsBlockThumbnail.vb" />
-    <Compile Include="clsDataValues.vb" />
-    <Compile Include="clsDynamicLayout.vb" />
-    <Compile Include="clsFilterData.vb" />
-    <Compile Include="clsFunctions.vb" />
-    <Compile Include="clsGPSConverter.vb" />
-    <Compile Include="clsImageForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="clsINI.vb" />
-    <Compile Include="clsLayout.vb" />
-    <Compile Include="clsMyDocData.vb" />
-    <Compile Include="clsNOD.vb" />
-    <Compile Include="clsRDNAPTRANS.vb" />
-    <Compile Include="clsRegister.vb" />
-    <Compile Include="clsTripleDES.vb" />
-    <Compile Include="frmAddUserSearchPath.Designer.vb">
+    <Compile Update="frmAddUserSearchPath.Designer.vb">
       <DependentUpon>frmAddUserSearchPath.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmAddUserSearchPath.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmFilter.Designer.vb">
+    <Compile Update="frmFilter.Designer.vb">
       <DependentUpon>frmFilter.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmFilter.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmRegister.Designer.vb">
+    <Compile Update="frmRegister.Designer.vb">
       <DependentUpon>frmRegister.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmRegister.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmRenameLayouts.Designer.vb">
+    <Compile Update="frmRenameLayouts.Designer.vb">
       <DependentUpon>frmRenameLayouts.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmRenameLayouts.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="plotting.vb" />
-    <Compile Include="ucLayoutManager.Designer.vb">
+    <Compile Update="ucLayoutManager.Designer.vb">
       <DependentUpon>ucLayoutManager.vb</DependentUpon>
     </Compile>
-    <Compile Include="ucLayoutManager.vb">
+    <Compile Update="ucLayoutManager.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="myCommands.Designer.vb">
+    <Compile Update="myCommands.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>myCommands.resx</DependentUpon>
     </Compile>
-    <Compile Include="myPlugin.vb" />
-    <Compile Include="myCommands.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Application.Designer.vb">
+    <Compile Update="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
+    <Compile Update="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Settings.Designer.vb">
+    <Compile Update="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ucSettings.Designer.vb">
+    <Compile Update="ucSettings.Designer.vb">
       <DependentUpon>ucSettings.vb</DependentUpon>
     </Compile>
-    <Compile Include="ucSettings.vb">
+    <Compile Update="ucSettings.vb">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmAddUserSearchPath.resx">
-      <DependentUpon>frmAddUserSearchPath.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmFilter.resx">
-      <DependentUpon>frmFilter.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmRegister.resx">
-      <DependentUpon>frmRegister.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmRenameLayouts.resx">
-      <DependentUpon>frmRenameLayouts.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucLayoutManager.resx">
-      <DependentUpon>ucLayoutManager.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucSettings.resx">
-      <DependentUpon>ucSettings.vb</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="My Project\Application.myapp">
+    <None Update="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
-    <None Include="My Project\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>My</CustomToolNamespace>
-      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="myCommands.resx">
-      <DependentUpon>myCommands.vb</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>myCommands.Designer.vb</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -346,118 +194,56 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icons\icon_import.png" />
+    <ProjectReference Include="..\DropDownContainer\DropDownContainer.vbproj" />
+    <ProjectReference Include="..\RN-attribute-listitem\RN-attribute-listitem\RN-attribute-listitem.vbproj" />
+    <ProjectReference Include="..\RN-CustomAlerts\RN-CustomAlerts.vbproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icons\icon_print.png" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icons\icon_sort_ascending.png" />
+    <Reference Include="accoremgd">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AcCoreMgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcCui">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AcCui.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Acdbmgd">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AcDbMgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="acdbmgdbrep">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\acdbmgdbrep.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="acmgd">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AcMgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcWindows">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AcWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AdUiPalettes">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AdUiPalettes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AdWindows">
+      <HintPath>..\..\..\Documentatie\CDROM1\inc\AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Autodesk.AutoCAD.Interop">
+      <HintPath>..\..\..\Documentatie\CDROM1\extra\Autodesk.AutoCAD.Interop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Autodesk.AutoCAD.Interop.Common">
+      <HintPath>..\..\..\Documentatie\CDROM1\extra\Autodesk.AutoCAD.Interop.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RN-LayoutItems">
+      <HintPath>..\..\RN-LayoutItems\RN-LayoutItems\bin\x64\Debug\net8.0-windows\RN-LayoutItems.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_sort_descending.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_view.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_PDF.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_PDF_multi.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_filter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_light_off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_light_off-2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_light_on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_light_on-2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_selection_all.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_selection_invert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_trash.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_attrib_eddit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DropDownContainer\DropDownContainer.vbproj">
-      <Project>{E0FF137C-8F24-4EBA-ADBB-8CC68775E260}</Project>
-      <Name>DropDownContainer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RN-attribute-listitem\RN-attribute-listitem\RN-attribute-listitem.vbproj">
-      <Project>{6bd42762-fc9a-4a33-851a-fc7ac9a85326}</Project>
-      <Name>RN-attribute-listitem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RN-CustomAlerts\RN-CustomAlerts.vbproj">
-      <Project>{3a0f00e2-7abc-4d4c-9103-efab1b2fca24}</Project>
-      <Name>RN-CustomAlerts</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_check.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_DWF.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_penstyle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_plotter_override.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\Clouds.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_question.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_success.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\icon_warning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icons\Tool Head.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

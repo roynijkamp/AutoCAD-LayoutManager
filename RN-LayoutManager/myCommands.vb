@@ -128,10 +128,10 @@ Namespace RN_LayoutManager
             RNmsgBox.WindowTitle = "Wijzigingen opslaan?"
             RNmsgBox.LabelTekst = "Wilt u de niet opgeslagen wijzigingen opslaan?"
             RNmsgBox.applytoall = False
-            Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+            Dim dlgRes As System.Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
             Dim bApplyToAll As Boolean = RNmsgBox.applytoall
             'bij cancel result exit sub
-            If dlgRes = Windows.Forms.DialogResult.Cancel Then
+            If dlgRes = System.Windows.Forms.DialogResult.Cancel Then
                 Exit Sub
             End If
 
@@ -160,7 +160,7 @@ Namespace RN_LayoutManager
                         doc.CloseAndDiscard()
                     Else
                         'gewijzigd, kijken wat de keuze is
-                        If dlgRes = Windows.Forms.DialogResult.Yes Then
+                        If dlgRes = System.Windows.Forms.DialogResult.Yes Then
                             'saven
                             If bApplyToAll Then
                                 'keuze geld voor alle documenten
@@ -260,12 +260,12 @@ Namespace RN_LayoutManager
                         RNmsgBox.RegDate = sRegDate
                         RNmsgBox.UpdateOmschrijving = "Software update V: " & sNewVersion & " beschikbaar"
                         RNmsgBox.ReleaseNotes = sReleaseNotes
-                        Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                        Dim dlgRes As System.Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
                         'bij cancel result exit sub
-                        If dlgRes = Windows.Forms.DialogResult.Cancel Then
+                        If dlgRes = System.Windows.Forms.DialogResult.Cancel Then
                             'update geannuleerd, wel programma starten
                             Return True
-                        ElseIf dlgRes = Windows.Forms.DialogResult.Yes Then
+                        ElseIf dlgRes = System.Windows.Forms.DialogResult.Yes Then
                             'update hier
                             If clsRegister.createUpdateFile(sUserEmail, "update", sUserID) Then
                                 'meesturen update url, appname en core dir

@@ -3,29 +3,7 @@
 Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
-
-' General Information about an assembly is controlled through the following 
-' set of attributes. Change these attribute values to modify the information
-' associated with an assembly.
-<Assembly: AssemblyTitle("RN-LayoutManager")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("RN-LayoutManager")>
-<Assembly: AssemblyCopyright("Copyright ©  2017")>
 <Assembly: AssemblyTrademark("")>
-
-' Version information for an assembly consists of the following four values:
-'
-'      Major Version
-'      Minor Version 
-'      Build Number
-'      Revision
-'
-' You can specify all the values or you can default the Build and Revision Numbers 
-' by using the '*' as shown below:
-' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("1.0.0312.1336")>
-<Assembly: AssemblyFileVersion("1.0.0312.1336")>
 
 ' In order to sign your assembly you must specify a key to use. Refer to the 
 ' Microsoft .NET Framework documentation for more information on assembly signing.
@@ -61,5 +39,3 @@ Imports System.Runtime.InteropServices
 
 ' The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("fad7b1e9-625e-4c10-9ba4-c94681a982cf")>
-
-<Assembly: AssemblyInformationalVersion("1.0.0312")>

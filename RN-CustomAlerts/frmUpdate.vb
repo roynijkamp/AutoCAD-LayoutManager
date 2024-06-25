@@ -64,12 +64,12 @@
 
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
     End Sub
 
     Private Sub cmdUpdateNow_Click(sender As Object, e As EventArgs) Handles cmdUpdateNow.Click
         MsgBox("update wordt gestart")
-        Me.DialogResult = Windows.Forms.DialogResult.Yes
+        Me.DialogResult = System.Windows.Forms.DialogResult.Yes
     End Sub
 
     Private Sub frmUpdate_Load(sender As Object, e As EventArgs) Handles Me.Load

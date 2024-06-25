@@ -89,8 +89,8 @@ Partial Class frmRegister
 
     End Sub
 
-    Friend WithEvents Label1 As Windows.Forms.Label
-    Friend WithEvents txtEmailadres As Windows.Forms.TextBox
-    Friend WithEvents cmdRegister As Windows.Forms.Button
-    Friend WithEvents cmdCancel As Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents txtEmailadres As System.Windows.Forms.TextBox
+    Friend WithEvents cmdRegister As System.Windows.Forms.Button
+    Friend WithEvents cmdCancel As System.Windows.Forms.Button
 End Class

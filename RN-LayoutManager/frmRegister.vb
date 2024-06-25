@@ -13,9 +13,9 @@ Public Class frmRegister
 
         If clsRegister.createLicense(sEmail, sRequestType, sUserID) = True Then
             'OK, scherm sluiten
-            cmdRegister.DialogResult = Windows.Forms.DialogResult.OK
+            cmdRegister.DialogResult = System.Windows.Forms.DialogResult.OK
         Else
-            cmdRegister.DialogResult = Windows.Forms.DialogResult.Abort
+            cmdRegister.DialogResult = System.Windows.Forms.DialogResult.Abort
         End If
     End Sub
 End Class

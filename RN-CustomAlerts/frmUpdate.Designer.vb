@@ -190,16 +190,16 @@ Partial Class frmUpdate
 
     End Sub
 
-    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
-    Friend WithEvents lblUpdate As Windows.Forms.Label
-    Friend WithEvents webReleasenotes As Windows.Forms.WebBrowser
-    Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
-    Friend WithEvents lblRegDate As Windows.Forms.Label
-    Friend WithEvents Label3 As Windows.Forms.Label
-    Friend WithEvents lblUserEmail As Windows.Forms.Label
-    Friend WithEvents lblUserName As Windows.Forms.Label
-    Friend WithEvents Label2 As Windows.Forms.Label
-    Friend WithEvents Label1 As Windows.Forms.Label
-    Friend WithEvents cmdUpdateNow As Windows.Forms.Button
-    Friend WithEvents cmdCancel As Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents lblUpdate As System.Windows.Forms.Label
+    Friend WithEvents webReleasenotes As System.Windows.Forms.WebBrowser
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents lblRegDate As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents lblUserEmail As System.Windows.Forms.Label
+    Friend WithEvents lblUserName As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents cmdUpdateNow As System.Windows.Forms.Button
+    Friend WithEvents cmdCancel As System.Windows.Forms.Button
 End Class

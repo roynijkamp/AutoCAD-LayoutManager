@@ -607,7 +607,7 @@ Public Class ucLayoutManager
     Public Sub item_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
         If e.Button = Forms.MouseButtons.Left Then
             Dim myCntrl As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
-            myCntrl.DoDragDrop(myCntrl, Windows.DragDropEffects.Move)
+            myCntrl.DoDragDrop(myCntrl, System.Windows.DragDropEffects.Move)
             'reset dragstate of control
             myCntrl.GetDragged = False
             myCntrl.isDragged()
@@ -625,7 +625,7 @@ Public Class ucLayoutManager
     ''' <param name="e"></param>
     Public Sub item_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         If e.Data.GetDataPresent(GetType(RN_LayoutItems.RN_UCLayoutItem)) Then
-            e.Effect = Windows.DragDropEffects.All
+            e.Effect = System.Windows.DragDropEffects.All
             Dim myCntrlOver As RN_LayoutItems.RN_UCLayoutItem = CType(sender, RN_LayoutItems.RN_UCLayoutItem)
             Dim myCntrlSrc As RN_LayoutItems.RN_UCLayoutItem = CType(e.Data.GetData(GetType(RN_LayoutItems.RN_UCLayoutItem)), RN_LayoutItems.RN_UCLayoutItem)
 
@@ -1985,8 +1985,8 @@ Public Class ucLayoutManager
                             RNmsgBox.applytoall = False
                             RNmsgBox.ShowCancelButton = False
                             RNmsgBox.ShowCheckbox = False
-                            Dim dlgRes As Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
-                            If dlgRes = Windows.Forms.DialogResult.No Then
+                            Dim dlgRes As System.Windows.Forms.DialogResult = RNmsgBox.ShowDialog()
+                            If dlgRes = System.Windows.Forms.DialogResult.No Then
                                 bIsProvFlevoland = False
                             Else
                                 bIsProvFlevoland = True
@@ -2495,7 +2495,7 @@ resestlistitems:
     Private Sub mnuItmRenameSelection_Click(sender As Object, e As EventArgs) Handles mnuItmRenameSelection.Click
         'rename selected layouts
         Dim renameOptions As New frmRenameLayouts
-        If renameOptions.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If renameOptions.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
             Dim sNewName As String = renameOptions.txtLayoutNaam.Text
             Dim dAutoNr As Double = CDbl(renameOptions.txtAutoNummer.Value)
             Dim bAutoNr As Boolean = renameOptions.chkAutoNummer.Checked

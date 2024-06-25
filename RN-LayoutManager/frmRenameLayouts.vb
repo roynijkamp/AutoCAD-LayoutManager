@@ -1,11 +1,11 @@
 ﻿Public Class frmRenameLayouts
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         'Me.Close()
     End Sub
 
     Private Sub cmdRename_Click(sender As Object, e As EventArgs) Handles cmdRename.Click
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        Me.DialogResult = System.Windows.Forms.DialogResult.OK
         'Me.Close()
     End Sub
 

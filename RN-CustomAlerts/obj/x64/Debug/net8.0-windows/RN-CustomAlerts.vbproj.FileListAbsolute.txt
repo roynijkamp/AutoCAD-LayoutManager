@@ -1,0 +1,16 @@
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN_CustomAlerts.frmAlert.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN_CustomAlerts.frmUpdate.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN_CustomAlerts.Resources.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.vbproj.GenerateResource.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.GeneratedMSBuildEditorConfig.editorconfig
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.vbproj.CoreCompileInputs.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.sourcelink.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\bin\x64\Debug\net8.0-windows\RN-CustomAlerts.deps.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\bin\x64\Debug\net8.0-windows\RN-CustomAlerts.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\bin\x64\Debug\net8.0-windows\RN-CustomAlerts.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\bin\x64\Debug\net8.0-windows\RN-CustomAlerts.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\refint\RN-CustomAlerts.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\RN-CustomAlerts.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\RN-CustomAlerts\obj\x64\Debug\net8.0-windows\ref\RN-CustomAlerts.dll

@@ -1,0 +1,15 @@
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.DDContainer.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.Resources.resources
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.vbproj.GenerateResource.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.vbproj.CoreCompileInputs.cache
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.sourcelink.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\bin\x64\Debug\net8.0-windows\DropDownContainer.deps.json
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\bin\x64\Debug\net8.0-windows\DropDownContainer.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\bin\x64\Debug\net8.0-windows\DropDownContainer.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\bin\x64\Debug\net8.0-windows\DropDownContainer.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\refint\DropDownContainer.dll
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.xml
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\DropDownContainer.pdb
+D:\Ontwikkeling\Plugins\RN-LayoutManager\DropDownContainer\obj\x64\Debug\net8.0-windows\ref\DropDownContainer.dll

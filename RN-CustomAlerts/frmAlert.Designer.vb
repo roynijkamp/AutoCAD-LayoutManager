@@ -118,10 +118,10 @@ Partial Class frmAlert
 
     End Sub
 
-    Friend WithEvents lblTekst As Windows.Forms.Label
-    Friend WithEvents chk_aplytoall As Windows.Forms.CheckBox
-    Friend WithEvents TableLayoutPanel1 As Windows.Forms.TableLayoutPanel
-    Friend WithEvents Yes_Button As Windows.Forms.Button
-    Friend WithEvents No_Button As Windows.Forms.Button
-    Friend WithEvents Cancel_Button As Windows.Forms.Button
+    Friend WithEvents lblTekst As System.Windows.Forms.Label
+    Friend WithEvents chk_aplytoall As System.Windows.Forms.CheckBox
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Yes_Button As System.Windows.Forms.Button
+    Friend WithEvents No_Button As System.Windows.Forms.Button
+    Friend WithEvents Cancel_Button As System.Windows.Forms.Button
 End Class
