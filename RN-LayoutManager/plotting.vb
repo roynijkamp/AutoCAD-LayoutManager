@@ -158,6 +158,20 @@ Public Class plotting
                                 End If
                             End If
                             sLayoutNaam = "" 'layoutnaam zit al in tekeningnummer
+                        Else 'onbekend bedrijf, hopen dat de standaard wat oplevert
+                            If dictAttrib.ContainsKey("BESTEKNUMMER") And bUseBesteknr = True Then
+                                sPreffix = sPreffix & dictAttrib.Item("BESTEKNUMMER") & "-"
+                            End If
+                            If dictAttrib.ContainsKey("BLADNUMMER") And bUseBladnr = True Then
+                                sPreffix = sPreffix & dictAttrib.Item("BLADNUMMER") & " "
+                            End If
+                            If dictAttrib.ContainsKey("VERSIE") And bUseVersie = True Then
+                                If bVersieInFront Then
+                                    sPreffix = "V" & dictAttrib.Item("VERSIE") & " " & sPreffix
+                                Else
+                                    sSuffix = " - V" & dictAttrib.Item("VERSIE")
+                                End If
+                            End If
                         End If
                     Else
                         'onbekend bedrijf, hopen dat de standaard wat oplevert
